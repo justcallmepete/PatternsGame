@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Class for the soundwaves. 
+ */
 public class SoundWave : MonoBehaviour {
 
     public static Object prefab;
@@ -11,6 +14,7 @@ public class SoundWave : MonoBehaviour {
 
     private float timer;
 
+    // Factory Method for SoundWave objects. Returns a instace of the SoundRing prefab with specified parameters.
     public static SoundWave Create(float maxRadius, float lifeTime) {
         GameObject newObject = Instantiate(prefab) as GameObject;
         SoundWave soundWave = newObject.GetComponent<SoundWave>();
@@ -20,21 +24,11 @@ public class SoundWave : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Awake()
-    {
-        prefab = Resources.Load("Prefabs/SoundRing");
-    }
-
-    private void Start()
+    void Start()
     {
         gameObject.GetComponent<SphereCollider>().radius = this.radius;
-
+        prefab = Resources.Load("Prefabs/SoundRing");
     }
-
-   
-
-
-
 
     // Update is called once per frame
     void Update () {

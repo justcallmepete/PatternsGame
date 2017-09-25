@@ -2,20 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/**
- * This abstract
- */
-public abstract class SoundReceiver : MonoBehaviour {
+public class SoundReciever : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.GetComponent<SoundWave>() != null)
         {
-            OnSoundReceived();
+            Debug.Log("Heard Something!");
         }
     }
-
-    public abstract void OnSoundReceived();
-
-    
 }

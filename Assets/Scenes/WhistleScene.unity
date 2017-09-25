@@ -342,6 +342,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e735781799de3548b962e1968811865, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerIndex: 0
+  button: 1
   radius: 6
   lifeTime: 0.5
 --- !u!1 &922875943
@@ -355,8 +357,8 @@ GameObject:
   - component: {fileID: 922875947}
   - component: {fileID: 922875946}
   - component: {fileID: 922875945}
-  - component: {fileID: 922875944}
   - component: {fileID: 922875949}
+  - component: {fileID: 922875944}
   m_Layer: 0
   m_Name: Guard
   m_TagString: Guard
@@ -372,7 +374,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 922875943}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e37171d2c21196844b7795ede7885119, type: 3}
+  m_Script: {fileID: 11500000, guid: 87b4b0099f797aa4499a9df0a4a1654a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!23 &922875945
