@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Bush : MonoBehaviour {
-
     [Tooltip("Set alpha when in normal state.")]
     public float alphaNormal;
     [Tooltip("Set alpha when in hiding state.")]
@@ -13,20 +12,32 @@ public class Bush : MonoBehaviour {
     [Tooltip("Set maximal tiling.")]
     public float maxTiling = 1.5f;
 
-    private Material[] mat;
-	// Use this for initialization
+    private float alphaTarget;
+    private Material[] materials;
+    private float value = 0.0f;
+    const float lerpSpeed = 0.3f;
+
 	void Start () {
-        mat = gameObject.GetComponent<MeshRenderer>().materials;
-        float scaleX = Random.Range(0.5f, 1.5f);
-        float scaleY = Random.Range(0.5f, 1.5f);
-        mat[0].mainTextureScale = new Vector2(scaleX, scaleY);
+        SetRandomTextureScale();
+        alphaTarget = alphaNormal;
+    }
+
+    private void SetRandomTextureScale()
+    {
+        materials = gameObject.GetComponent<MeshRenderer>().materials;
+        float scaleX = Random.Range(minTiling, maxTiling);
+        float scaleY = Random.Range(minTiling, maxTiling);
+        for (int i = 0; i < materials.Length; i++)
+        {
+            materials[i].mainTextureScale = new Vector2(scaleX, scaleY);
+        }
     }
 
     public void OnTriggerEnter(Collider other)
     { 
         if (other.tag == "Player")
         {
-            SetObjectAlpha(alphaTransparent);
+            SetAlphaTarget(alphaTransparent);
         }
     }
 
@@ -34,19 +45,35 @@ public class Bush : MonoBehaviour {
     {
         if (other.tag == "Player")
         {
-            SetObjectAlpha(alphaNormal);
+            SetAlphaTarget(alphaNormal);
         }
     }
 
-    // Change transparency
+    private void Update()
+    {
+        SetObjectAlpha(alphaTarget);
+    }
+
     private void SetObjectAlpha(float alpha)
     {
-        for (int i = 0; i < mat.Length; i++)
+        if (value > 1f)
         {
-            Color color = mat[i].color;
-            color.a = alpha;
-            mat[i].color = color;
-            Debug.Log(color.a);
+            return; 
         }
+
+        for (int i = 0; i < materials.Length; i++)
+        {
+            Color color = materials[i].color;
+            color.a = Mathf.Lerp(color.a, alphaTarget, value);
+            materials[i].color = color;
+        }
+
+        value += lerpSpeed * Time.deltaTime;
+    }
+
+    private void SetAlphaTarget(float alpha)
+    {
+        alphaTarget = alpha;
+        value = 0.0f;
     }
 }
