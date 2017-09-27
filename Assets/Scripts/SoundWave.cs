@@ -16,6 +16,7 @@ public class SoundWave : MonoBehaviour {
 
     // Factory Method for SoundWave objects. Returns a instace of the SoundRing prefab with specified parameters.
     public static SoundWave Create(float maxRadius, float lifeTime) {
+        if (prefab ==  null) prefab = Resources.Load("Prefabs/SoundRing");
         GameObject newObject = Instantiate(prefab) as GameObject;
         SoundWave soundWave = newObject.GetComponent<SoundWave>();
         soundWave.radius = maxRadius;
@@ -27,7 +28,6 @@ public class SoundWave : MonoBehaviour {
     void Start()
     {
         gameObject.GetComponent<SphereCollider>().radius = this.radius;
-        prefab = Resources.Load("Prefabs/SoundRing");
     }
 
     // Update is called once per frame
