@@ -1,30 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/* 
+    This script changes the player transparency when it collides with an object with a tag "Hideable"
+    The boolean if it's hiding can be called with IsHiding.
+ */
 using UnityEngine;
 
-public class PlayerHide : MonoBehaviour {
-
-    private bool isHiding = false;
+public class PlayerHide : MonoBehaviour
+{
     private MeshRenderer mesh;
+    private bool isHiding = false;
 
-	// Use this for initialization
-	void Start () {
+    public bool IsHiding { get { return isHiding; } }
+
+    // Use this for initialization
+    void Start()
+    {
         // Get meshrenderer
         mesh = gameObject.GetComponentInChildren<MeshRenderer>();
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
     private void OnTriggerStay(Collider other)
     {
         if (other.tag == "Hideable")
         {
             // Become invisible when hiding
             isHiding = true;
-            SetObjectAlpha(mesh.materials, 0.2f);        
+            SetObjectAlpha(mesh.materials, 0.2f);
         }
     }
 
@@ -48,7 +47,4 @@ public class PlayerHide : MonoBehaviour {
             mat[i].color = color;
         }
     }
-
-    // Getter for isHiding
-    public bool IsHiding { get { return isHiding; } }
 }

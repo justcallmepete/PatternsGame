@@ -1,8 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/* 
+ * The alpha of the bush changes when a player enters the bush. Also each bush has a random tiling,
+ * resulting in a different texture each time.
+ */
+
 using UnityEngine;
 
-public class Bush : MonoBehaviour {
+public class Bush : MonoBehaviour
+{
     [Tooltip("Set alpha when in normal state.")]
     public float alphaNormal;
     [Tooltip("Set alpha when in hiding state.")]
@@ -12,18 +16,23 @@ public class Bush : MonoBehaviour {
     [Tooltip("Set maximal tiling.")]
     public float maxTiling = 1.5f;
 
-    private float alphaTarget;
     private Material[] materials;
-    private float value = 0.0f;
+    // Alpha to lerp to
+    private float alphaTarget;
+    // Lerp value has a range [0, 1]
+    private float lerpValue = 0.0f;
+    // Speed to lerp
     const float lerpSpeed = 0.3f;
 
-	void Start () {
+    void Start()
+    {
         SetRandomTextureScale();
         alphaTarget = alphaNormal;
     }
 
     private void SetRandomTextureScale()
     {
+        // Randomize the tiling 
         materials = gameObject.GetComponent<MeshRenderer>().materials;
         float scaleX = Random.Range(minTiling, maxTiling);
         float scaleY = Random.Range(minTiling, maxTiling);
@@ -34,9 +43,10 @@ public class Bush : MonoBehaviour {
     }
 
     public void OnTriggerEnter(Collider other)
-    { 
+    {
         if (other.tag == "Player")
         {
+            // Change to transparent
             SetAlphaTarget(alphaTransparent);
         }
     }
@@ -45,6 +55,7 @@ public class Bush : MonoBehaviour {
     {
         if (other.tag == "Player")
         {
+            // Reset transparency
             SetAlphaTarget(alphaNormal);
         }
     }
@@ -56,24 +67,28 @@ public class Bush : MonoBehaviour {
 
     private void SetObjectAlpha(float alpha)
     {
-        if (value > 1f)
+        // Stops lerping when value is greater or equal than 1
+        if (lerpValue >= 1f)
         {
-            return; 
+            return;
         }
 
+        // Lerp alpha
         for (int i = 0; i < materials.Length; i++)
         {
             Color color = materials[i].color;
-            color.a = Mathf.Lerp(color.a, alphaTarget, value);
+            color.a = Mathf.Lerp(color.a, alphaTarget, lerpValue);
             materials[i].color = color;
         }
 
-        value += lerpSpeed * Time.deltaTime;
+        // Increase lerp value
+        lerpValue += lerpSpeed * Time.deltaTime;
     }
 
     private void SetAlphaTarget(float alpha)
     {
         alphaTarget = alpha;
-        value = 0.0f;
+        // Reset lerp value
+        lerpValue = 0.0f;
     }
 }
