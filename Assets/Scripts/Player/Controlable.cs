@@ -44,7 +44,7 @@ public class Controlable : MonoBehaviour {
         }
 
         rb.velocity = speed * GetMovementAxis() * Time.deltaTime;
-	}
+    }
 
     private Vector3 GetMovementAxis()
     {
