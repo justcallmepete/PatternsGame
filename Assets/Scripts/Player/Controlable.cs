@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//this script controls the movement of both players, it uses acceleration, deceleration and rotation
 public class Controlable : MonoBehaviour {
 
     public enum PlayerIndex
@@ -40,7 +40,6 @@ public class Controlable : MonoBehaviour {
     private float maxSpeed;
     private Vector3 saveDirection;
     private int playerNumber;
-    private bool decelerateBool = false;
 
     // Use this for initialization
     void Start () {
@@ -57,7 +56,6 @@ public class Controlable : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-
         //Set max speed and rotation speed to sprint speed or walk speed
         if (Input.GetAxis("P" + playerNumber + "_Button_" + sprintButton) !=0)
         {
@@ -67,37 +65,18 @@ public class Controlable : MonoBehaviour {
         else if(Input.GetAxis("P" + playerNumber + "_Button_" + sneakButton) !=0)
         {
             maxSpeed = sneakSpeed;
-            if (speed >sneakSpeed && GetMovementAxis() != Vector3.zero)
-            {
-                speed -= deceleration;
-                if (speed < 0) speed = 0;
-            }
+            rotationSpeed = rotationMovementSpeed;
         }
         else
         {
             maxSpeed = movementSpeed;
             rotationSpeed = rotationMovementSpeed;
-            if (speed>movementSpeed&&GetMovementAxis()!=Vector3.zero)
-            {
-                speed -= deceleration;
-                if (speed < 0) speed = 0;
-            }
         }
-        //Apply accelararion
-        if (speed < maxSpeed && GetMovementAxis() != Vector3.zero && decelerateBool == false)
-        {
-            speed += accelaration;
-        }
+
         //save the direction when the direction is not zero so the controller knows which direction to decelerate in
         if (GetMovementAxis() != Vector3.zero)
         {
             saveDirection = GetMovementAxis();
-        }
-        //apply decelaration
-        if (GetMovementAxis() == Vector3.zero&& speed > 0)
-        {
-            speed -= deceleration;
-            if (speed < 0) speed = 0;    
         }
 
         // Rotate our transform a step closer to the target's
@@ -110,47 +89,79 @@ public class Controlable : MonoBehaviour {
             //rotate transform 
             transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(targetRotation), rotationSpeed);
 
+            //check the difference in angle to do a full stop
             if (rotationDifference > 180-fullStopSensitivity&& rotationDifference< 180+fullStopSensitivity)
             {
                 FullStop();
             }
         }
 
+        //apply aceleration when needed
+        CheckAcceleration();
+        //apply deceleration when needed
+        CheckDeceleration();
         //apply movement
         Move();
-        
+    }
+
+    private void Move()
+    {
+        Rigidbody rb = this.GetComponent<Rigidbody>();
+        //Apply speed
+        if (GetMovementAxis() != Vector3.zero)
+        {
+            rb.velocity = speed * GetMovementAxis() * Time.deltaTime;
+        }
+        else
+        {
+            rb.velocity = speed * saveDirection * Time.deltaTime;
+        }       
+    }
+    private void CheckAcceleration()
+    {
+        //Apply accelararion
+        if(GetMovementAxis() != Vector3.zero)
+        {
+            if(speed<maxSpeed)
+            {
+                speed += accelaration;
+            }             
+        }
+    }
+    private void CheckDeceleration()
+    {
+        //if the player is moving faster than the max speed, decelerate
+        if(GetMovementAxis()!=Vector3.zero)
+        {
+            if(speed>maxSpeed)
+            {
+                speed -= deceleration;
+                if (speed < 0) speed = 0;
+            }
+        }
+        //if the player is not moving but is not stationary, decelerate
+        else
+        {
+            if (speed > 0)
+            {
+                speed -= deceleration;
+                if (speed < 0) speed = 0;
+            }
+        }
     }
     private void FullStop()
     {
-        decelerateBool = true;
-
-        while(speed>0)
+        while (speed > 0)
         {
             speed -= fullStopDeceleration;
             if (speed <= 0)
             {
                 speed = 0;
-                decelerateBool = false;
-            }
-        }
-    }
-    private void Move()
-    {
-        Rigidbody rb = this.GetComponent<Rigidbody>();
-        //Apply speed
-        if (decelerateBool==false)
-        {
-            if (GetMovementAxis() != Vector3.zero)
-            {
-                rb.velocity = speed * GetMovementAxis() * Time.deltaTime;
-            }
-            else
-            {
-                rb.velocity = speed * saveDirection * Time.deltaTime;
             }
         }
     }
 
+    //get players movement input
     private Vector3 GetMovementAxis()
     {
         float axis_Horizontal = Input.GetAxis("P" + playerNumber + "_Axis_1");
@@ -159,6 +170,7 @@ public class Controlable : MonoBehaviour {
         return axisDir;
     }
 
+    //get players rotation input
     public Vector3 getRotationAxis()
     {
         float axis_Horizontal = Input.GetAxis("P" + playerNumber + "_Axis_1");
