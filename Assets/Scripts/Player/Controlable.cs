@@ -59,6 +59,11 @@ public class Controlable : MonoBehaviour
 
     }
 
+    public bool GetInputAxis(int key)
+    {
+        return Input.GetAxis("P" + playerNumber + "_Button_" + key) != 0;
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
