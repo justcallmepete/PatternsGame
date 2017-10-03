@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/*
+ * If a door is infront the player, he can open the door by clicking the A button.
+ */ 
+
 public class Detection : MonoBehaviour
 {
     // GENERAL SETTINGS
@@ -19,6 +23,7 @@ public class Detection : MonoBehaviour
         if (other.tag == "Door") {
             if (!door)
             {
+                // Get Door component
                 door = other.GetComponent<Door>();
             }
         }
@@ -28,6 +33,7 @@ public class Detection : MonoBehaviour
     {
         if (other.tag == "Door")
         {
+            // Set door to null if the door is not in range.
             door = null;
         }
     }
@@ -39,7 +45,7 @@ public class Detection : MonoBehaviour
             if (controlable.GetInputAxis(key))
             {
                 // Open/close the door by running the 'Open' function found in the 'Door' script
-                if (door.RotationPending == false) StartCoroutine(door.Move());
+                if (door.rotationPending == false) StartCoroutine(door.Move());
             }
         }
     }
