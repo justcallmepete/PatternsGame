@@ -12,6 +12,11 @@ public abstract class GuardState {
     }
 
     public abstract void OnStateEnter();
+    public abstract void Update();
+    public abstract void OnStateExit();
+
+
+
     /* Get the Guard's current Pathfinding target */
     public abstract Vector3 GetTargetPosition();
     public abstract void OnTargetReached();
@@ -22,11 +27,6 @@ public abstract class GuardState {
     /* What happens when a player is seen */
     public abstract void OnSeePlayer();
 
-    public abstract void OnStateExit();
-
-    private void Start()
-    {
-        OnStateEnter();
-    }
+    
 
 }

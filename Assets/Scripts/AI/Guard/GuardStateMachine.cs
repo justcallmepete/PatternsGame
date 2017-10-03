@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 /** This class is used as the Context class for the Guard State Machine 
  * See https://sourcemaking.com/design_patterns/state and 
- * http://gameprogrammingpatterns.com/state.html for more info on the state pattern */
+ * http://gameprogrammingpatterns.com/state.html for more info on the State Pattern */
 
 public class GuardStateMachine : MonoBehaviour {
 
@@ -30,21 +30,13 @@ public class GuardStateMachine : MonoBehaviour {
     // Use this for initialization
     void Start () {
         agent = GetComponent<NavMeshAgent>();
-        GoToState(new CluelessGuardState(this));
+        GoToState(new PatrollingState(this));
 
     }
 
     // Update is called once per frame
     void Update () {
-        agent.SetDestination(state.GetTargetPosition());
-
-        if (Vector3.Distance(gameObject.transform.position, state.GetTargetPosition()) < 2.0f)
-        {
-            state.OnTargetReached();
-            
-        }
-
-
+        state.Update();
     }
 
     public void GoToState(GuardState state)
