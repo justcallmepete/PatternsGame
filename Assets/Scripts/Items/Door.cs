@@ -1,9 +1,13 @@
+using System;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 /*
- * Door script changes the state of the door by rotating. It is fully adjustable in the inspector.
- * The IEnumerator Move can be called to change the state of the door.
+ * Door script changes the state of the door. The rotation of the door is animated by code. 
+ * The door rotation is fully adjustable in the inspector.
+ * The method TryMove can be called to change the state of the door. This method must be called by the player.
+ * The methods Open en Close can be use to force the door to open or close. These methods must be called by events.
  */
 
 public class Door : MonoBehaviour
@@ -17,7 +21,7 @@ public class Door : MonoBehaviour
     public enum SideOfRotation { Left, Right }
     public SideOfRotation rotationSide;
     [Tooltip("Rotating speed of the door/window.")]
-    public float speed = 3F;
+    public float speed = 10F;
     [Tooltip("0 = infinite times")]
     public int timesMoveable = 0;
     [Tooltip("Boolean if the door is locked with a key")]
@@ -45,7 +49,16 @@ public class Door : MonoBehaviour
 
     // Define an initial and final rotation
     Quaternion finalRot, initialRot;
-    int state;
+    public enum State 
+    {
+        Open,
+        Closed,
+    };
+
+    private State currentState = State.Open;
+    public State CurrentState { get { return currentState; } }
+
+    private Coroutine lastCoroutine;
 
     // Create a hinge
     GameObject hinge;
@@ -109,7 +122,7 @@ public class Door : MonoBehaviour
 
             // Hinge Positioning
             hinge.transform.position = hingePosCopy;
-            transform.parent = hinge.transform;
+            transform.parent = hinge.transform; 
             hinge.transform.localEulerAngles = hingeRotCopy;
 
             // Debugging
@@ -123,42 +136,75 @@ public class Door : MonoBehaviour
         }
     }
 
-    // Move Function
-    public IEnumerator Move()
+    public void TryMove()
     {
-        if (lockedWithKey || lockedWithSwitch)
+        if (lockedWithSwitch)
+        {
+            Debug.Log("Door is locked by a switch");
+            return;
+        }
+
+        if (lockedWithKey)
         {
             Debug.Log("Door is locked");
-            yield break;
+            // TODO Check if the player has a key
         }
+
+
+        switch (currentState)
+        {
+            case State.Closed:
+                Open();
+                break;
+            case State.Open:
+                Close();
+                break;
+        }
+    }
+
+    public void Open()
+    {
+        StopLastCoroutine();
+        lastCoroutine = StartCoroutine(DoOpen());
+    }
+
+    public void Close()
+    {
+        StopLastCoroutine();
+        lastCoroutine = StartCoroutine(DoClose());
+    }
+
+    public void StopLastCoroutine()
+    {
+        if (lastCoroutine != null)
+        {
+            StopCoroutine(lastCoroutine);
+        }
+    }
+
+    // Move Function
+    public IEnumerator DoOpen()
+    {
+        currentState = State.Open;
         // Angles
         if (rotationSide == SideOfRotation.Left)
         {
-            initialRot = Quaternion.Euler(0, -initialAngle, 0);
             finalRot = Quaternion.Euler(0, -initialAngle - rotationAngle, 0);
         }
 
         if (rotationSide == SideOfRotation.Right)
         {
-            initialRot = Quaternion.Euler(0, -initialAngle, 0);
             finalRot = Quaternion.Euler(0, -initialAngle + rotationAngle, 0);
         }
 
         if (timesRotated < timesMoveable || timesMoveable == 0)
         {
             if (hingeType == TypeOfHinge.Centered)
-            {
-                // Change state from 1 to 0 and back ( = alternate between FinalRot and InitialRot)
-                if (hinge.transform.rotation == (state == 0 ? finalRot : initialRot))
-                {
-                    state ^= 1;
-                }
-             
+            {           
+                // Set 'FinalRotation' to 'FinalRot' when moving
+                Quaternion FinalRotation = finalRot;
 
-                // Set 'FinalRotation' to 'FinalRot' when moving and to 'InitialRot' when moving back
-                Quaternion FinalRotation = ((state == 0) ? finalRot : initialRot);
-
-                // Make the door/window rotate until it is fully opened/closed
+                // Make the door/window rotate until it is fully opened
                 while (Mathf.Abs(Quaternion.Angle(FinalRotation, hinge.transform.rotation)) > 0.01f)
                 {
                     rotationPending = true;
@@ -167,19 +213,69 @@ public class Door : MonoBehaviour
                 }
                 rotationPending = false;
             }
-
             else
             {
-                // Change state from 1 to 0 and back (= alternate between FinalRot and InitialRot)
-                if (transform.rotation == (state == 0 ? finalRot * rotationOffset : initialRot * rotationOffset))
+                // Set 'FinalRotation' to 'FinalRot' when moving
+                Quaternion FinalRotation = finalRot * rotationOffset;
+
+                // Make the door/window rotate until it is fully opened
+                while (Mathf.Abs(Quaternion.Angle(FinalRotation, transform.rotation)) > 0.01f)
                 {
-                    state ^= 1;
+                    rotationPending = true;
+                    transform.rotation = Quaternion.Lerp(transform.rotation, FinalRotation, Time.deltaTime * speed);
+                    yield return new WaitForEndOfFrame();
                 }
+                rotationPending = false;
+            }
 
-                // Set 'FinalRotation' to 'FinalRot' when moving and to 'InitialRot' when moving back
-                Quaternion FinalRotation = ((state == 0) ? finalRot * rotationOffset : initialRot * rotationOffset);
+            if (timesMoveable == 0)
+            {
+                timesRotated = 0;
+            }
+            else
+            {
+                timesRotated++;
+            }
+        }
+    }
 
-                // Make the door/window rotate until it is fully opened/closed
+    // Move Function
+    public IEnumerator DoClose()
+    {
+        currentState = State.Closed;
+        // Angles
+        if (rotationSide == SideOfRotation.Left)
+        {
+            initialRot = Quaternion.Euler(0, -initialAngle, 0);
+        }
+
+        if (rotationSide == SideOfRotation.Right)
+        {
+            initialRot = Quaternion.Euler(0, -initialAngle, 0);
+        }
+
+        if (timesRotated < timesMoveable || timesMoveable == 0)
+        {
+            if (hingeType == TypeOfHinge.Centered)
+            {            
+                // Set 'FinalRotation' to 'InitialRot' when moving back
+                Quaternion FinalRotation = initialRot;
+
+                // Make the door/window rotate until it is fully closed
+                while (Mathf.Abs(Quaternion.Angle(FinalRotation, hinge.transform.rotation)) > 0.01f)
+                {
+                    rotationPending = true;
+                    hinge.transform.rotation = Quaternion.Lerp(hinge.transform.rotation, FinalRotation, Time.deltaTime * speed);
+                    yield return new WaitForEndOfFrame();
+                }
+                rotationPending = false;
+            }
+            else
+            {       
+                // Set 'FinalRotation' to 'InitialRot' when moving back
+                Quaternion FinalRotation = initialRot * rotationOffset;
+
+                // Make the door/window rotate until it is fully closed
                 while (Mathf.Abs(Quaternion.Angle(FinalRotation, transform.rotation)) > 0.01f)
                 {
                     rotationPending = true;

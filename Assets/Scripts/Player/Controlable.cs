@@ -59,9 +59,9 @@ public class Controlable : MonoBehaviour
 
     }
 
-    public bool GetInputAxis(int key)
+    public bool GetButtonDown(int key)
     {
-        return Input.GetAxis("P" + playerNumber + "_Button_" + key) != 0;
+        return Input.GetButtonDown("P" + playerNumber + "_Button_" + key);
     }
 
     // Update is called once per frame

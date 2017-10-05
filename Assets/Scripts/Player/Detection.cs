@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /*
- * If a door is infront the player, he can open the door by clicking the A button.
+ * If a door is infront the player, he can open the door by clicking the key.
  */ 
 
 public class Detection : MonoBehaviour
@@ -15,7 +15,7 @@ public class Detection : MonoBehaviour
 
     void Start()
     {
-        controlable = gameObject.GetComponent<Controlable>();
+        controlable = gameObject.GetComponentInParent<Controlable>();
     }
 
     private void OnTriggerStay(Collider other)
@@ -42,10 +42,11 @@ public class Detection : MonoBehaviour
     {
         if (door)
         {
-            if (controlable.GetInputAxis(key))
+            if (controlable.GetButtonDown(key))
             {
                 // Open/close the door by running the 'Open' function found in the 'Door' script
-                if (door.rotationPending == false) StartCoroutine(door.Move());
+                door.TryMove();
+
             }
         }
     }
