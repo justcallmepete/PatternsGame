@@ -20,6 +20,8 @@ public class Door : MonoBehaviour
     public float speed = 3F;
     [Tooltip("0 = infinite times")]
     public int timesMoveable = 0;
+    [Tooltip("Boolean if the door is locked with a key")]
+    public bool lockedWithKey = false;
 
     public enum TypeOfHinge { Centered, CorrectlyPositioned }
     [Header("Hinge Settings")]
@@ -30,6 +32,8 @@ public class Door : MonoBehaviour
     
     // Private Settings
     private int timesRotated = 0;
+    private bool lockedWithSwitch = false;
+    public bool LockedWithSwitch { get { return lockedWithSwitch; } set { lockedWithSwitch = value; } }
     [HideInInspector] public bool rotationPending = false; // Needs to be public because Detection.cs has to access it
 
     // Debug Settings
@@ -122,6 +126,11 @@ public class Door : MonoBehaviour
     // Move Function
     public IEnumerator Move()
     {
+        if (lockedWithKey || lockedWithSwitch)
+        {
+            Debug.Log("Door is locked");
+            yield break;
+        }
         // Angles
         if (rotationSide == SideOfRotation.Left)
         {
