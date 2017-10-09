@@ -1,55 +1,76 @@
 using UnityEngine;
+using System.Linq;
 
 /*
- * If a door is infront the player, he can open the door by clicking the key.
- */ 
+ * This script detects objects with certain tags and interacts with those stuff.
+ */
 
 public class Detection : MonoBehaviour
 {
-    // GENERAL SETTINGS
+    // General Settings
     [Header("General Settings")]
     public int key = 1;
 
-    private Door door;
+    // Private Settings
+    private Inventory inventory;
+    private string[] tags = new string[] { "Door", "Elevator" };
+    private GameObject obj;
+    // Controls of the player
     private Controlable controlable;
 
     void Start()
     {
+        inventory = gameObject.GetComponentInParent<Inventory>();
         controlable = gameObject.GetComponentInParent<Controlable>();
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Door") {
-            if (!door)
-            {
-                // Get Door component
-                door = other.GetComponent<Door>();
-            }
+        if (tags.Contains(other.tag))
+        {
+            obj = other.gameObject;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Door")
-        {
-            // Set door to null if the door is not in range.
-            door = null;
-        }
+            // Remove object when it exits the collider
+            obj = null;
     }
 
     void Update()
     {
-        if (door)
+        if (obj)
         {
             if (controlable.GetButtonDown(key))
             {
-                // Open/close the door by running the 'Open' function found in the 'Door' script
-                door.TryMove();
+                switch (obj.tag)
+                {
+                    case "Elevator":
+                        OpenElevator();
+                        break;
+                    case "Door": obj.GetComponent<Door>().TryMove();
+                        break;
+                    default: break;
+
+                }
+                
 
             }
         }
     }
 
-          
+   private void OpenElevator()
+    {
+        Elevator elevator = obj.GetComponentInParent<Elevator>();
+
+        // Use keycard
+        if (inventory.Keycard)
+        {
+            elevator.UnlockElevator();
+            inventory.Keycard = false;
+        }
+
+        elevator.TryOpen();
+    }         
 }
