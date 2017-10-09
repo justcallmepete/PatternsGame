@@ -49,7 +49,6 @@ public class PressurePlate : MonoBehaviour {
         // Add mass 
         currentMass += other.gameObject.GetComponent<Rigidbody>().mass;
 
-        Debug.Log(currentMass);
         // Check mass difference
         if (currentMass >= minimalMass)
         {
