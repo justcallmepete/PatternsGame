@@ -59,6 +59,11 @@ public class Controlable : MonoBehaviour
 
     }
 
+    public bool GetButtonDown(int key)
+    {
+        return Input.GetButtonDown("P" + playerNumber + "_Button_" + key);
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
