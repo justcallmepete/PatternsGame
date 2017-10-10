@@ -11,7 +11,7 @@ public class Elevator : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        anim = gameObject.GetComponent<Animator>();
+        anim = transform.parent.gameObject.GetComponent<Animator>();
 	}
 
     public void TryOpen()
