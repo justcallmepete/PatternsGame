@@ -12,11 +12,13 @@ public class Pull : MonoBehaviour
     public float maxDistance;
 
     private Controlable controlable;
+    private MainPlayer mainPlayer;
     private List<GameObject> otherPlayers = new List<GameObject>();
 
     // Use this for initialization
     void Start()
     {
+        mainPlayer = gameObject.GetComponent<MainPlayer>();
         controlable = gameObject.GetComponent<Controlable>();
         GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
 
@@ -35,6 +37,12 @@ public class Pull : MonoBehaviour
         {
             return;
         }
+
+        if (mainPlayer.IsBusy())
+        {
+            return;
+        }
+
 
         if (controlable.GetButtonDown(pullToPlayerKey))
         {
@@ -92,12 +100,14 @@ public class Pull : MonoBehaviour
 
     private void PullPlayer()
     {
-        GetClosestPlayer().GetComponent<MainPlayer>().BePulled(gameObject);
+        GetClosestPlayer().GetComponent<MainPlayer>().BePulled(gameObject, maxDistance);
+        gameObject.GetComponent<MainPlayer>().PullPlayer(GetClosestPlayer());
     } 
 
     private void PullToPlayer()
     {
-       gameObject.GetComponent<MainPlayer>().BePulled(GetClosestPlayer());
+        gameObject.GetComponent<MainPlayer>().BePulled(GetClosestPlayer(), maxDistance);
+        GetClosestPlayer().GetComponent<MainPlayer>().PullPlayer(gameObject);
     }
     
 }
