@@ -1,22 +1,34 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-/* This state is for waiting and looking around. */
-public class WaitingState : GuardState {
+/* This state is for idling in the clueless state. The guard will wait and enter
+ * The goToState*/
+public class CluelessWaitingState : CluelessGuardState {
 
+    float waitingTime;
+    float timer;
 
-    public WaitingState(GuardStateMachine context) : base(context)
+    GuardState goToState;
+
+    public CluelessWaitingState(GuardStateMachine context, float waitForSeconds, GuardState goToState) : base(context)
     {
+        waitingTime = waitForSeconds;
+        this.goToState = goToState;
     }
 
     public override void OnStateEnter()
     {
-        throw new System.NotImplementedException();
+        timer = 0.0f;
     }
 
     public override void Update()
     {
-        throw new System.NotImplementedException();
+        timer += Time.deltaTime;
+
+        if (timer >= waitingTime)
+        {
+            context.GoToState(this.goToState);
+        }
     }
 
     public override float GetTargetAngle()
@@ -31,12 +43,12 @@ public class WaitingState : GuardState {
 
     public override void OnDistraction()
     {
-        throw new System.NotImplementedException();
+        base.OnDistraction();
     }
 
     public override void OnSeePlayer()
     {
-        throw new System.NotImplementedException();
+        base.OnSeePlayer();
     }
 
     public override void OnTargetReached()
@@ -46,6 +58,6 @@ public class WaitingState : GuardState {
 
     public override void OnStateExit()
     {
-        throw new System.NotImplementedException();
+        
     }  
 }

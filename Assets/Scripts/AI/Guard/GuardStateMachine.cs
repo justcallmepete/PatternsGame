@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 
 /** This class is used as the Context class for the Guard State Machine 
@@ -18,18 +16,15 @@ public class GuardStateMachine : MonoBehaviour {
     }
 
     public PatrolStyle patrolStyle = PatrolStyle.Stationary;
-    public Waypoint[] waypoints;
+    public float rotationSpeed;
 
     private GuardState state;
     public int LastWaypointIndex { get { return lastWaypointIndex; } set { lastWaypointIndex = value; } }
     private int lastWaypointIndex = 0;
-
-    //Components
-    private NavMeshAgent agent;
     
     // Use this for initialization
     void Start () {
-        agent = GetComponent<NavMeshAgent>();
+
         GoToState(new PatrollingState(this));
 
     }
@@ -49,5 +44,11 @@ public class GuardStateMachine : MonoBehaviour {
         state.OnStateEnter();
     }
 
-    
+    private void OnTriggerEnter(Collider other)
+    {
+
+
+
+
+    }
 }

@@ -1,13 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PatrollingState : GuardState {
+public class PatrollingState : CluelessGuardState {
 
     private int waypointIndex = 0;
     public Waypoint[] waypoints;
+
     private NavMeshAgent navMeshAgent;
+
+    private Vector3 startRotation;
+    private bool startUpdated;
+
+    private float lerpSpeed;
+    private float lerpTime;
+
 
     public PatrollingState(GuardStateMachine context) : base(context)
     {
@@ -15,26 +22,56 @@ public class PatrollingState : GuardState {
 
     public override void OnStateEnter()
     {
-        waypoints = context.waypoints;
+        GuardPatrol patrol = context.gameObject.transform.parent.gameObject.GetComponentInChildren<GuardPatrol>();
+
+        waypoints = patrol.GetWaypoints();
 
         waypointIndex = context.LastWaypointIndex;
-
         navMeshAgent = context.GetComponent<NavMeshAgent>();
-    }
 
-    public override void Update()
+        startRotation = context.transform.rotation.eulerAngles;
+        startUpdated = false;
+
+        lerpSpeed = context.rotationSpeed / 180.0f;
+}
+
+public override void Update()
     {
        navMeshAgent.SetDestination(GetTargetPosition());
 
-        if (Vector3.Distance(context.gameObject.transform.position, GetTargetPosition()) < 2.0f)
+        Vector2 currentPos = new Vector2(context.gameObject.transform.position.x, context.gameObject.transform.position.z);
+        Vector2 targetPos = new Vector2(GetTargetPosition().x, GetTargetPosition().z);
+
+        if (Vector2.Distance(currentPos, targetPos) < 1.0f && Math.Abs(navMeshAgent.velocity.magnitude) < 0.01f)
         {
-            OnTargetReached();
+            if (!startUpdated)
+            {
+                startRotation = context.transform.rotation.eulerAngles;
+                startUpdated = true;
+                lerpTime = 0.0f;
+            }
+            RotateGuard(startRotation.y, waypoints[waypointIndex].transform.eulerAngles.y);
         }
+    }
+
+    private void RotateGuard(float from, float to)
+    {
+            Vector3 toVector = new Vector3(0.0f, to, 0.0f );
+            lerpTime += lerpSpeed * Time.deltaTime;
+            if (Vector3.Distance(context.transform.eulerAngles, toVector) > 2.0f)
+            {
+            context.transform.eulerAngles = new Vector3(0.0f, Mathf.LerpAngle(from, to, lerpTime), 0.0f);
+            }
+            else
+            {
+                context.transform.eulerAngles = toVector;
+                OnTargetReached();
+            }
     }
 
     public override float GetTargetAngle()
     {
-        throw new System.NotImplementedException();
+        return waypoints[waypointIndex].gameObject.transform.rotation.y;
     }
 
     public override Vector3 GetTargetPosition()
@@ -63,6 +100,10 @@ public class PatrollingState : GuardState {
     {
         Debug.Log("Target Reached");
 
+        int oldIndex = waypointIndex;
+
+        startUpdated = false;
+
         if (waypointIndex == waypoints.Length - 1)
         {
             waypointIndex = 0;
@@ -71,10 +112,18 @@ public class PatrollingState : GuardState {
         {
             waypointIndex++;
         }
+        context.LastWaypointIndex = waypointIndex;
+
+
+        //if the waypoint has a waitingtime go to the waiting
+        if (waypoints[oldIndex].duration > 0.0f)
+        {
+            context.GoToState(new CluelessWaitingState(context, waypoints[oldIndex].duration, this));
+        }
     }
 
     public override void OnStateExit()
     {
         context.LastWaypointIndex = waypointIndex;
     }
-}
+} 

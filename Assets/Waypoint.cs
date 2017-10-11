@@ -4,5 +4,14 @@
 public class Waypoint : MonoBehaviour
 {
     public float duration;
-    public float rotation;
+    /* Show Indicator in play mode */
+    public bool debugMode;
+
+    private void Start()
+    {
+        if (debugMode)
+        {
+            gameObject.GetComponent<MeshRenderer>().enabled = false;
+        }
+    }
 }
