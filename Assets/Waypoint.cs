@@ -7,11 +7,17 @@ public class Waypoint : MonoBehaviour
     /* Show Indicator in play mode */
     public bool debugMode;
 
+    public bool matchRotation;
+
     private void Update()
     {
         if (!debugMode)
         {
             gameObject.GetComponent<MeshRenderer>().enabled = false;
+        } else
+        {
+            gameObject.GetComponent<MeshRenderer>().enabled = true;
+
         }
     }
 }

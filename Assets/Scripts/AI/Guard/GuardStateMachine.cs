@@ -7,12 +7,12 @@
 
 public class GuardStateMachine : MonoBehaviour {
 
-    public enum PatrolStyle
-    {
-       BackAndForth,
-       Loop,
-       Stationary
-    }
+    //public enum PatrolStyle
+    //{
+    //   BackAndForth,
+    //   Loop,
+    //   Stationary
+    //}
 
     public PatrolStyle patrolStyle = PatrolStyle.Stationary;
     public float rotationSpeed;

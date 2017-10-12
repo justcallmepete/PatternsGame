@@ -45,6 +45,10 @@ public override void Update()
 
         if (Vector2.Distance(currentPos, targetPos) < 1.0f && Math.Abs(navMeshAgent.velocity.magnitude) < 0.01f)
         {
+            if(!waypoints[waypointIndex].matchRotation)
+            {
+                OnTargetReached();
+            }
             if (!startUpdated)
             {
                 startRotation = context.transform.rotation.eulerAngles;
