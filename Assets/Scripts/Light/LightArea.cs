@@ -95,6 +95,7 @@ public class LightArea : MonoBehaviour
         CreateMesh(viewMesh, vertices, triangles);
     }
 
+
     EdgeInfo FindEdge(ViewCastInfo minViewCast, ViewCastInfo maxViewCast)
     {
         float minAngle = minViewCast.angle;
