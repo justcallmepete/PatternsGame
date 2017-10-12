@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 /* This state is for idling in the clueless state. The guard will wait and enter
  * The goToState*/
 public class CluelessWaitingState : CluelessGuardState {
@@ -31,11 +29,6 @@ public class CluelessWaitingState : CluelessGuardState {
         }
     }
 
-    public override float GetTargetAngle()
-    {
-        throw new System.NotImplementedException();
-    }
-
     public override Vector3 GetTargetPosition()
     {
         throw new System.NotImplementedException();
@@ -49,11 +42,6 @@ public class CluelessWaitingState : CluelessGuardState {
     public override void OnSeePlayer()
     {
         base.OnSeePlayer();
-    }
-
-    public override void OnTargetReached()
-    {
-        throw new System.NotImplementedException();
     }
 
     public override void OnStateExit()

@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
+/* This state handles all logic for Patrolling Guards */
 public class PatrollingState : CluelessGuardState {
 
     private int waypointIndex = 0;
@@ -54,6 +55,7 @@ public override void Update()
         }
     }
 
+    /* Rotate guard to the same rotation as the Waypoint */
     private void RotateGuard(float from, float to)
     {
             Vector3 toVector = new Vector3(0.0f, to, 0.0f );
@@ -69,7 +71,7 @@ public override void Update()
             }
     }
 
-    public override float GetTargetAngle()
+    private float GetTargetAngle()
     {
         return waypoints[waypointIndex].gameObject.transform.rotation.y;
     }
@@ -96,7 +98,7 @@ public override void Update()
         throw new System.NotImplementedException();
     }
 
-    public override void OnTargetReached()
+    private void OnTargetReached()
     {
         Debug.Log("Target Reached");
 
@@ -115,7 +117,7 @@ public override void Update()
         context.LastWaypointIndex = waypointIndex;
 
 
-        //if the waypoint has a waitingtime go to the waiting
+        //if the waypoint has a waitingtime go to the waiting state and return here when done waiting.
         if (waypoints[oldIndex].duration > 0.0f)
         {
             context.GoToState(new CluelessWaitingState(context, waypoints[oldIndex].duration, this));

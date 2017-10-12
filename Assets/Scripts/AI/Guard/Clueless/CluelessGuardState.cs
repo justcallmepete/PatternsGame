@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+/* This is the superstate for all substates for when a guard is "Clueless" */
 public class CluelessGuardState : GuardState
 {
 
@@ -18,11 +18,6 @@ public class CluelessGuardState : GuardState
         throw new System.NotImplementedException();
     }
 
-    public override float GetTargetAngle()
-    {
-        throw new System.NotImplementedException();
-    }
-
     public override Vector3 GetTargetPosition()
     {
         throw new System.NotImplementedException();
@@ -31,18 +26,13 @@ public class CluelessGuardState : GuardState
     public override void OnDistraction()
     {
         //TODO: handle State transition
-        throw new System.NotImplementedException();
+        throw new System.NotImplementedException("State Transition not yet handled");
     }
 
     public override void OnSeePlayer()
     {
         //TODO: handle State transition
-        throw new System.NotImplementedException();
-    }
-
-    public override void OnTargetReached()
-    {
-        throw new System.NotImplementedException();
+        throw new System.NotImplementedException("State Transition not yet handled");
     }
 
     public override void OnStateExit()

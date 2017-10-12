@@ -7,9 +7,9 @@ public class Waypoint : MonoBehaviour
     /* Show Indicator in play mode */
     public bool debugMode;
 
-    private void Start()
+    private void Update()
     {
-        if (debugMode)
+        if (!debugMode)
         {
             gameObject.GetComponent<MeshRenderer>().enabled = false;
         }

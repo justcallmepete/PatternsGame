@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 /** This class is used as the Context class for the Guard State Machine 
@@ -22,14 +21,10 @@ public class GuardStateMachine : MonoBehaviour {
     public int LastWaypointIndex { get { return lastWaypointIndex; } set { lastWaypointIndex = value; } }
     private int lastWaypointIndex = 0;
     
-    // Use this for initialization
-    void Start () {
-
+    void Awake () {
         GoToState(new PatrollingState(this));
-
     }
 
-    // Update is called once per frame
     void Update () {
         state.Update();
     }
@@ -44,11 +39,13 @@ public class GuardStateMachine : MonoBehaviour {
         state.OnStateEnter();
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void Distract()
     {
+        state.OnDistraction();
+    }
 
-
-
-
+    public void Alert()
+    {
+        state.OnSeePlayer();
     }
 }
