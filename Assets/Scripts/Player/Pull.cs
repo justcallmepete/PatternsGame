@@ -1,25 +1,28 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-
+/*
+ * This script will detect other players and gives the player the ability to pull the other player 
+ * towards yourself or pull yourself to the other player.
+ */ 
 
 public class Pull : MonoBehaviour
 {
-    [Header("Key settings")]
+    [Header("General settings")]
     public byte pullToPlayerKey = 4;
     public byte pullPlayerKey = 5;
+    [Tooltip("Maximal pull distance")]
     public float maxDistance;
 
     private Controlable controlable;
     private MainPlayer mainPlayer;
     private List<GameObject> otherPlayers = new List<GameObject>();
 
-    // Use this for initialization
     void Start()
     {
         mainPlayer = gameObject.GetComponent<MainPlayer>();
         controlable = gameObject.GetComponent<Controlable>();
+
         GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
 
         foreach(GameObject obj in allPlayers)
@@ -33,11 +36,13 @@ public class Pull : MonoBehaviour
 
     private void Update()
     {
+        // Do nothing if there is no other player
         if (otherPlayers.Count == 0)
         {
             return;
         }
 
+        // Do nothing if the main player is in the busy state
         if (mainPlayer.IsBusy())
         {
             return;
@@ -46,17 +51,16 @@ public class Pull : MonoBehaviour
 
         if (controlable.GetButtonDown(pullToPlayerKey))
         {
-
             if (IsPlayerInSight())
             {
-                PullToPlayer();
+                PullToPlayer(GetClosestPlayer());
             }
         }
         if (controlable.GetButtonDown(pullPlayerKey))
         {
             if (IsPlayerInSight())
             {
-                PullPlayer();
+                PullPlayer(GetClosestPlayer());
             }
         }
 
@@ -98,16 +102,15 @@ public class Pull : MonoBehaviour
         return otherPlayers[index];
     }
 
-    private void PullPlayer()
+    private void PullPlayer(GameObject pPlayer)
     {
-        GetClosestPlayer().GetComponent<MainPlayer>().BePulled(gameObject, maxDistance);
-        gameObject.GetComponent<MainPlayer>().PullPlayer(GetClosestPlayer());
+        pPlayer.GetComponent<MainPlayer>().BePulled(gameObject, maxDistance);
+        gameObject.GetComponent<MainPlayer>().PullPlayer(pPlayer);
     } 
 
-    private void PullToPlayer()
+    private void PullToPlayer(GameObject pPlayer)
     {
-        gameObject.GetComponent<MainPlayer>().BePulled(GetClosestPlayer(), maxDistance);
-        GetClosestPlayer().GetComponent<MainPlayer>().PullPlayer(gameObject);
+        gameObject.GetComponent<MainPlayer>().BePulled(pPlayer, maxDistance);
+        pPlayer.GetComponent<MainPlayer>().PullPlayer(gameObject);
     }
-    
 }

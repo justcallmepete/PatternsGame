@@ -1,20 +1,26 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * The main player class to control the state of the player and other behaviours.
+ */
+ 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Controlable))]
 [RequireComponent(typeof(Pull))]
 public class MainPlayer : MonoBehaviour
 {
+    [Header("General settings")]
     // Animation curve for pulling
     public AnimationCurve pullEasing;
 
     [SerializeField]
-    private float minDistance = 1.3f;
+    private float outerRadius = 1.3f;
     [SerializeField]
     private float pullSpeed = 1;
+
     private Controlable controlable;
+
     public enum State
     {
         Free,
@@ -33,24 +39,33 @@ public class MainPlayer : MonoBehaviour
     {
         currentState = State.Busy;
 
-        StartCoroutine(MoveObject(obj, maxDistance))    ;
+        StartCoroutine(MovePlayer(obj, maxDistance));
     }
 
-    private IEnumerator MoveObject(GameObject obj, float maxDistance)
+    private IEnumerator MovePlayer(GameObject obj, float maxDistance)
     {
         float curveTime = 0f;
         float curveAmount = pullEasing.Evaluate(curveTime);
 
-        Vector3 path = gameObject.transform.position - obj.transform.position - (gameObject.transform.position - obj.transform.position).normalized * minDistance;
+        // Calculate the path
+        Vector3 path = gameObject.transform.position - obj.transform.position - 
+            (gameObject.transform.position - obj.transform.position).normalized * outerRadius;
+
+        // Set begin position
         Vector3 beginPosition = gameObject.transform.position;
-        float distance = path.magnitude;
+
         while (curveTime < pullEasing[pullEasing.length - 1].time)
         {
+            // Update easing
             curveTime += Time.deltaTime * pullSpeed * maxDistance / path.magnitude;
             curveAmount = pullEasing.Evaluate(curveTime);
+
+            // Update transform position
             gameObject.transform.position = beginPosition - curveAmount * path;
             yield return new WaitForEndOfFrame();
         }
+        
+        // Set state to free when target is reached
         currentState = State.Free;
     }
 
@@ -58,15 +73,14 @@ public class MainPlayer : MonoBehaviour
     {
         currentState = State.Busy;
 
-        StartCoroutine(WaitForObject(obj));
+        StartCoroutine(WaitForPlayer(obj));
     }
 
-    private IEnumerator WaitForObject(GameObject obj)
+    private IEnumerator WaitForPlayer(GameObject obj)
     {
 
         while (obj.GetComponent<MainPlayer>().IsBusy())
         {
-
             yield return new WaitForEndOfFrame();
         }
 

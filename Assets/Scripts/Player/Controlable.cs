@@ -1,34 +1,45 @@
 ﻿using UnityEngine;
 
-//this script controls the movement of both players, it uses acceleration, deceleration and rotation
+/* 
+ * This script controls the movement of both players, it uses acceleration, deceleration and rotation
+ */
 public class Controlable : MonoBehaviour
 {
-
     public enum PlayerIndex
     {
         Player1, Player2
     }
 
+    [Header("Player settings")]
     public PlayerIndex playerIndex;
     public int sprintButton;
     public int sneakButton;
 
+    [Header("Movement variables")]
+    [Tooltip("Normal movement speed")]
     [Range(100, 200)]
     public float movementSpeed;
+    [Tooltip("Maximal sprint speed")]
     [Range(200, 500)]
     public float sprintSpeed;
+    [Tooltip("Minimal sneak speed")]
     [Range(50, 150)]
     public float sneakSpeed;
 
+    [Tooltip("Normal rotation speed")]
     [Range(10, 30)]
     public float rotationMovementSpeed;
+    [Tooltip("Sprint rotation speed")]
     [Range(10, 30)]
     public float rotationSprintSpeed;
 
+    [Tooltip("Acceleration of the player")]
     [Range(10, 30)]
-    public float accelaration;
+    public float acceleration;
+    [Tooltip("Deceleration of the player")]
     [Range(10, 30)]
     public float deceleration;
+    [Tooltip("Full stop deceleration of the player")]
     [Range(10, 50)]
     public float fullStopDeceleration;
 
@@ -95,30 +106,30 @@ public class Controlable : MonoBehaviour
             {
                 saveDirection = GetAxisDirection();
             }
+        }
+        // Rotate our transform a step closer to the target's
+        Vector3 targetRotation = Vector3.Normalize(GetAxisDirection());
+        if (targetRotation != Vector3.zero)
+        {
+            //calculate difference between the current rotation and the target rotation in angles
+            float rotationDifference = Mathf.Abs(Quaternion.LookRotation(targetRotation).eulerAngles.y - transform.rotation.eulerAngles.y);
 
-            // Rotate our transform a step closer to the target's
-            Vector3 targetRotation = Vector3.Normalize(GetAxisDirection());
-            if (targetRotation != Vector3.zero)
+            //rotate transform 
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(targetRotation), rotationSpeed);
+
+            //check the difference in angle to do a full stop
+            if (rotationDifference > 180 - fullStopSensitivity && rotationDifference < 180 + fullStopSensitivity)
             {
-                //calculate difference between the current rotation and the target rotation in angles
-                float rotationDifference = Mathf.Abs(Quaternion.LookRotation(targetRotation).eulerAngles.y - transform.rotation.eulerAngles.y);
-
-                //rotate transform 
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(targetRotation), rotationSpeed);
-
-                //check the difference in angle to do a full stop
-                if (rotationDifference > 180 - fullStopSensitivity && rotationDifference < 180 + fullStopSensitivity)
-                {
-                    FullStop();
-                }
+                FullStop();
             }
         }
+
 
         // Apply aceleration when needed
         CheckAcceleration();
         //apply deceleration when needed
         CheckDeceleration();
-        // Apply movement
+        // Apply movement when the player is free
         if (mainPlayer.IsFree())
         {
             Move();
@@ -145,7 +156,7 @@ public class Controlable : MonoBehaviour
         {
             if (speed < maxSpeed)
             {
-                speed += accelaration;
+                speed += acceleration;
             }
         }
     }
