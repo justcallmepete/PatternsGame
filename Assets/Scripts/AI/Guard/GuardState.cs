@@ -18,7 +18,7 @@ public abstract class GuardState {
     /* Get the Guard's current Pathfinding target */
     public abstract Vector3 GetTargetPosition();
     /* What happens on discraction */
-    public abstract void OnDistraction();
+    public abstract void OnDistraction(Vector3 target);
     /* What happens when a player is seen */
     public abstract void OnSeePlayer();
 }

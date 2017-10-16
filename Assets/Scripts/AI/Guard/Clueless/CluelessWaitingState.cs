@@ -34,9 +34,9 @@ public class CluelessWaitingState : CluelessGuardState {
         throw new System.NotImplementedException();
     }
 
-    public override void OnDistraction()
+    public override void OnDistraction(Vector3 target)
     {
-        base.OnDistraction();
+        base.OnDistraction(target);
     }
 
     public override void OnSeePlayer()

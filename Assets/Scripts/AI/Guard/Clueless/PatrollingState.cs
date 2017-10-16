@@ -92,14 +92,14 @@ public override void Update()
         }
     }
 
-    public override void OnDistraction()
+    public override void OnDistraction(Vector3 target)
     {
         throw new System.NotImplementedException();
     }
 
     public override void OnSeePlayer()
     {
-        throw new System.NotImplementedException();
+        base.OnSeePlayer();
     }
 
     private void OnTargetReached()

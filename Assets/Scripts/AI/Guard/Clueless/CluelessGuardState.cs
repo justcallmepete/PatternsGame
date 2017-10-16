@@ -23,7 +23,7 @@ public class CluelessGuardState : GuardState
         throw new System.NotImplementedException();
     }
 
-    public override void OnDistraction()
+    public override void OnDistraction(Vector3 target)
     {
         //TODO: handle State transition
         throw new System.NotImplementedException("State Transition not yet handled");
@@ -32,11 +32,12 @@ public class CluelessGuardState : GuardState
     public override void OnSeePlayer()
     {
         //TODO: handle State transition
-        throw new System.NotImplementedException("State Transition not yet handled");
+        context.GoToState(new AlertGuardState(context));
+        Debug.Log("I see the Player!");
     }
 
     public override void OnStateExit()
     {
-        throw new System.NotImplementedException();
+        
     }
 }
