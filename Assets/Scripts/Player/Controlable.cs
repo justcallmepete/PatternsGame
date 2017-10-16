@@ -77,10 +77,40 @@ public class Controlable : MonoBehaviour
         return Input.GetButtonDown("P" + playerNumber + "_Button_" + key);
     }
 
+    public bool GetButton(int key)
+    {
+        return Input.GetButton("P" + playerNumber + "_Button_" + key);
+    }
+
+    public bool CheckAnyInput(byte ignoreKey)
+    {
+        for (int i = 0; i < 11; i++)
+        {
+            if (i == ignoreKey)
+            {
+                continue;
+            }
+
+            if (GetButton(i))
+            {
+                return true;
+            }
+
+            if (GetAxisDirection().magnitude != 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (mainPlayer.IsFree())
+        if (!mainPlayer.IsBusy())
         {
 
             //Set max speed and rotation speed to sprint speed or walk speed
@@ -130,7 +160,7 @@ public class Controlable : MonoBehaviour
         //apply deceleration when needed
         CheckDeceleration();
         // Apply movement when the player is free
-        if (mainPlayer.IsFree())
+        if (!mainPlayer.IsBusy())
         {
             Move();
         }

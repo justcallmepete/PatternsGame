@@ -7,7 +7,7 @@ using UnityEngine;
  
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Controlable))]
-[RequireComponent(typeof(Pull))]
+[RequireComponent(typeof(Teleportation))]   
 public class MainPlayer : MonoBehaviour
 {
     [Header("General settings")]
@@ -18,13 +18,16 @@ public class MainPlayer : MonoBehaviour
     private float outerRadius = 1.3f;
     [SerializeField]
     private float pullSpeed = 1;
+    [SerializeField]
+    private float teleportDelay = 1;
 
     private Controlable controlable;
 
     public enum State
     {
         Free,
-        Busy
+        Busy,
+        Channelling
     }
 
     private State currentState = State.Free;
@@ -35,6 +38,7 @@ public class MainPlayer : MonoBehaviour
         controlable = gameObject.GetComponent<Controlable>();
     }
 
+    #region Pull Mechanic
     public void BePulled(GameObject obj, float maxDistance)
     {
         currentState = State.Busy;
@@ -75,6 +79,18 @@ public class MainPlayer : MonoBehaviour
 
         StartCoroutine(WaitForPlayer(obj));
     }
+
+    #endregion
+
+    public IEnumerator StartTeleport(GameObject pPlayer)
+    {
+        Debug.Log("Teleport");
+        yield return new WaitForSeconds(teleportDelay);
+
+        Vector3 path = pPlayer.transform.position + (gameObject.transform.position - pPlayer.transform.position).normalized * outerRadius;
+        gameObject.transform.position = path;
+    }
+    
 
     private IEnumerator WaitForPlayer(GameObject obj)
     {
