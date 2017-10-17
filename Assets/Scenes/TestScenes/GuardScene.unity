@@ -275,13 +275,13 @@ MonoBehaviour:
   sneakButton: 0
   movementSpeed: 200
   sprintSpeed: 400
-  sneakSpeed: 0
-  rotationMovementSpeed: 0
-  rotationSprintSpeed: 0
-  accelaration: 0
-  deceleration: 0
-  fullStopDeceleration: 0
-  fullStopSensitivity: 0
+  sneakSpeed: 63
+  rotationMovementSpeed: 13
+  rotationSprintSpeed: 12.3
+  accelaration: 13
+  deceleration: 14.6
+  fullStopDeceleration: 16.6
+  fullStopSensitivity: 16.4
 --- !u!54 &378794899
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -351,6 +351,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 4409255912382118, guid: ad8fbf5f0e8c71c44a4264e010bb01e1, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0.584
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ad8fbf5f0e8c71c44a4264e010bb01e1, type: 2}
   m_IsPrefabParent: 0
@@ -406,6 +410,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 180
+  indicator: {fileID: 0}
 --- !u!135 &860253000
 SphereCollider:
   m_ObjectHideFlags: 0
