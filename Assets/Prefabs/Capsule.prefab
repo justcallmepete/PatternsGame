@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 23302664418944126}
   - component: {fileID: 54183853741193252}
   - component: {fileID: 114249650421734818}
+  - component: {fileID: 114635460138230098}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -69,7 +70,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1649700035728166}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.2, y: 1, z: 2}
+  m_LocalPosition: {x: 4.3987, y: 1.43, z: -7.229946}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4185249393158954}
@@ -192,7 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e896704f7072a74fa2d6a93c99450ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerIndex: 0
+  playerIndex: 1
   sprintButton: 0
   sneakButton: 1
   movementSpeed: 160
@@ -204,6 +205,18 @@ MonoBehaviour:
   deceleration: 30
   fullStopDeceleration: 50
   fullStopSensitivity: 30
+--- !u!114 &114635460138230098
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1649700035728166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1060fb18e2b45364b8b39d64ffdb7b16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isInLight: 0
 --- !u!136 &136047668741791756
 CapsuleCollider:
   m_ObjectHideFlags: 1
