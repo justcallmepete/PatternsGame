@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
+/* This is the state for when the guard is investigating a sound or something he saw */
 public class SearchingGuardState : GuardState
 {
 

@@ -16,10 +16,14 @@ public class GuardStateMachine : MonoBehaviour {
     //}
 
    // public PatrolStyle patrolStyle = PatrolStyle.Stationary;
+
+    //Inspector
     public float rotationSpeed;
     public GameObject indicator;
 
     private GuardState state;
+
+    //Properties
     public int LastWaypointIndex { get { return lastWaypointIndex; } set { lastWaypointIndex = value; } }
     private int lastWaypointIndex = 0;
     public GameObject TargetPlayer { get { return targetPlayer; } set { targetPlayer = value; } }
@@ -37,6 +41,30 @@ public class GuardStateMachine : MonoBehaviour {
         state.Update();
     }
 
+    //Call when the Guard sees or hears a distraction. (Go to Searching state)
+    public void Distract(Vector3 position)
+    {
+        state.OnDistraction(position);
+    }
+
+    //Call when guard can currently see a player. (Go to Alert state)
+    public void Alert(GameObject player)
+    {
+        state.OnSeePlayer(player);
+    }
+
+    //Call if player is no longer visible (Go to searching state)
+    public void PlayerLost(Vector3 lastKnownPosition)
+    {
+        GoToState(new SearchingGuardState(this, lastKnownPosition));
+    }
+    
+    // Shoot a player.
+    public void Shoot()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
     public void GoToState(GuardState state)
     {
         if (state != null)
@@ -45,25 +73,5 @@ public class GuardStateMachine : MonoBehaviour {
         }
         this.state = state;
         state.OnStateEnter();
-    }
-
-    public void Distract(Vector3 position)
-    {
-        state.OnDistraction(position);
-    }
-
-    public void Alert(GameObject player)
-    {
-        state.OnSeePlayer(player);
-    }
-
-    public void PlayerLost(Vector3 lastKnownPosition)
-    {
-        GoToState(new SearchingGuardState(this, lastKnownPosition));
-    }
-    
-    public void Shoot()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

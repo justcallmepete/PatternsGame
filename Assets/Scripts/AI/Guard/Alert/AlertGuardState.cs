@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.AI;
+﻿using UnityEngine;
 
+/* This state contains the logic for when the guard can see the player. */
 public class AlertGuardState : GuardState
 {
     private float deathTime = 3.0f;
@@ -15,6 +13,12 @@ public class AlertGuardState : GuardState
     {
     }
 
+    public override void OnStateEnter()
+    {
+        timer = 0.0f;
+        context.IndicatorColor = Color.red;
+    }
+
     public override Vector3 GetTargetPosition()
     {
         throw new System.NotImplementedException();
@@ -22,6 +26,7 @@ public class AlertGuardState : GuardState
 
     public override void OnDistraction(Vector3 target)
     {
+        //Ignore distractions
         return;
     }
 
@@ -39,15 +44,8 @@ public class AlertGuardState : GuardState
         context.NavigationAgent.SetDestination(player.transform.position);
     }
 
-    public override void OnStateEnter()
-    {
-        timer = 0.0f;
-        context.IndicatorColor = Color.red;
-    }
-
     public override void OnStateExit()
     {
     }
 
-   
 }
