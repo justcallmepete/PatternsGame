@@ -9,11 +9,11 @@ public abstract class SoundReceiver : MonoBehaviour {
     {
         if (other.gameObject.GetComponent<SoundWave>() != null)
         {
-            OnSoundReceived();
+            OnSoundReceived(other.gameObject);
         }
     }
 
-    public abstract void OnSoundReceived();
+    public abstract void OnSoundReceived(GameObject source);
 
     
 }
