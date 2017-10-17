@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 /** This class is used as the Context class for the Guard State Machine 
  * See https://sourcemaking.com/design_patterns/state and 
@@ -16,6 +17,7 @@ public class GuardStateMachine : MonoBehaviour {
 
    // public PatrolStyle patrolStyle = PatrolStyle.Stationary;
     public float rotationSpeed;
+    public GameObject indicator;
 
     private GuardState state;
     public int LastWaypointIndex { get { return lastWaypointIndex; } set { lastWaypointIndex = value; } }
@@ -24,6 +26,7 @@ public class GuardStateMachine : MonoBehaviour {
     private GameObject targetPlayer;
     public NavMeshAgent NavigationAgent { get { return agent; }  set { } }
     private NavMeshAgent agent;
+    public Color IndicatorColor { get { return indicator.GetComponent<MeshRenderer>().material.color; } set { indicator.GetComponent<MeshRenderer>().material.color = value;  } }
 
     void Awake () {
         agent = GetComponent<NavMeshAgent>();
@@ -49,9 +52,9 @@ public class GuardStateMachine : MonoBehaviour {
         state.OnDistraction(position);
     }
 
-    public void Alert()
+    public void Alert(GameObject player)
     {
-        state.OnSeePlayer();
+        state.OnSeePlayer(player);
     }
 
     public void PlayerLost(Vector3 lastKnownPosition)
@@ -61,6 +64,6 @@ public class GuardStateMachine : MonoBehaviour {
     
     public void Shoot()
     {
-        Debug.Log("Bang!");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

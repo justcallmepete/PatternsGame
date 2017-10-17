@@ -16,6 +16,7 @@ public class CluelessWaitingState : CluelessGuardState {
 
     public override void OnStateEnter()
     {
+        base.OnStateEnter();
         timer = 0.0f;
     }
 
@@ -39,9 +40,9 @@ public class CluelessWaitingState : CluelessGuardState {
         base.OnDistraction(target);
     }
 
-    public override void OnSeePlayer()
+    public override void OnSeePlayer(GameObject player)
     {
-        base.OnSeePlayer();
+        base.OnSeePlayer(player);
     }
 
     public override void OnStateExit()

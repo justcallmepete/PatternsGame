@@ -20,5 +20,5 @@ public abstract class GuardState {
     /* What happens on discraction */
     public abstract void OnDistraction(Vector3 target);
     /* What happens when a player is seen */
-    public abstract void OnSeePlayer();
+    public abstract void OnSeePlayer(GameObject player);
 }

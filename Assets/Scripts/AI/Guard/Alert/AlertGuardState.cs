@@ -8,6 +8,8 @@ public class AlertGuardState : GuardState
     private float deathTime = 3.0f;
     private float timer;
 
+    private bool canSeePlayer;
+
 
     public AlertGuardState(GuardStateMachine context) : base(context)
     {
@@ -32,14 +34,15 @@ public class AlertGuardState : GuardState
         }
     }
 
-    public override void OnSeePlayer()
+    public override void OnSeePlayer(GameObject player)
     {
-        throw new System.NotImplementedException();
+        context.NavigationAgent.SetDestination(player.transform.position);
     }
 
     public override void OnStateEnter()
     {
         timer = 0.0f;
+        context.IndicatorColor = Color.red;
     }
 
     public override void OnStateExit()

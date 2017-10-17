@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -24,14 +22,15 @@ public class SearchingGuardState : GuardState
         context.GoToState(new SearchingGuardState(context, target));
     }
 
-    public override void OnSeePlayer()
+    public override void OnSeePlayer(GameObject player)
     {
-        throw new System.NotImplementedException();
+        context.GoToState(new AlertGuardState(context));
     }
 
     public override void OnStateEnter()
     {
         context.GetComponent<NavMeshAgent>().SetDestination(targetPosition);
+        context.IndicatorColor = Color.yellow;
     }
 
     public override void OnStateExit()

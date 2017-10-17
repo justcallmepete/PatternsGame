@@ -23,6 +23,7 @@ public class PatrollingState : CluelessGuardState {
 
     public override void OnStateEnter()
     {
+        base.OnStateEnter();
         GuardPatrol patrol = context.gameObject.transform.parent.gameObject.GetComponentInChildren<GuardPatrol>();
 
         waypoints = patrol.GetWaypoints();
@@ -94,12 +95,12 @@ public override void Update()
 
     public override void OnDistraction(Vector3 target)
     {
-        throw new System.NotImplementedException();
+        context.GoToState(new SearchingGuardState(context, target));
     }
 
-    public override void OnSeePlayer()
+    public override void OnSeePlayer(GameObject player)
     {
-        base.OnSeePlayer();
+        base.OnSeePlayer(player);
     }
 
     private void OnTargetReached()

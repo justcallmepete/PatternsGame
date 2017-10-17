@@ -15,11 +15,11 @@ public class GuardVision : MonoBehaviour {
 		
 	}
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            SpotPlayer();
+            SpotPlayer(other.gameObject);
         }
     }
 
@@ -37,8 +37,8 @@ public class GuardVision : MonoBehaviour {
         GetComponentInParent<GuardStateMachine>().PlayerLost(position);
     }
 
-    private void SpotPlayer()
+    private void SpotPlayer(GameObject player)
     {
-        GetComponentInParent<GuardStateMachine>().Alert();
+        GetComponentInParent<GuardStateMachine>().Alert(player);
     }
 }

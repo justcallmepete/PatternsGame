@@ -10,7 +10,7 @@ public class CluelessGuardState : GuardState
 
     public override void OnStateEnter()
     {
-        throw new System.NotImplementedException();
+        context.IndicatorColor = Color.cyan;
     }
 
     public override void Update()
@@ -29,7 +29,7 @@ public class CluelessGuardState : GuardState
         throw new System.NotImplementedException("State Transition not yet handled");
     }
 
-    public override void OnSeePlayer()
+    public override void OnSeePlayer(GameObject player)
     {
         //TODO: handle State transition
         context.GoToState(new AlertGuardState(context));
