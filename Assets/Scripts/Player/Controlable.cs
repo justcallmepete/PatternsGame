@@ -82,7 +82,7 @@ public class Controlable : MonoBehaviour
         return Input.GetButton("P" + playerNumber + "_Button_" + key);
     }
 
-    public bool CheckAnyInput(byte ignoreKey)
+    public bool CheckAnyButton(byte ignoreKey)
     {
         for (int i = 0; i < 11; i++)
         {

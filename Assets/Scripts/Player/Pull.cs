@@ -3,7 +3,7 @@ using UnityEngine;
 
 /*
  * This script will detect other players and gives the player the ability to pull the other player 
- * towards yourself or pull yourself to the other player.
+ * towards yourself.
  */ 
 
 public class Pull : MonoBehaviour
@@ -19,6 +19,7 @@ public class Pull : MonoBehaviour
 
     void Start()
     {
+        // Cache components for later use
         mainPlayer = gameObject.GetComponent<MainPlayer>();
         controlable = gameObject.GetComponent<Controlable>();
 
@@ -26,6 +27,7 @@ public class Pull : MonoBehaviour
 
         foreach(GameObject obj in allPlayers)
         {
+            // Ignore this game object
             if (obj != gameObject)
             {
                 otherPlayers.Add(obj);
@@ -61,10 +63,12 @@ public class Pull : MonoBehaviour
         RaycastHit hit;
 
         Vector3 target = (GetClosestPlayer().transform.position - transform.position).normalized * maxDistance;
+        // Draw debug ray
         Debug.DrawRay(transform.position, target, Color.green, 1);
 
         if (Physics.Raycast(transform.position, target, out hit, maxDistance))
         {
+            // Return true if player is hit by the ray cast
             if (hit.collider.gameObject.tag == "Player")
             {
                 return true;

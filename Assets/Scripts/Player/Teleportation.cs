@@ -52,6 +52,7 @@ public class Teleportation : MonoBehaviour
 
         if (controlable.GetButton(teleportationKey))
         {
+            // Start channelling if player is in sight and character is free
             if (IsPlayerInSight())
             {
                 if (mainPlayer.IsFree())
@@ -63,18 +64,15 @@ public class Teleportation : MonoBehaviour
         }
         else if (mainPlayer.IsChannelling())
         {
+            // Stop channelling is the key is released
             StopChannelling();
         }
 
+        // Draw debug ray
         if (mainPlayer.IsChannelling())
         {
             Vector3 target = (GetClosestPlayer().transform.position - transform.position).normalized * maxDistance;
             Debug.DrawRay(transform.position, target, Color.green);
-
-            if (controlable.CheckAnyInput(teleportationKey))
-            {
-                StopChannelling();
-            }
         }
     }
 
@@ -92,9 +90,6 @@ public class Teleportation : MonoBehaviour
         }
         return false;
     }
-
-
-
 
     private GameObject GetClosestPlayer()
     {
@@ -117,12 +112,15 @@ public class Teleportation : MonoBehaviour
 
     private IEnumerator Channelling(GameObject pPlayer)
     {
+        // Set current time to zero
         currentTime = 0;
+        // Get MainPlayer script from the other player
         MainPlayer pPlayerMainPlayer = pPlayer.GetComponent<MainPlayer>();
 
         while (currentTime < channelTime)
         {
-            if (!IsPlayerInSight() || !mainPlayer.IsChannelling() || pPlayerMainPlayer.IsBusy() || controlable.CheckAnyInput(teleportationKey))
+            // Cancel channelling if player is not in sight, player is not channelling, other player is busy or any other button is pressed
+            if (!IsPlayerInSight() || !mainPlayer.IsChannelling() || pPlayerMainPlayer.IsBusy() || controlable.CheckAnyButton(teleportationKey))
             {
                 StopChannelling();
                 yield break;
@@ -131,8 +129,8 @@ public class Teleportation : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-        // TODO teleport
-        StartCoroutine(GetClosestPlayer().GetComponent<MainPlayer>().StartTeleport(gameObject));
+        // Start teleporting
+        StartCoroutine(pPlayerMainPlayer.StartTeleport(gameObject));
         StopChannelling();
     }
 
@@ -152,6 +150,7 @@ public class Teleportation : MonoBehaviour
         Debug.Log("Start Channel");
     }
 
+    // Ratio for the channel bar
     public float GetChannelTimeRatio()
     {
         return currentTime / channelTime;

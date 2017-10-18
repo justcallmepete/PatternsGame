@@ -2,7 +2,8 @@
 using UnityEngine;
 
 /*
- * The main player class to control the state of the player and other behaviours.
+ * The main player class to control the state of the player and other behaviours. Alpha Fading, 
+ * Pulling and Teleporting are the other behaviours.
  */
  
 [RequireComponent(typeof(Rigidbody))]
@@ -38,11 +39,12 @@ public class MainPlayer : MonoBehaviour
     }
 
     
-    public State currentState = State.Free;
+    private State currentState = State.Free;
     public State CurrentState { get { return currentState; } set { currentState = value; } }
 
     private void Start()
     {
+        // Cache components for later use
         controlable = gameObject.GetComponent<Controlable>();
         material = gameObject.GetComponent<MeshRenderer>().material;
         color = material.color;
@@ -58,6 +60,7 @@ public class MainPlayer : MonoBehaviour
 
     private IEnumerator PullPlayer(GameObject obj, float maxDistance)
     {
+        // Wait for pulling
         yield return new WaitForSeconds(teleportDelay);
 
         float curveTime = 0f;
@@ -97,9 +100,8 @@ public class MainPlayer : MonoBehaviour
     public IEnumerator StartTeleport(GameObject pPlayer)
     {
         currentState = State.Busy;
-        Debug.Log("Teleport");
-
         StartCoroutine(AlphaFade());
+        // Wait for teleport
         yield return new WaitForSeconds(teleportDelay);
 
         Vector3 path = pPlayer.transform.position + (gameObject.transform.position - pPlayer.transform.position).normalized * outerRadius;
@@ -109,7 +111,6 @@ public class MainPlayer : MonoBehaviour
         currentState = State.Free;
     }
     
-
     private IEnumerator WaitForPlayer(GameObject obj)
     {
 
@@ -148,9 +149,7 @@ public class MainPlayer : MonoBehaviour
                 // Reduce alpha by fadeSpeed amount.
                 currentAlpha -= alphaSpeed * Time.deltaTime;
                 Debug.Log(currentAlpha);
-                // Create a new color using original color RGB values combined
-                // with new alpha value. We have to do this because we can't 
-                // change the alpha value of the original color directly.
+                // Create a new color using original color RGB values combined with new alpha value
                 material.color = new Color(color.r, color.g, color.b, currentAlpha);
 
                 yield return null;
@@ -163,9 +162,7 @@ public class MainPlayer : MonoBehaviour
                 // Reduce alpha by fadeSpeed amount.
                 currentAlpha += alphaSpeed * Time.deltaTime;
                 Debug.Log(currentAlpha);
-                // Create a new color using original color RGB values combined
-                // with new alpha value. We have to do this because we can't 
-                // change the alpha value of the original color directly.
+                // Create a new color using original color RGB values combined with new alpha value
                 material.color = new Color(color.r, color.g, color.b, currentAlpha);
 
                 yield return null;
