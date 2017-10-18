@@ -9,7 +9,8 @@ public class LightArea : MonoBehaviour
     public float viewAngle;
 
     public LayerMask obstacleLayers;
-
+    int playerLayerIndex;
+    int lightLayerMask; 
     [HideInInspector]
     public List<Transform> targetsInSight = new List<Transform>();
 
@@ -27,6 +28,12 @@ public class LightArea : MonoBehaviour
         viewMesh = new Mesh();
         viewMesh.name = "viewMesh";
         viewMeshFiler.mesh = viewMesh;
+
+
+        playerLayerIndex = LayerMask.NameToLayer("Player");
+        lightLayerMask = (1 << playerLayerIndex) | (1 << obstacleLayers);
+
+        Debug.Log(lightLayerMask);
 
         StartCoroutine("CheckTargetWithDelay", 2f);
     }
@@ -50,11 +57,15 @@ public class LightArea : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// This method will visualize the light. First it will Viewcast multiple times to get get the hitpoints. From these hitpoints this method will draw the mesh.
+    /// </summary>
     void DrawFieldOfView()
     {
         int stepCount = Mathf.RoundToInt(viewAngle * meshResolution);
         float stepAngleSize = viewAngle / stepCount;
 
+        //This part will raycast multiple times to get the hitpoints. 
         List<Vector3> viewPoints = new List<Vector3>();
         ViewCastInfo oldViewCast = ViewCast(transform.eulerAngles.y - viewAngle / 2);
         viewPoints.Add(oldViewCast.point);
@@ -63,7 +74,7 @@ public class LightArea : MonoBehaviour
             float angle = transform.eulerAngles.y - viewAngle / 2 + stepAngleSize * i;
             ViewCastInfo newViewCast = ViewCast(angle);
             bool edgeDistanceThresholdExceed = Mathf.Abs(oldViewCast.distance - newViewCast.distance) > edgeThresholdDistance;
-            if (oldViewCast.hit != newViewCast.hit || (oldViewCast.hit && newViewCast.hit && edgeDistanceThresholdExceed))
+            if (oldViewCast.hit != newViewCast.hit || (oldViewCast.hit && newViewCast.hit && edgeDistanceThresholdExceed)) // Check if there is an edge inbetween raycasts. 
             {
                 //Get edge cast
                 EdgeInfo edge = FindEdge(oldViewCast, newViewCast);
@@ -80,6 +91,7 @@ public class LightArea : MonoBehaviour
         //Mesh will be a child of, so need to calculate in world space
         vertices[0] = Vector3.zero;
 
+        //This part will set the vertices and trinagles for the viewmesh.
         for (int i = 0; i < vertexCount - 1; i++)
         {
             vertices[i + 1] = transform.InverseTransformPoint(viewPoints[i]);
@@ -95,6 +107,12 @@ public class LightArea : MonoBehaviour
         CreateMesh(viewMesh, vertices, triangles);
     }
 
+    /// <summary>
+    /// This method will be called if there is an edge to be found. It will iterate multiple times to get as close to the edge as possible. The output will be Edgeinfo.
+    /// </summary>
+    /// <param name="minViewCast"></param>
+    /// <param name="maxViewCast"></param>
+    /// <returns> EdgeInfo </returns>
     EdgeInfo FindEdge(ViewCastInfo minViewCast, ViewCastInfo maxViewCast)
     {
         float minAngle = minViewCast.angle;
@@ -136,8 +154,12 @@ public class LightArea : MonoBehaviour
     {
         Vector3 dir = DirFromAngle(pGlobalAngle, true);
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, dir, out hit, viewRadius, obstacleLayers))
+        if (Physics.Raycast(transform.position, dir, out hit, viewRadius, lightLayerMask))
         {
+            if (hit.collider.gameObject.GetComponent<PlayerLight>())
+            {
+                hit.collider.gameObject.GetComponent<PlayerLight>().isInLight = true;
+            }
             return new ViewCastInfo(true, hit.point, hit.distance, pGlobalAngle);
         }
         return new ViewCastInfo(false, transform.position + dir * viewRadius, viewRadius, pGlobalAngle);

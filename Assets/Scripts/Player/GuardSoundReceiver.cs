@@ -5,8 +5,12 @@
  */
 public class GuardSoundReceiver : SoundReceiver {
 
-    public override void OnSoundReceived()
+    public override void OnSoundReceived(GameObject source)
     {
-        Debug.Log("What was that?");
+        GuardStateMachine stateMachine = GetComponent<GuardStateMachine>();
+        if (stateMachine)
+        {
+            stateMachine.Distract(source.transform.position);
+        }
     }
 }
