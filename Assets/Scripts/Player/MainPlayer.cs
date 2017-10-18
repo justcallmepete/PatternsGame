@@ -112,4 +112,9 @@ public class MainPlayer : MonoBehaviour
     {
         return CurrentState == State.Free;
     }
+
+    public bool IsChannelling()
+    {
+        return CurrentState == State.Channelling;
+    }
 }

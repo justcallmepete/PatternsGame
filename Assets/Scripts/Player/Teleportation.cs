@@ -15,6 +15,7 @@ public class Teleportation : MonoBehaviour
     public float maxDistance;
     public float channelTime = 3;
 
+    private float currentTime = 0;
     private Controlable controlable;
     private MainPlayer mainPlayer;
     private List<GameObject> otherPlayers = new List<GameObject>();
@@ -118,11 +119,12 @@ public class Teleportation : MonoBehaviour
 
     private IEnumerator Channelling(GameObject pPlayer)
     {
-        float currentTime = 0;
+        currentTime = 0;
+        MainPlayer pPlayerMainPlayer = pPlayer.GetComponent<MainPlayer>();
 
         while (currentTime < channelTime)
         {
-            if (!IsPlayerInSight() || !isChannelling )
+            if (!IsPlayerInSight() || !isChannelling || pPlayerMainPlayer.IsBusy())
             {
                 StopChannelling();
                 yield break;
@@ -140,11 +142,17 @@ public class Teleportation : MonoBehaviour
     {
         isChannelling = false;
         Debug.Log("Stop Channel");
+        currentTime = 0;
     }
 
     private void StartChannelling()
     {
         isChannelling = true;
         Debug.Log("Start Channel");
+    }
+
+    public float GetChannelTimeRatio()
+    {
+        return currentTime / channelTime;
     }
 }

@@ -9,7 +9,6 @@ using UnityEngine;
 public class Pull : MonoBehaviour
 {
     [Header("General settings")]
-    public byte pullToPlayerKey = 4;
     public byte pullPlayerKey = 5;
     [Tooltip("Maximal pull distance")]
     public float maxDistance;
@@ -48,14 +47,6 @@ public class Pull : MonoBehaviour
             return;
         }
 
-
-        if (controlable.GetButtonDown(pullToPlayerKey))
-        {
-            if (IsPlayerInSight())
-            {
-                PullToPlayer(GetClosestPlayer());
-            }
-        }
         if (controlable.GetButtonDown(pullPlayerKey))
         {
             if (IsPlayerInSight())
@@ -63,7 +54,6 @@ public class Pull : MonoBehaviour
                 PullPlayer(GetClosestPlayer());
             }
         }
-
     }
 
     private bool IsPlayerInSight()
@@ -71,7 +61,7 @@ public class Pull : MonoBehaviour
         RaycastHit hit;
 
         Vector3 target = (GetClosestPlayer().transform.position - transform.position).normalized * maxDistance;
-        Debug.DrawRay(transform.position, target, Color.green);
+        Debug.DrawRay(transform.position, target, Color.green, 1);
 
         if (Physics.Raycast(transform.position, target, out hit, maxDistance))
         {
@@ -107,10 +97,4 @@ public class Pull : MonoBehaviour
         pPlayer.GetComponent<MainPlayer>().BePulled(gameObject, maxDistance);
         gameObject.GetComponent<MainPlayer>().PullPlayer(pPlayer);
     } 
-
-    private void PullToPlayer(GameObject pPlayer)
-    {
-        gameObject.GetComponent<MainPlayer>().BePulled(pPlayer, maxDistance);
-        pPlayer.GetComponent<MainPlayer>().PullPlayer(gameObject);
-    }
 }
