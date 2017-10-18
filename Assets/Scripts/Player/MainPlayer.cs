@@ -22,6 +22,9 @@ public class MainPlayer : MonoBehaviour
     private float teleportDelay = 1;
 
     private Controlable controlable;
+    private Material material;
+    public float alphaSpeed = 1f;    // How fast alpha value decreases.
+    private Color color;            // Used to store color reference.
 
     public enum State
     {
@@ -30,12 +33,15 @@ public class MainPlayer : MonoBehaviour
         Channelling
     }
 
-    private State currentState = State.Free;
+    
+    public State currentState = State.Free;
     public State CurrentState { get { return currentState; } set { currentState = value; } }
 
     private void Start()
     {
         controlable = gameObject.GetComponent<Controlable>();
+        material = gameObject.GetComponent<MeshRenderer>().material;
+        color = material.color;
     }
 
     #region Pull Mechanic
@@ -84,11 +90,17 @@ public class MainPlayer : MonoBehaviour
 
     public IEnumerator StartTeleport(GameObject pPlayer)
     {
+        currentState = State.Busy;
         Debug.Log("Teleport");
+
+        StartCoroutine(AlphaFade());
         yield return new WaitForSeconds(teleportDelay);
 
         Vector3 path = pPlayer.transform.position + (gameObject.transform.position - pPlayer.transform.position).normalized * outerRadius;
         gameObject.transform.position = path;
+
+        StartCoroutine(AlphaFade(1));
+        currentState = State.Free;
     }
     
 
@@ -116,5 +128,42 @@ public class MainPlayer : MonoBehaviour
     public bool IsChannelling()
     {
         return CurrentState == State.Channelling;
+    }
+
+    private IEnumerator AlphaFade(float pAlpha = 0)
+    {
+        // Alpha start value.
+        float currentAlpha = material.color.a;
+
+        if (pAlpha < currentAlpha) {
+            // Loop until aplha is below zero (completely invisalbe)
+            while (currentAlpha > pAlpha)
+            {
+                // Reduce alpha by fadeSpeed amount.
+                currentAlpha -= alphaSpeed * Time.deltaTime;
+                Debug.Log(currentAlpha);
+                // Create a new color using original color RGB values combined
+                // with new alpha value. We have to do this because we can't 
+                // change the alpha value of the original color directly.
+                material.color = new Color(color.r, color.g, color.b, currentAlpha);
+
+                yield return null;
+            }
+        }
+        else
+        {
+            while (currentAlpha < pAlpha)
+            {
+                // Reduce alpha by fadeSpeed amount.
+                currentAlpha += alphaSpeed * Time.deltaTime;
+                Debug.Log(currentAlpha);
+                // Create a new color using original color RGB values combined
+                // with new alpha value. We have to do this because we can't 
+                // change the alpha value of the original color directly.
+                material.color = new Color(color.r, color.g, color.b, currentAlpha);
+
+                yield return null;
+            }
+        }
     }
 }

@@ -19,7 +19,6 @@ public class Teleportation : MonoBehaviour
     private Controlable controlable;
     private MainPlayer mainPlayer;
     private List<GameObject> otherPlayers = new List<GameObject>();
-    private bool isChannelling = false;
 
     void Start()
     {
@@ -55,20 +54,19 @@ public class Teleportation : MonoBehaviour
         {
             if (IsPlayerInSight())
             {
-                if (!isChannelling)
+                if (mainPlayer.IsFree())
                 {
-                    // mainPlayer.CurrentState = MainPlayer.State.Channelling;
                     StartChannelling();
                     StartCoroutine(Channelling(GetClosestPlayer()));
                 }
             }
         }
-        else
+        else if (mainPlayer.IsChannelling())
         {
-            isChannelling = false;
+            StopChannelling();
         }
 
-        if (isChannelling)
+        if (mainPlayer.IsChannelling())
         {
             Vector3 target = (GetClosestPlayer().transform.position - transform.position).normalized * maxDistance;
             Debug.DrawRay(transform.position, target, Color.green);
@@ -124,7 +122,7 @@ public class Teleportation : MonoBehaviour
 
         while (currentTime < channelTime)
         {
-            if (!IsPlayerInSight() || !isChannelling || pPlayerMainPlayer.IsBusy())
+            if (!IsPlayerInSight() || !mainPlayer.IsChannelling() || pPlayerMainPlayer.IsBusy() || controlable.CheckAnyInput(teleportationKey))
             {
                 StopChannelling();
                 yield break;
@@ -140,14 +138,17 @@ public class Teleportation : MonoBehaviour
 
     private void StopChannelling()
     {
-        isChannelling = false;
+        if (!mainPlayer.IsBusy())
+        {
+            mainPlayer.CurrentState = MainPlayer.State.Free;
+        }
         Debug.Log("Stop Channel");
         currentTime = 0;
     }
 
     private void StartChannelling()
     {
-        isChannelling = true;
+        mainPlayer.CurrentState = MainPlayer.State.Channelling;
         Debug.Log("Start Channel");
     }
 

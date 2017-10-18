@@ -95,11 +95,6 @@ public class Controlable : MonoBehaviour
             {
                 return true;
             }
-
-            if (GetAxisDirection().magnitude != 0)
-            {
-                return true;
-            }
         }
 
         return false;
@@ -153,14 +148,13 @@ public class Controlable : MonoBehaviour
                 FullStop();
             }
         }
-
-
+    
         // Apply aceleration when needed
         CheckAcceleration();
         //apply deceleration when needed
         CheckDeceleration();
         // Apply movement when the player is free
-        if (!mainPlayer.IsBusy())
+        if (mainPlayer.IsFree())
         {
             Move();
         }
