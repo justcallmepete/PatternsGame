@@ -7,7 +7,11 @@ using UnityEngine;
  
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Controlable))]
-[RequireComponent(typeof(Teleportation))]   
+[RequireComponent(typeof(Teleportation))]
+[RequireComponent(typeof(PlayerLight))]
+[RequireComponent(typeof(Pull))]
+[RequireComponent(typeof(Inventory))]
+[RequireComponent(typeof(Whistle))]
 public class MainPlayer : MonoBehaviour
 {
     [Header("General settings")]
@@ -49,11 +53,13 @@ public class MainPlayer : MonoBehaviour
     {
         currentState = State.Busy;
 
-        StartCoroutine(MovePlayer(obj, maxDistance));
+        StartCoroutine(PullPlayer(obj, maxDistance));
     }
 
-    private IEnumerator MovePlayer(GameObject obj, float maxDistance)
+    private IEnumerator PullPlayer(GameObject obj, float maxDistance)
     {
+        yield return new WaitForSeconds(teleportDelay);
+
         float curveTime = 0f;
         float curveAmount = pullEasing.Evaluate(curveTime);
 
