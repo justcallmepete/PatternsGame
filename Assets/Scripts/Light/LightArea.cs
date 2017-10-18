@@ -32,29 +32,11 @@ public class LightArea : MonoBehaviour
 
         playerLayerIndex = LayerMask.NameToLayer("Player");
         lightLayerMask = (1 << playerLayerIndex) | (1 << obstacleLayers);
-
-        Debug.Log(lightLayerMask);
-
-        StartCoroutine("CheckTargetWithDelay", 2f);
     }
 
     private void LateUpdate()
     {
         DrawFieldOfView();
-    }
-
-    IEnumerator CheckTargetWithDelay(float pDelay)
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(pDelay);
-            CheckTargetInSight();
-        }
-    }
-
-    void CheckTargetInSight()
-    {
-
     }
 
     /// <summary>
