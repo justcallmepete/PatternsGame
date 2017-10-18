@@ -1,34 +1,45 @@
 ﻿using UnityEngine;
 
-//this script controls the movement of both players, it uses acceleration, deceleration and rotation
+/* 
+ * This script controls the movement of both players, it uses acceleration, deceleration and rotation
+ */
 public class Controlable : MonoBehaviour
 {
-
     public enum PlayerIndex
     {
         Player1, Player2
     }
 
+    [Header("Player settings")]
     public PlayerIndex playerIndex;
     public int sprintButton;
     public int sneakButton;
 
+    [Header("Movement variables")]
+    [Tooltip("Normal movement speed")]
     [Range(100, 200)]
     public float movementSpeed;
+    [Tooltip("Maximal sprint speed")]
     [Range(200, 500)]
     public float sprintSpeed;
+    [Tooltip("Minimal sneak speed")]
     [Range(50, 150)]
     public float sneakSpeed;
 
+    [Tooltip("Normal rotation speed")]
     [Range(10, 30)]
     public float rotationMovementSpeed;
+    [Tooltip("Sprint rotation speed")]
     [Range(10, 30)]
     public float rotationSprintSpeed;
 
+    [Tooltip("Acceleration of the player")]
     [Range(10, 30)]
-    public float accelaration;
+    public float acceleration;
+    [Tooltip("Deceleration of the player")]
     [Range(10, 30)]
     public float deceleration;
+    [Tooltip("Full stop deceleration of the player")]
     [Range(10, 50)]
     public float fullStopDeceleration;
 
@@ -41,10 +52,13 @@ public class Controlable : MonoBehaviour
     private Vector3 saveDirection;
     private int playerNumber;
     private Rigidbody rb;
+    private MainPlayer mainPlayer;
 
     // Use this for initialization
     void Start()
     {
+        mainPlayer = gameObject.GetComponent<MainPlayer>();
+
         rb = this.GetComponent<Rigidbody>();
 
         switch (playerIndex)
@@ -56,7 +70,6 @@ public class Controlable : MonoBehaviour
                 playerNumber = 2;
                 break;
         }
-
     }
 
     public bool GetButtonDown(int key)
@@ -64,32 +77,61 @@ public class Controlable : MonoBehaviour
         return Input.GetButtonDown("P" + playerNumber + "_Button_" + key);
     }
 
+    public bool GetButton(int key)
+    {
+        return Input.GetButton("P" + playerNumber + "_Button_" + key);
+    }
+
+    public bool CheckAnyButton(byte ignoreKey)
+    {
+        for (int i = 0; i < 11; i++)
+        {
+            if (i == ignoreKey)
+            {
+                continue;
+            }
+
+            if (GetButton(i))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+
     // Update is called once per frame
     void FixedUpdate()
     {
-        //Set max speed and rotation speed to sprint speed or walk speed
-        if (Input.GetAxis("P" + playerNumber + "_Button_" + sprintButton) != 0)
+        if (!mainPlayer.IsBusy())
         {
-            maxSpeed = sprintSpeed;
-            rotationSpeed = rotationSprintSpeed;
-        }
-        else if (Input.GetAxis("P" + playerNumber + "_Button_" + sneakButton) != 0)
-        {
-            maxSpeed = sneakSpeed;
-            rotationSpeed = rotationMovementSpeed;
-        }
-        else
-        {
-            maxSpeed = movementSpeed;
-            rotationSpeed = rotationMovementSpeed;
-        }
 
-        // Save the direction when the direction is not zero so the controller knows which direction to decelerate in
-        if (GetAxisDirection() != Vector3.zero)
-        {
-            saveDirection = GetAxisDirection();
-        }
+            //Set max speed and rotation speed to sprint speed or walk speed
+            if (Input.GetAxis("P" + playerNumber + "_Button_" + sprintButton) != 0)
+            {
+                maxSpeed = sprintSpeed;
+                rotationSpeed = rotationSprintSpeed;
+            }
+            else if (Input.GetAxis("P" + playerNumber + "_Button_" + sneakButton) != 0)
+            {
+                maxSpeed = sneakSpeed;
+                rotationSpeed = rotationMovementSpeed;
+            }
 
+            else
+            {
+                maxSpeed = movementSpeed;
+                rotationSpeed = rotationMovementSpeed;
+            }
+
+            // Save the direction when the direction is not zero so the controller knows which direction to decelerate in
+            if (GetAxisDirection() != Vector3.zero)
+            {
+                saveDirection = GetAxisDirection();
+            }
+        }
         // Rotate our transform a step closer to the target's
         Vector3 targetRotation = Vector3.Normalize(GetAxisDirection());
         if (targetRotation != Vector3.zero)
@@ -106,13 +148,16 @@ public class Controlable : MonoBehaviour
                 FullStop();
             }
         }
-
+    
         // Apply aceleration when needed
         CheckAcceleration();
         //apply deceleration when needed
         CheckDeceleration();
-        // Apply movement
-        Move();
+        // Apply movement when the player is free
+        if (mainPlayer.IsFree())
+        {
+            Move();
+        }
     }
 
     private void Move()
@@ -135,7 +180,7 @@ public class Controlable : MonoBehaviour
         {
             if (speed < maxSpeed)
             {
-                speed += accelaration;
+                speed += acceleration;
             }
         }
     }
