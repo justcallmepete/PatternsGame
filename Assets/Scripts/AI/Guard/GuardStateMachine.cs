@@ -8,14 +8,14 @@ using UnityEngine.SceneManagement;
 
 public class GuardStateMachine : MonoBehaviour {
 
-    //public enum PatrolStyle
-    //{
-    //   BackAndForth,
-    //   Loop,
-    //   Stationary
-    //}
+    public enum PatrolStyle
+    {
+       BackAndForth,
+       Loop,
+       Roaming
+    }
 
-   // public PatrolStyle patrolStyle = PatrolStyle.Stationary;
+    public PatrolStyle patrolStyle = PatrolStyle.Loop;
 
     //Inspector
     public float rotationSpeed;
