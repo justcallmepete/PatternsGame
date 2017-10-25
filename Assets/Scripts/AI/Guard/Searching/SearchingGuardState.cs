@@ -52,6 +52,6 @@ public class SearchingGuardState : GuardState
 
     private void OnTargetReached()
     {
-        context.GoToState(new PatrollingState(context));
+        context.GoToState(new InvestigationGuardState(context, targetPosition));
     }
 }

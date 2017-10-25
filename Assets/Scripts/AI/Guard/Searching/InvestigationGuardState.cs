@@ -5,6 +5,11 @@
  */
 public class InvestigationGuardState : SearchingGuardState
 {
+    private Vector3 startRotation;
+    private Vector3 targetRotation;
+    private bool startUpdated;
+
+    private bool done;
 
     private float lerpSpeed;
     private float lerpTime;
@@ -15,12 +20,25 @@ public class InvestigationGuardState : SearchingGuardState
 
     public override void OnStateEnter()
     {
-        base.OnStateEnter();
+       //base.OnStateEnter();
+        lerpSpeed = context.rotationSpeed / 180.0f;
+
+        startRotation = context.transform.rotation.eulerAngles;
+        targetRotation = new Vector3(startRotation.x, startRotation.y + 90.0f, startRotation.z);
+        
+        startUpdated = false;
     }
 
     public override void Update()
     {
-        base.Update();
+        //base.Update();
+        if (!startUpdated)
+        {
+            startRotation = context.transform.rotation.eulerAngles;
+            startUpdated = true;
+            lerpTime = 0.0f;
+        }
+        RotateGuard(startRotation.y, targetRotation.y);
     }
 
     public override Vector3 GetTargetPosition()
@@ -47,7 +65,7 @@ public class InvestigationGuardState : SearchingGuardState
     {
         Vector3 toVector = new Vector3(0.0f, to, 0.0f);
         lerpTime += lerpSpeed * Time.deltaTime;
-        if (Vector3.Distance(context.transform.eulerAngles, toVector) > 2.0f)
+        if (Vector3.Distance(context.transform.eulerAngles, toVector) > 5.0f)
         {
             context.transform.eulerAngles = new Vector3(0.0f, Mathf.LerpAngle(from, to, lerpTime), 0.0f);
         }
@@ -60,7 +78,17 @@ public class InvestigationGuardState : SearchingGuardState
 
     private void OnTargetReached()
     {
-
+        Debug.Log("Target!");
+        if (!done)
+        {
+            startRotation = targetRotation;
+            targetRotation = new Vector3(startRotation.x, startRotation.y - 90.0f, startRotation.z);
+            lerpTime = 0.0f;
+            done = true;
+        } else
+        {
+            context.GoToState(new PatrollingState(context));
+        }
     }
 
 }
