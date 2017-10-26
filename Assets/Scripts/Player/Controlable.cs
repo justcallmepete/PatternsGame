@@ -224,6 +224,7 @@ public class Controlable : MonoBehaviour
         float axis_Horizontal = Input.GetAxis("P" + playerNumber + "_Axis_1");
         float axis_Vertical = Input.GetAxis("P" + playerNumber + "_Axis_2");
         Vector3 axisDir = new Vector3(axis_Horizontal, 0, axis_Vertical);
+        axisDir = Quaternion.Euler(0, 45, 0) * axisDir;
         return axisDir;
     }
 }
