@@ -1,7 +1,10 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+/*
+ * Same principle as the Light Area code. Guard raycasts multiple times infront of him to detect walls and players. These points will be made into one mesh. This represents the vision.
+ */ 
 
 public class GuardVision : MonoBehaviour {
 
@@ -22,9 +25,7 @@ public class GuardVision : MonoBehaviour {
     int edgeCheckIteration;
     [SerializeField]
     float edgeThresholdDistance = 0.5f;
-
-
-    
+        
     List<Transform> playersInSight = new List<Transform>();
 
     [SerializeField]
