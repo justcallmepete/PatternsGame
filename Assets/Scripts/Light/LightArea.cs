@@ -8,7 +8,7 @@ public class LightArea : MonoBehaviour
     [Range(0, 360)]
     public float viewAngle;
 
-    public LayerMask obstacleLayers;
+    int obstacleLayersIndex;
     int playerLayerIndex;
     int lightLayerMask; 
     [HideInInspector]
@@ -30,8 +30,10 @@ public class LightArea : MonoBehaviour
         viewMeshFiler.mesh = viewMesh;
 
 
+        obstacleLayersIndex = LayerMask.NameToLayer("Wall");
         playerLayerIndex = LayerMask.NameToLayer("Player");
-        lightLayerMask = (1 << playerLayerIndex) | (1 << obstacleLayers);
+
+        lightLayerMask = (1 << obstacleLayersIndex) | (1 << playerLayerIndex);
     }
 
     private void LateUpdate()

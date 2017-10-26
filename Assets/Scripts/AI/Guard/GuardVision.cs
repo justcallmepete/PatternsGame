@@ -9,8 +9,9 @@ public class GuardVision : MonoBehaviour {
     [Range(0, 360)]
     public float viewAngle;
 
-    public LayerMask obstacleLayers;
-    public LayerMask playerLayer;
+    int obstacleLayersIndex;
+    int playerLayerIndex;
+    int lightLayerMask;
 
     public float meshResolution;
 
@@ -33,6 +34,11 @@ public class GuardVision : MonoBehaviour {
         viewMesh = new Mesh();
         viewMesh.name = "viewMesh";
         viewMeshFiler.mesh = viewMesh;
+        
+        obstacleLayersIndex = LayerMask.NameToLayer("Wall");
+        playerLayerIndex = LayerMask.NameToLayer("Player");
+
+        lightLayerMask = (1 << obstacleLayersIndex) | (1 << playerLayerIndex);
 
         StartCoroutine("CheckTargetWithDelay", checkPlayerInSightDelay);
     }
@@ -54,7 +60,7 @@ public class GuardVision : MonoBehaviour {
     void CheckIfPlayerInSight()
     {
         playersInSight.Clear();
-        Collider[] targets = Physics.OverlapSphere(transform.position, viewRadius, playerLayer);
+        Collider[] targets = Physics.OverlapSphere(transform.position, viewRadius, playerLayerIndex);
         for (int i = 0; i < targets.Length; i++)
         {
             //Check if in sightAngle
@@ -63,7 +69,7 @@ public class GuardVision : MonoBehaviour {
             {
                 //Check distance to target 
                 float distToTarget = Vector3.Distance(transform.position, targets[i].transform.position);
-                if (!Physics.Raycast(transform.position, dirToTarget, distToTarget, obstacleLayers))
+                if (!Physics.Raycast(transform.position, dirToTarget, distToTarget, obstacleLayersIndex))
                 {
                     //Draw line if in sight
                     playersInSight.Add(targets[i].transform);
@@ -182,7 +188,7 @@ public class GuardVision : MonoBehaviour {
     {
         Vector3 dir = DirFromAngle(pGlobalAngle, true);
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, dir, out hit, viewRadius, obstacleLayers))
+        if (Physics.Raycast(transform.position, dir, out hit, viewRadius, lightLayerMask))
         {
             return new ViewCastInfo(true, hit.point, hit.distance, pGlobalAngle);
         }
