@@ -8,7 +8,7 @@ public class LightArea : MonoBehaviour
     [Range(0, 360)]
     public float viewAngle;
 
-    public LayerMask obstacleLayers;
+    int obstacleLayersIndex;
     int playerLayerIndex;
     int lightLayerMask; 
     [HideInInspector]
@@ -30,31 +30,15 @@ public class LightArea : MonoBehaviour
         viewMeshFiler.mesh = viewMesh;
 
 
+        obstacleLayersIndex = LayerMask.NameToLayer("Wall");
         playerLayerIndex = LayerMask.NameToLayer("Player");
-        lightLayerMask = (1 << playerLayerIndex) | (1 << obstacleLayers);
 
-        Debug.Log(lightLayerMask);
-
-        StartCoroutine("CheckTargetWithDelay", 2f);
+        lightLayerMask = (1 << obstacleLayersIndex) | (1 << playerLayerIndex);
     }
 
     private void LateUpdate()
     {
         DrawFieldOfView();
-    }
-
-    IEnumerator CheckTargetWithDelay(float pDelay)
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(pDelay);
-            CheckTargetInSight();
-        }
-    }
-
-    void CheckTargetInSight()
-    {
-
     }
 
     /// <summary>

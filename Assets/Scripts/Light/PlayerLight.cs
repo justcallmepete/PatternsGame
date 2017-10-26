@@ -15,10 +15,10 @@ public class PlayerLight : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-	}
+        isInLight = false;
+    }
 
     void LateUpdate()
     {
-        isInLight = false;
     }
 }
