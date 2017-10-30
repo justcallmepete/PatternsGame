@@ -138,7 +138,7 @@ public class Teleportation : MonoBehaviour
     {
         if (!mainPlayer.IsBusy())
         {
-            mainPlayer.CurrentState = MainPlayer.State.Free;
+            mainPlayer.CurrentState = MainPlayer.State.Idle;
         }
         Debug.Log("Stop Channel");
         currentTime = 0;

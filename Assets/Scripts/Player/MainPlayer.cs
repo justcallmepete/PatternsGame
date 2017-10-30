@@ -11,6 +11,7 @@ using UnityEngine;
 [RequireComponent(typeof(InputComponent))]
 [RequireComponent(typeof(MovementComponent))]
 [RequireComponent(typeof(WhistleComponent))]
+[RequireComponent(typeof(DetectionComponent))]
 [RequireComponent(typeof(Rigidbody))]
 
 public class MainPlayer : MonoBehaviour
@@ -46,8 +47,10 @@ public class MainPlayer : MonoBehaviour
     private InputComponent inputComponent;
     public enum State
     {
-        Free,
+        Idle,
         Busy,
+        Pulled,
+        Teleported,
         Channelling
     }
 
@@ -72,7 +75,7 @@ public class MainPlayer : MonoBehaviour
     public Vector3 axisDirection = Vector3.zero;
 
 
-    private State currentState = State.Free;
+    private State currentState = State.Idle;
     public State CurrentState { get { return currentState; } set { currentState = value; } }
 
     private void Awake()
@@ -147,7 +150,7 @@ public class MainPlayer : MonoBehaviour
         }
         
         // Set state to free when target is reached
-        currentState = State.Free;
+        currentState = State.Idle;
     }
 
     public void PullPlayer(GameObject obj)
@@ -170,7 +173,7 @@ public class MainPlayer : MonoBehaviour
         gameObject.transform.position = path;
 
         StartCoroutine(AlphaFade(1));
-        currentState = State.Free;
+        currentState = State.Idle;
     }
     
     private IEnumerator WaitForPlayer(GameObject obj)
@@ -181,7 +184,7 @@ public class MainPlayer : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-        currentState = State.Free;
+        currentState = State.Idle;
     }
 
     public bool IsBusy()
@@ -191,7 +194,7 @@ public class MainPlayer : MonoBehaviour
 
     public bool IsFree()
     {
-        return CurrentState == State.Free;
+        return CurrentState == State.Idle;
     }
 
     public bool IsChannelling()
