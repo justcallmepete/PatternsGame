@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 114700941144054852}
   m_Layer: 0
   m_Name: Camera
-  m_TagString: Untagged
+  m_TagString: CameraFocus
   m_Icon: {fileID: 419385456094870383, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -138,6 +138,9 @@ MonoBehaviour:
   target: {fileID: 1048557263956130}
   speed: 2.5
   zoomSpeed: 1.125
+  minZoomLevel: 30
+  maxZoomLevel: 60
+  initialCameraPoisitionRelativeToFocuspoint: {x: -20, y: 50, z: -20}
 --- !u!114 &114700941144054852
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -151,6 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player1: {fileID: 0}
   player2: {fileID: 0}
+  focusObject: {fileID: 0}
   speed: 3
 --- !u!124 &124842106982097914
 Behaviour:
