@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Linq;
 using UnityEngine;
 
 /*
@@ -10,7 +8,7 @@ using UnityEngine;
  * The methods Open en Close can be use to force the door to open or close. These methods must be called by events.
  */
 
-public class Door : MonoBehaviour
+public class Door : Interactable
 {
     // Inspector Settings
     [Header("Rotation Settings")]
@@ -136,7 +134,7 @@ public class Door : MonoBehaviour
         }
     }
 
-    public void TryMove()
+    public override void OnInteract(GameObject obj)
     {
         if (lockedWithSwitch)
         {

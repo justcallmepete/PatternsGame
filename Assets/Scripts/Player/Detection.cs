@@ -2,7 +2,11 @@ using UnityEngine;
 using System.Linq;
 
 /*
- * This script detects objects with certain tags and interacts with those stuff.
+ * This script gives the player the ability to use interactable objects. 
+ * Interactables are objects which use the interface Interactable.cs 
+ * The player uses a ray cast to detect interactables infront of him.
+ * OnInteract method of the Interactable will be called if the player interacts 
+ * with it.
  */
 
 public class Detection : MonoBehaviour
@@ -10,7 +14,7 @@ public class Detection : MonoBehaviour
     // General Settings
     [Header("General Settings")]
     public int key = 1;
-
+    public float detectionRange = 2;
     // Private Settings
     private Inventory inventory;
     private string[] tags = new string[] { "Door", "Elevator" };
@@ -40,37 +44,29 @@ public class Detection : MonoBehaviour
 
     void Update()
     {
-        if (obj)
+        if (obj && obj.GetComponent<Interactable>())
         {
+            
             if (controlable.GetButtonDown(key))
             {
-                switch (obj.tag)
-                {
-                    case "Elevator":
-                        OpenElevator();
-                        break;
-                    case "Door": obj.GetComponent<Door>().TryMove();
-                        break;
-                    default: break;
-
-                }
-                
-
+                obj.GetComponent<Interactable>().OnInteract(gameObject);
             }
         }
+        GetInteractableObject();
     }
 
-   private void OpenElevator()
+    private void GetInteractableObject()
     {
-        Elevator elevator = obj.GetComponentInParent<Elevator>();
-
-        // Use keycard
-        if (inventory.Keycard)
+        RaycastHit hit;
+        Vector3 fwd = gameObject.transform.TransformDirection(Vector3.forward);
+        Debug.DrawRay(transform.position, fwd * detectionRange, Color.green);
+        if (Physics.Raycast(transform.position, fwd, out hit, detectionRange))
         {
-            elevator.UnlockElevator();
-            inventory.Keycard = false;
+            obj = hit.transform.gameObject;
         }
-
-        elevator.TryOpen();
-    }         
+        else
+        {
+            obj = null;
+        }
+    }    
 }
