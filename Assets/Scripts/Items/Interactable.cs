@@ -1,17 +1,13 @@
 ﻿
 using UnityEngine;
 
+
+// Interface class is used to initialize interactable methods. Implement when you have a interactable object.
+
 public abstract class Interactable : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
+     
     public virtual void OnInteract(GameObject obj) { } 
+    
 }
