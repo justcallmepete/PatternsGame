@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 
 /*
- * Elevator script opens the elevator if the player has a keycard.
+ * Elevator script opens the elevator if the player has a keycard. 
+ * Use on elivator object. 
  */ 
 
 public class Elevator : Interactable {
