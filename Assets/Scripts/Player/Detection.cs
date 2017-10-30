@@ -2,7 +2,11 @@ using UnityEngine;
 using System.Linq;
 
 /*
- * This script detects objects with certain tags and interacts with those stuff.
+ * This script gives the player the ability to use interactable objects. 
+ * Interactables are objects which use the interface Interactable.cs 
+ * The player uses a ray cast to detect interactables infront of him.
+ * OnInteract method of the Interactable will be called if the player interacts 
+ * with it.
  */
 
 public class Detection : MonoBehaviour
