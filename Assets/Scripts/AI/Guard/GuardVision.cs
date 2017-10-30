@@ -191,6 +191,10 @@ public class GuardVision : MonoBehaviour {
         RaycastHit hit;
         if (Physics.Raycast(transform.position, dir, out hit, viewRadius, lightLayerMask))
         {
+            if (hit.collider.gameObject.GetComponent<PlayerLight>())
+            {
+                hit.collider.gameObject.GetComponent<PlayerLight>().isInLight = true;
+            }
             return new ViewCastInfo(true, hit.point, hit.distance, pGlobalAngle);
         }
         return new ViewCastInfo(false, transform.position + dir * viewRadius, viewRadius, pGlobalAngle);
