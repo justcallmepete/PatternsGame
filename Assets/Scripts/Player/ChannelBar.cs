@@ -18,6 +18,10 @@ public class ChannelBar : MonoBehaviour
 
     void Update()
     {
+        if (!teleportation)
+        {
+            return;
+        }
         float channelRatio = teleportation.GetChannelTimeRatio();
 
         // Change visibility when the ratio is zero

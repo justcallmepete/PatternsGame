@@ -1,23 +1,35 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-
 /*
- * The main player class to control the state of the player and other behaviours. Alpha Fading, 
- * Pulling and Teleporting are the other behaviours.
- */
- 
+* The main player class to control the state of the player and other behaviours. Alpha Fading, 
+* Pulling and Teleporting are the other behaviours.
+*/
+
+[RequireComponent(typeof(InputComponent))]
+[RequireComponent(typeof(MovementComponent))]
+[RequireComponent(typeof(WhistleComponent))]
 [RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(Controlable))]
-[RequireComponent(typeof(Teleportation))]
-[RequireComponent(typeof(PlayerLight))]
-[RequireComponent(typeof(Pull))]
-[RequireComponent(typeof(Inventory))]
-[RequireComponent(typeof(Whistle))]
+
 public class MainPlayer : MonoBehaviour
 {
+    [HideInInspector]
+    public PlayerComponent[] components;
+    [HideInInspector]
+    public Rigidbody rigidBody;
     [Header("General settings")]
     // Animation curve for pulling
     public AnimationCurve pullEasing;
+
+    public enum PlayerIndex
+    {
+        P1, P2
+    }
+
+    [Header("Player settings")]
+    public PlayerIndex playerIndex;
 
     [SerializeField]
     private float outerRadius = 1.3f;
@@ -31,6 +43,7 @@ public class MainPlayer : MonoBehaviour
     public float alphaSpeed = 1f;    // How fast alpha value decreases.
     private Color color;            // Used to store color reference.
 
+    private InputComponent inputComponent;
     public enum State
     {
         Free,
@@ -38,9 +51,41 @@ public class MainPlayer : MonoBehaviour
         Channelling
     }
 
-    
+    /*
+     * 0 - X
+     * 1 - A
+     * 2 - B 
+     * 3 - Y
+     * 4 - L1
+     * 5 - R1
+     * 6 - L2
+     * 7 - R2
+     * 8 - Select
+     * 9 - Start
+     */
+     
+    [HideInInspector]
+    public bool[] buttonDownList = new bool[10];
+    [HideInInspector]
+    public bool[] buttonList = new bool[10];
+    [HideInInspector]
+    public Vector3 axisDirection = Vector3.zero;
+
+
     private State currentState = State.Free;
     public State CurrentState { get { return currentState; } set { currentState = value; } }
+
+    private void Awake()
+    {
+        components = gameObject.GetComponents<PlayerComponent>();
+        foreach(PlayerComponent component in components)
+        {
+            component.MainPlayer = this;
+            component.AwakeComponent();
+        }
+        rigidBody = gameObject.GetComponent<Rigidbody>();
+      
+    }
 
     private void Start()
     {
@@ -49,6 +94,23 @@ public class MainPlayer : MonoBehaviour
         material = gameObject.GetComponent<MeshRenderer>().material;
         color = material.color;
     }
+
+    private void Update()
+    {
+        foreach (PlayerComponent component in components)
+        {
+            component.UpdateComponent();
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        foreach (PlayerComponent component in components)
+        {
+            component.FixedUpdateComponent();
+        }
+    }
+
 
     #region Pull Mechanic
     public void BePulled(GameObject obj, float maxDistance)

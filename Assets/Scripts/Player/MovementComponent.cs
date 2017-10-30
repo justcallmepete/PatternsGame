@@ -1,19 +1,9 @@
 ﻿using UnityEngine;
 
-/* 
- * This script controls the movement of both players, it uses acceleration, deceleration and rotation
- */
-public class Controlable : MonoBehaviour
+public class MovementComponent : PlayerComponent
 {
-    public enum PlayerIndex
-    {
-        Player1, Player2
-    }
-    [Header("Player settings")]
-    public PlayerIndex playerIndex;
-
-    public int sprintButton;
-    public int sneakButton;
+    public int sprintButton = 1;
+    public int sneakButton = 0;
 
     [Header("Movement variables")]
     [Tooltip("Normal movement speed")]
@@ -50,76 +40,37 @@ public class Controlable : MonoBehaviour
     private float speed;
     private float maxSpeed;
     private Vector3 saveDirection;
-    private int playerNumber;
-    private Rigidbody rb;
-    private MainPlayer mainPlayer;
 
-    // Use this for initialization
-    void Start()
+    public override void AwakeComponent()
     {
-        mainPlayer = gameObject.GetComponent<MainPlayer>();
+        base.AwakeComponent();
 
-        rb = this.GetComponent<Rigidbody>();
-
-        switch (playerIndex)
-        {
-            case PlayerIndex.Player1:
-                playerNumber = 1;
-                break;
-            case PlayerIndex.Player2:
-                playerNumber = 2;
-                break;
-        }
     }
 
-    public bool GetButtonDown(int key)
+    public override void FixedUpdateComponent()
     {
-        return Input.GetButtonDown("P" + playerNumber + "_Button_" + key);
+        base.FixedUpdateComponent();
+
+        SetMovementValues();
+
     }
 
-    public bool GetButton(int key)
+    private void SetMovementValues()
     {
-        return Input.GetButton("P" + playerNumber + "_Button_" + key);
-    }
-
-    public bool CheckAnyButton(byte ignoreKey)
-    {
-        for (int i = 0; i < 11; i++)
-        {
-            if (i == ignoreKey)
-            {
-                continue;
-            }
-
-            if (GetButton(i))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-
-
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        if (!mainPlayer.IsBusy())
+        if (!MainPlayer.IsBusy())
         {
 
             //Set max speed and rotation speed to sprint speed or walk speed
-            if (Input.GetAxis("P" + playerNumber + "_Button_" + sprintButton) != 0)
+            if (MainPlayer.buttonList[sprintButton])
             {
                 maxSpeed = sprintSpeed;
                 rotationSpeed = rotationSprintSpeed;
             }
-            else if (Input.GetAxis("P" + playerNumber + "_Button_" + sneakButton) != 0)
+            else if (MainPlayer.buttonList[sneakButton])
             {
                 maxSpeed = sneakSpeed;
                 rotationSpeed = rotationMovementSpeed;
             }
-
             else
             {
                 maxSpeed = movementSpeed;
@@ -127,13 +78,13 @@ public class Controlable : MonoBehaviour
             }
 
             // Save the direction when the direction is not zero so the controller knows which direction to decelerate in
-            if (GetAxisDirection() != Vector3.zero)
+            if (MainPlayer.axisDirection != Vector3.zero)
             {
-                saveDirection = GetAxisDirection();
+                saveDirection = MainPlayer.axisDirection;
             }
         }
         // Rotate our transform a step closer to the target's
-        Vector3 targetRotation = Vector3.Normalize(GetAxisDirection());
+        Vector3 targetRotation = Vector3.Normalize(MainPlayer.axisDirection);
         if (targetRotation != Vector3.zero)
         {
             //calculate difference between the current rotation and the target rotation in angles
@@ -148,13 +99,13 @@ public class Controlable : MonoBehaviour
                 FullStop();
             }
         }
-    
+
         // Apply aceleration when needed
         CheckAcceleration();
         //apply deceleration when needed
         CheckDeceleration();
         // Apply movement when the player is free
-        if (mainPlayer.IsFree())
+        if (MainPlayer.IsFree())
         {
             Move();
         }
@@ -163,20 +114,31 @@ public class Controlable : MonoBehaviour
     private void Move()
     {
         //Apply speed
-        if (GetAxisDirection() != Vector3.zero)
+        if (MainPlayer.axisDirection != Vector3.zero)
         {
-            rb.velocity = speed * GetAxisDirection() * Time.deltaTime;
+            MainPlayer.rigidBody.velocity = speed * MainPlayer.axisDirection * Time.deltaTime;
         }
         else
         {
-            rb.velocity = speed * saveDirection * Time.deltaTime;
+            MainPlayer.rigidBody.velocity = speed * saveDirection * Time.deltaTime;
         }
     }
 
+    private void FullStop()
+    {
+        while (speed > 0)
+        {
+            speed -= fullStopDeceleration;
+            if (speed <= 0)
+            {
+                speed = 0;
+            }
+        }
+    }
     private void CheckAcceleration()
     {
         //Apply accelararion
-        if (GetAxisDirection() != Vector3.zero)
+        if (MainPlayer.axisDirection != Vector3.zero)
         {
             if (speed < maxSpeed)
             {
@@ -188,7 +150,7 @@ public class Controlable : MonoBehaviour
     private void CheckDeceleration()
     {
         //if the player is moving faster than the max speed, decelerate
-        if (GetAxisDirection() != Vector3.zero)
+        if (MainPlayer.axisDirection != Vector3.zero)
         {
             if (speed > maxSpeed)
             {
@@ -205,26 +167,5 @@ public class Controlable : MonoBehaviour
                 if (speed < 0) speed = 0;
             }
         }
-    }
-    private void FullStop()
-    {
-        while (speed > 0)
-        {
-            speed -= fullStopDeceleration;
-            if (speed <= 0)
-            {
-                speed = 0;
-            }
-        }
-    }
-
-    // Get players movement input
-    private Vector3 GetAxisDirection()
-    {
-        float axis_Horizontal = Input.GetAxis("P" + playerNumber + "_Axis_1");
-        float axis_Vertical = Input.GetAxis("P" + playerNumber + "_Axis_2");
-        Vector3 axisDir = new Vector3(axis_Horizontal, 0, axis_Vertical);
-        axisDir = Quaternion.Euler(0, 45, 0) * axisDir;
-        return axisDir;
     }
 }
