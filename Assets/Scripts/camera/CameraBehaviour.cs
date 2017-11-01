@@ -25,23 +25,37 @@ public class CameraBehaviour : MonoBehaviour
     [Range(1, 2)]
     float zoomSpeed = 1.125f;
 
+    [Header("Zoom levels")]
+    [SerializeField]
+    [Range(10, 40)]
+    int minZoomLevel = 30;
+
+    [SerializeField]
+    [Range(50, 80)]
+    int maxZoomLevel = 60;
+
+    [Header("")]
+    [SerializeField]
+    Vector3 initialCameraPoisitionRelativeToFocuspoint = new Vector3(-20, 50, -20);
+
+
+
     private void Awake()
     {
         // Defining the start position of the camera
-        gameObject.GetComponent<Transform>().position = new Vector3(-20, 50, -20); 
+        gameObject.transform.position = initialCameraPoisitionRelativeToFocuspoint;
     }
 
     private void Start()
     {
-        targetPos = target.GetComponent<Transform>();
+        targetPos = target.transform;
         camPos = gameObject.GetComponent<Transform>();
         camera = gameObject.GetComponent<Camera>();
-        target = GameObject.Find("Camera");
+        target = GameObject.FindGameObjectWithTag("CameraFocus");
     }
 
     void Update()
-    {
-        
+    {        
 
         camPos.LookAt(targetPos);
 
@@ -52,13 +66,13 @@ public class CameraBehaviour : MonoBehaviour
         camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, camera.fieldOfView = distance * zoomSpeed, step);
 
 
-        if (camera.fieldOfView < 30)
+        if (camera.fieldOfView < minZoomLevel)
         {
-            camera.fieldOfView = 30;
+            camera.fieldOfView = minZoomLevel;
         }
-        else if (camera.fieldOfView > 60)
+        else if (camera.fieldOfView > maxZoomLevel)
         {
-            camera.fieldOfView = 60;
+            camera.fieldOfView = maxZoomLevel;
         }
 
 

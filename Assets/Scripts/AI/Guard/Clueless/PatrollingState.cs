@@ -108,7 +108,7 @@ public override void Update()
 
     private void OnTargetReached()
     {
-        Debug.Log("Target Reached");
+        //Debug.Log("Target Reached");
 
         int oldIndex = waypointIndex;
 
