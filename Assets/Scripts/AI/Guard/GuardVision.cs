@@ -109,8 +109,16 @@ public class GuardVision : MonoBehaviour {
                 float distToTarget = Vector3.Distance(transform.position, playersInSight[i].transform.position);
                 if (distToTarget < closestDistance)
                 {
-                    closestDistance = distToTarget;
-                    closestPlayer = playersInSight[i].gameObject;
+                    float sightDistance = viewRadius;
+                    if (playersInSight[i].GetComponent<MainPlayer>().IsStandingInLight)
+                    {
+                        sightDistance = viewRadiusInLight;
+                    }
+                    if (distToTarget <= sightDistance)
+                    {
+                        closestDistance = distToTarget;
+                        closestPlayer = playersInSight[i].gameObject;
+                    }
                 }
             }
         }
