@@ -26,6 +26,12 @@ public class MainPlayer : MonoBehaviour
         P1, P2
     }
 
+    // Get player index in string.
+    public string getPlayerIndex()
+    {
+        return playerIndex.ToString();
+    }
+
     [Header("Player settings")]
     public PlayerIndex playerIndex;
 
