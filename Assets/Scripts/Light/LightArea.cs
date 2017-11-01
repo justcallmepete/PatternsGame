@@ -140,9 +140,10 @@ public class LightArea : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, dir, out hit, viewRadius, lightLayerMask))
         {
-            if (hit.collider.gameObject.GetComponent<PlayerLight>())
+            if (hit.collider.gameObject.GetComponent<MainPlayer>())
             {
-                hit.collider.gameObject.GetComponent<PlayerLight>().isInLight = true;
+                // TODO fix light for players
+                //hit.collider.gameObject.GetComponent<MainPlayer>().IsInLight = true;
             }
             return new ViewCastInfo(true, hit.point, hit.distance, pGlobalAngle);
         }

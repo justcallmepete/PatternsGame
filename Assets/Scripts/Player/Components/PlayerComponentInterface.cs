@@ -16,4 +16,5 @@ public class PlayerComponentInterface : MonoBehaviour
     public virtual void AwakeComponent() { }
     public virtual void UpdateComponent() { }
     public virtual void FixedUpdateComponent() { }
+    public virtual void LateUpdateComponent() { }
 }

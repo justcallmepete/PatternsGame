@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 /*
  * The main player class to control the state of the player and other behaviours. It searches all 
@@ -16,6 +17,8 @@ using UnityEngine;
 
 public class MainPlayer : MonoBehaviour
 {
+    public List<GameObject> lightStandingIn;
+
     public enum PlayerIndex
     {
         P1, P2
@@ -30,7 +33,7 @@ public class MainPlayer : MonoBehaviour
     private Color color;            // Used to store color reference.
     private Material material;
 
-    private Inventory inventory; 
+    private Inventory inventory;
 
     // Used for channelling
     private float channelTimeRatio = 0;
@@ -114,6 +117,15 @@ public class MainPlayer : MonoBehaviour
         foreach (PlayerComponentInterface component in components)
         {
             component.FixedUpdateComponent();
+        }
+    }
+
+    private void LateUpdate()
+    {
+        // Fixed update all components
+        foreach (PlayerComponentInterface component in components)
+        {
+            component.LateUpdateComponent();
         }
     }
 
