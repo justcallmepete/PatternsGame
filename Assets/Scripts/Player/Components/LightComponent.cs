@@ -24,8 +24,6 @@ public class LightComponent : PlayerComponentInterface
 
         if (MainPlayer.IsStandingInLight && !changedToLight)
         {
-            Debug.Log("Player is in light");
-
             changedToLight = true;
             StartCoroutine(MainPlayer.AlphaFade(1));
 
@@ -34,9 +32,7 @@ public class LightComponent : PlayerComponentInterface
         }
         else if (!MainPlayer.IsStandingInLight && changedToLight)
         {
-            Debug.Log("Player is in shadow");
             changedToLight = false;
-
             gameObject.GetComponent<Renderer>().material = darkMaterial;
         }
     }
