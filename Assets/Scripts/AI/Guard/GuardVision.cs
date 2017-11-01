@@ -19,6 +19,7 @@ public class GuardVision : MonoBehaviour {
     int playerLayerIndex;
     int lightLayerMask;
     LayerMask playerLayerMask;
+    LayerMask obstacleLayerMask;
 
     public float meshResolution;
 
@@ -53,6 +54,7 @@ public class GuardVision : MonoBehaviour {
 
         obstacleLayersIndex = LayerMask.NameToLayer("Wall");
         playerLayerIndex = LayerMask.NameToLayer("Player");
+        obstacleLayerMask = 1 << obstacleLayersIndex;
         playerLayerMask = 1 << playerLayerIndex;
 
         lightLayerMask = (1 << obstacleLayersIndex) | (1 << playerLayerIndex);
@@ -87,10 +89,10 @@ public class GuardVision : MonoBehaviour {
             {
                 //Check distance to target 
                 float distToTarget = Vector3.Distance(transform.position, targets[i].transform.position);
-                if (!Physics.Raycast(transform.position, dirToTarget, distToTarget, obstacleLayersIndex))
+                if (!Physics.Raycast(transform.position, dirToTarget, distToTarget, obstacleLayerMask))
                 {
                     //Draw line if in sight
-                    Debug.DrawLine(transform.position, targets[i].transform.position, Color.red, 2f);
+                    Debug.DrawLine(transform.position, transform.position + dirToTarget * distToTarget, Color.red, 2f);
                     playersInSight.Add(targets[i].transform);
 
                 }
