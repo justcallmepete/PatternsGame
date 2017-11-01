@@ -18,6 +18,7 @@ public class GuardVision : MonoBehaviour {
     int obstacleLayersIndex;
     int playerLayerIndex;
     int lightLayerMask;
+    LayerMask playerLayerMask;
 
     public float meshResolution;
 
@@ -52,6 +53,7 @@ public class GuardVision : MonoBehaviour {
 
         obstacleLayersIndex = LayerMask.NameToLayer("Wall");
         playerLayerIndex = LayerMask.NameToLayer("Player");
+        playerLayerMask = 1 << playerLayerIndex;
 
         lightLayerMask = (1 << obstacleLayersIndex) | (1 << playerLayerIndex);
 
@@ -75,9 +77,10 @@ public class GuardVision : MonoBehaviour {
     void CheckIfPlayerInSight()
     {
         playersInSight.Clear();
-        Collider[] targets = Physics.OverlapSphere(transform.position, viewRadius, playerLayerIndex);
+        Collider[] targets = Physics.OverlapSphere(transform.position, viewRadiusInLight, playerLayerMask);
         for (int i = 0; i < targets.Length; i++)
         {
+            if (!targets[i].gameObject.GetComponent<Controlable>()) continue;
             //Check if in sightAngle
             Vector3 dirToTarget = (targets[i].transform.position - transform.position).normalized;
             if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
@@ -87,8 +90,8 @@ public class GuardVision : MonoBehaviour {
                 if (!Physics.Raycast(transform.position, dirToTarget, distToTarget, obstacleLayersIndex))
                 {
                     //Draw line if in sight
+                    Debug.DrawLine(transform.position, targets[i].transform.position, Color.red, 2f);
                     playersInSight.Add(targets[i].transform);
-                    // Debug.Log("Player in range");
 
                 }
 
