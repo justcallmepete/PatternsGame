@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class LightComponent : PlayerComponentInterface
 {
-    public bool isInLight = false;
-
     public Material lightMaterial;
     public Material darkMaterial;
 
@@ -25,7 +22,7 @@ public class LightComponent : PlayerComponentInterface
     {
         base.LateUpdateComponent();
 
-        if (isInLight && !changedToLight)
+        if (MainPlayer.lightStandingIn.Count > 0 && !changedToLight)
         {
             Debug.Log("Player is in light");
 
@@ -35,7 +32,7 @@ public class LightComponent : PlayerComponentInterface
             gameObject.GetComponent<Renderer>().material = lightMaterial;
 
         }
-        else if (!isInLight && changedToLight)
+        else if (MainPlayer.lightStandingIn.Count == 0 && changedToLight)
         {
             Debug.Log("Player is in shadow");
             changedToLight = false;
