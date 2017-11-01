@@ -3,30 +3,40 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
- * This script will detect other players and gives the player the ability to pull the other player 
- * towards yourself or pull yourself to the other player.
- */
+ * Gives the player the ability to channel for teleport. Both players must have this script to enable 
+ * teleport.
+ */ 
 
-public class Teleportation : MonoBehaviour
+public class TeleportComponent : PlayerComponentInterface
 {
     [Header("General settings")]
-    public byte teleportationKey = 4;
+    public byte teleportationKey = 2;
     [Tooltip("Maximal pull distance")]
-    public float maxDistance;
-    public float channelTime = 3;
-
+    public float maxDistance = 10;
+    [Tooltip("Duraction of channelling")]
+    public float channelTime = 2;
+    [SerializeField]
+    [Tooltip("Delay between activating teleport and changing position.")]
+    private float teleportDelay = 1;
+    [Tooltip("Outer radius of the player")]
+    [SerializeField]
+    private float outerRadius = 1.3f;
     private float currentTime = 0;
-    private Controlable controlable;
-    private MainPlayer mainPlayer;
+    private bool doTeleport = false;
+
     private List<GameObject> otherPlayers = new List<GameObject>();
 
-    void Start()
+    public override void AwakeComponent()
     {
-        mainPlayer = gameObject.GetComponent<MainPlayer>();
-        controlable = gameObject.GetComponent<Controlable>();
+        base.AwakeComponent();
 
+        // Set id
+        id = 4;
+
+        // Get all players in the scene
         GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
 
+        // Cache the players except itself
         foreach (GameObject obj in allPlayers)
         {
             if (obj != gameObject)
@@ -36,8 +46,16 @@ public class Teleportation : MonoBehaviour
         }
     }
 
-    private void Update()
+    public override void UpdateComponent()
     {
+        // If player is getting teleported
+        if (MainPlayer.IsTeleported() && !doTeleport)
+        {
+            StartCoroutine(StartTeleport());
+            doTeleport = true;
+            return;
+        }
+
         // Do nothing if there is no other player
         if (otherPlayers.Count == 0)
         {
@@ -45,37 +63,39 @@ public class Teleportation : MonoBehaviour
         }
 
         // Do nothing if the main player is in the busy state
-        if (mainPlayer.IsBusy())
+        if (MainPlayer.IsBusy())
         {
             return;
         }
 
-        if (controlable.GetButton(teleportationKey))
+        if (MainPlayer.buttonList[teleportationKey])
         {
             // Start channelling if player is in sight and character is free
             if (IsPlayerInSight())
             {
-                if (mainPlayer.IsFree())
+                if (MainPlayer.IsFree())
                 {
                     StartChannelling();
                     StartCoroutine(Channelling(GetClosestPlayer()));
                 }
             }
         }
-        else if (mainPlayer.IsChannelling())
+        else if (MainPlayer.IsChannelling())
         {
+            Debug.Log("cancel channel");
             // Stop channelling is the key is released
             StopChannelling();
         }
 
+        UpdateChannelTimeRatio();
+
         // Draw debug ray
-        if (mainPlayer.IsChannelling())
+        if (MainPlayer.IsChannelling())
         {
             Vector3 target = (GetClosestPlayer().transform.position - transform.position).normalized * maxDistance;
             Debug.DrawRay(transform.position, target, Color.green);
         }
     }
-
     private bool IsPlayerInSight()
     {
         RaycastHit hit;
@@ -117,10 +137,12 @@ public class Teleportation : MonoBehaviour
         // Get MainPlayer script from the other player
         MainPlayer pPlayerMainPlayer = pPlayer.GetComponent<MainPlayer>();
 
+        // Must hold teleportkey for channelTime to activate teleport
         while (currentTime < channelTime)
         {
             // Cancel channelling if player is not in sight, player is not channelling, other player is busy or any other button is pressed
-            if (!IsPlayerInSight() || !mainPlayer.IsChannelling() || pPlayerMainPlayer.IsBusy() || controlable.CheckAnyButton(teleportationKey))
+            if (!IsPlayerInSight() || !MainPlayer.IsChannelling() || 
+                pPlayerMainPlayer.IsBusy() || CheckAnyButton())
             {
                 StopChannelling();
                 yield break;
@@ -129,16 +151,18 @@ public class Teleportation : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-        // Start teleporting
-        StartCoroutine(pPlayerMainPlayer.StartTeleport(gameObject));
+        // Set teleport values for the other players
+        pPlayerMainPlayer.teleportTarget = gameObject.transform.position + 
+            (pPlayer.transform.position - gameObject.transform.position).normalized * outerRadius;
+        pPlayerMainPlayer.CurrentState = MainPlayer.State.Teleported;
         StopChannelling();
     }
 
     private void StopChannelling()
     {
-        if (!mainPlayer.IsBusy())
+        if (MainPlayer.CurrentState != MainPlayer.State.Busy)
         {
-            mainPlayer.CurrentState = MainPlayer.State.Idle;
+            MainPlayer.CurrentState = MainPlayer.State.Idle;
         }
         Debug.Log("Stop Channel");
         currentTime = 0;
@@ -146,13 +170,49 @@ public class Teleportation : MonoBehaviour
 
     private void StartChannelling()
     {
-        mainPlayer.CurrentState = MainPlayer.State.Channelling;
+        MainPlayer.CurrentState = MainPlayer.State.Channelling;
         Debug.Log("Start Channel");
     }
 
     // Ratio for the channel bar
-    public float GetChannelTimeRatio()
+    public void UpdateChannelTimeRatio()
     {
-        return currentTime / channelTime;
+        MainPlayer.ChannelTimeRatio = currentTime / channelTime;
+    }
+    
+    // Check if any button except teleport button is pressed
+    private bool CheckAnyButton()
+    {
+        for (int i = 0; i < MainPlayer.buttonList.Length; i++)
+        {
+            if (i == teleportationKey)
+            {
+                continue;
+            }
+
+            if (MainPlayer.buttonList[i])
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public IEnumerator StartTeleport()
+    {
+        // Change alpha value to 0
+        StartCoroutine(MainPlayer.AlphaFade());
+
+        // Wait for teleport
+        yield return new WaitForSeconds(teleportDelay);
+
+        // Set new position
+        gameObject.transform.position = MainPlayer.teleportTarget;
+
+        // Change alpha value to 1
+        StartCoroutine(MainPlayer.AlphaFade(1));
+
+        MainPlayer.CurrentState = MainPlayer.State.Idle;
+        doTeleport = false;
     }
 }

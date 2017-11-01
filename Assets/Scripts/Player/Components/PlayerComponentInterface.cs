@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 
 /*
- * 
+ * Interface class for player components 
  */
- 
-public class PlayerComponent : MonoBehaviour {
+
+public class PlayerComponentInterface : MonoBehaviour
+{
+    protected int id = 10; // Set default id value
+    public int Id { get { return id; } }
 
     MainPlayer mainPlayer;
 

@@ -1,29 +1,21 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 /*
-* The main player class to control the state of the player and other behaviours. Alpha Fading, 
-* Pulling and Teleporting are the other behaviours.
-*/
+ * The main player class to control the state of the player and other behaviours. It searches all 
+ * Player Component Interfaces and controls it by updating it in a specific order.
+ */
 
 [RequireComponent(typeof(InputComponent))]
 [RequireComponent(typeof(MovementComponent))]
+[RequireComponent(typeof(Inventory))]
 [RequireComponent(typeof(WhistleComponent))]
-[RequireComponent(typeof(DetectionComponent))]
+[RequireComponent(typeof(TeleportComponent))]
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(DetectionComponent))]
 
 public class MainPlayer : MonoBehaviour
 {
-    [HideInInspector]
-    public PlayerComponent[] components;
-    [HideInInspector]
-    public Rigidbody rigidBody;
-    [Header("General settings")]
-    // Animation curve for pulling
-    public AnimationCurve pullEasing;
-
     public enum PlayerIndex
     {
         P1, P2
@@ -32,26 +24,27 @@ public class MainPlayer : MonoBehaviour
     [Header("Player settings")]
     public PlayerIndex playerIndex;
 
-    [SerializeField]
-    private float outerRadius = 1.3f;
-    [SerializeField]
-    private float pullSpeed = 1;
-    [SerializeField]
-    private float teleportDelay = 1;
-
-    private Controlable controlable;
-    private Material material;
+    [Header("General settings")]
+    [Tooltip("The speed of changing the alpha value.")]
     public float alphaSpeed = 1f;    // How fast alpha value decreases.
     private Color color;            // Used to store color reference.
+    private Material material;
 
-    private InputComponent inputComponent;
+    private Inventory inventory; 
+
+    // Used for channelling
+    private float channelTimeRatio = 0;
+    public float ChannelTimeRatio { get { return channelTimeRatio; } set { channelTimeRatio = value; } }
+    [HideInInspector]
+    public Vector3 teleportTarget;
+
     public enum State
     {
         Idle,
         Busy,
-        Pulled,
         Teleported,
-        Channelling
+        Channelling,
+        Dead
     }
 
     /*
@@ -73,34 +66,43 @@ public class MainPlayer : MonoBehaviour
     public bool[] buttonList = new bool[10];
     [HideInInspector]
     public Vector3 axisDirection = Vector3.zero;
-
-
+    [HideInInspector]
+    public PlayerComponentInterface[] components;
+    [HideInInspector]
+    public Rigidbody rigidBody;
+    
     private State currentState = State.Idle;
     public State CurrentState { get { return currentState; } set { currentState = value; } }
 
     private void Awake()
     {
-        components = gameObject.GetComponents<PlayerComponent>();
-        foreach(PlayerComponent component in components)
+        // Cache stuff for later
+        components = gameObject.GetComponents<PlayerComponentInterface>();
+        inventory = gameObject.GetComponent<Inventory>();
+        rigidBody = gameObject.GetComponent<Rigidbody>();
+        material = gameObject.GetComponent<MeshRenderer>().material;
+
+        // Save current color
+        color = material.color;
+
+        // Initialize
+        foreach (PlayerComponentInterface component in components)
         {
             component.MainPlayer = this;
             component.AwakeComponent();
         }
-        rigidBody = gameObject.GetComponent<Rigidbody>();
-      
-    }
 
-    private void Start()
-    {
-        // Cache components for later use
-        controlable = gameObject.GetComponent<Controlable>();
-        material = gameObject.GetComponent<MeshRenderer>().material;
-        color = material.color;
+        // Sort array on ID
+        Array.Sort(components, delegate (PlayerComponentInterface a, PlayerComponentInterface b)
+        {
+            return (a.Id).CompareTo(b.Id);
+        });
     }
 
     private void Update()
     {
-        foreach (PlayerComponent component in components)
+        // Update all components
+        foreach (PlayerComponentInterface component in components)
         {
             component.UpdateComponent();
         }
@@ -108,88 +110,17 @@ public class MainPlayer : MonoBehaviour
 
     private void FixedUpdate()
     {
-        foreach (PlayerComponent component in components)
+        // Fixed update all components
+        foreach (PlayerComponentInterface component in components)
         {
             component.FixedUpdateComponent();
         }
     }
 
-
-    #region Pull Mechanic
-    public void BePulled(GameObject obj, float maxDistance)
-    {
-        currentState = State.Busy;
-
-        StartCoroutine(PullPlayer(obj, maxDistance));
-    }
-
-    private IEnumerator PullPlayer(GameObject obj, float maxDistance)
-    {
-        // Wait for pulling
-        yield return new WaitForSeconds(teleportDelay);
-
-        float curveTime = 0f;
-        float curveAmount = pullEasing.Evaluate(curveTime);
-
-        // Calculate the path
-        Vector3 path = gameObject.transform.position - obj.transform.position - 
-            (gameObject.transform.position - obj.transform.position).normalized * outerRadius;
-
-        // Set begin position
-        Vector3 beginPosition = gameObject.transform.position;
-
-        while (curveTime < pullEasing[pullEasing.length - 1].time)
-        {
-            // Update easing
-            curveTime += Time.deltaTime * pullSpeed * maxDistance / path.magnitude;
-            curveAmount = pullEasing.Evaluate(curveTime);
-
-            // Update transform position
-            gameObject.transform.position = beginPosition - curveAmount * path;
-            yield return new WaitForEndOfFrame();
-        }
-        
-        // Set state to free when target is reached
-        currentState = State.Idle;
-    }
-
-    public void PullPlayer(GameObject obj)
-    {
-        currentState = State.Busy;
-
-        StartCoroutine(WaitForPlayer(obj));
-    }
-
-    #endregion
-
-    public IEnumerator StartTeleport(GameObject pPlayer)
-    {
-        currentState = State.Busy;
-        StartCoroutine(AlphaFade());
-        // Wait for teleport
-        yield return new WaitForSeconds(teleportDelay);
-
-        Vector3 path = pPlayer.transform.position + (gameObject.transform.position - pPlayer.transform.position).normalized * outerRadius;
-        gameObject.transform.position = path;
-
-        StartCoroutine(AlphaFade(1));
-        currentState = State.Idle;
-    }
-    
-    private IEnumerator WaitForPlayer(GameObject obj)
-    {
-
-        while (obj.GetComponent<MainPlayer>().IsBusy())
-        {
-            yield return new WaitForEndOfFrame();
-        }
-
-        currentState = State.Idle;
-    }
-
+    // Check current states
     public bool IsBusy()
     {
-        return CurrentState == State.Busy;
+        return CurrentState == State.Teleported || CurrentState == State.Dead;
     }
 
     public bool IsFree()
@@ -202,7 +133,12 @@ public class MainPlayer : MonoBehaviour
         return CurrentState == State.Channelling;
     }
 
-    private IEnumerator AlphaFade(float pAlpha = 0)
+    public bool IsTeleported()
+    {
+        return CurrentState == State.Teleported;
+    }
+
+    public IEnumerator AlphaFade(float pAlpha = 0)
     {
         // Alpha start value.
         float currentAlpha = material.color.a;
@@ -213,7 +149,6 @@ public class MainPlayer : MonoBehaviour
             {
                 // Reduce alpha by fadeSpeed amount.
                 currentAlpha -= alphaSpeed * Time.deltaTime;
-                Debug.Log(currentAlpha);
                 // Create a new color using original color RGB values combined with new alpha value
                 material.color = new Color(color.r, color.g, color.b, currentAlpha);
 
@@ -226,7 +161,6 @@ public class MainPlayer : MonoBehaviour
             {
                 // Reduce alpha by fadeSpeed amount.
                 currentAlpha += alphaSpeed * Time.deltaTime;
-                Debug.Log(currentAlpha);
                 // Create a new color using original color RGB values combined with new alpha value
                 material.color = new Color(color.r, color.g, color.b, currentAlpha);
 

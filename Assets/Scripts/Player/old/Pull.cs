@@ -13,7 +13,7 @@ public class Pull : MonoBehaviour
     [Tooltip("Maximal pull distance")]
     public float maxDistance;
 
-    private Controlable controlable;
+    // Controlable controlable;
     private MainPlayer mainPlayer;
     private List<GameObject> otherPlayers = new List<GameObject>();
 
@@ -21,7 +21,7 @@ public class Pull : MonoBehaviour
     {
         // Cache components for later use
         mainPlayer = gameObject.GetComponent<MainPlayer>();
-        controlable = gameObject.GetComponent<Controlable>();
+       // controlable = gameObject.GetComponent<Controlable>();
 
         GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
 
@@ -49,7 +49,7 @@ public class Pull : MonoBehaviour
             return;
         }
 
-        if (controlable.GetButtonDown(pullPlayerKey))
+        //if (controlable.GetButtonDown(pullPlayerKey))
         {
             if (IsPlayerInSight())
             {
@@ -98,7 +98,6 @@ public class Pull : MonoBehaviour
 
     private void PullPlayer(GameObject pPlayer)
     {
-        pPlayer.GetComponent<MainPlayer>().BePulled(gameObject, maxDistance);
-        gameObject.GetComponent<MainPlayer>().PullPlayer(pPlayer);
+       
     } 
 }
