@@ -97,6 +97,33 @@ public class GuardVision : MonoBehaviour {
 
             }
         }
+
+        GameObject closestPlayer = null;
+        if(playersInSight.Count > 0)
+        {
+            float closestDistance = Mathf.Infinity;
+            for (int i = 0; i < playersInSight.Count; i++)
+            {
+                float distToTarget = Vector3.Distance(transform.position, playersInSight[i].transform.position);
+                if (distToTarget < closestDistance)
+                {
+                    closestDistance = distToTarget;
+                    closestPlayer = playersInSight[i].gameObject;
+                }
+            }
+        }
+        
+        if (closestPlayer != null)
+        {
+            if (GetComponentInParent<GuardStateMachine>().TargetPlayer == null)
+            {
+                SpotPlayer(closestPlayer);
+            }
+        }
+        else
+        {
+            if (GetComponentInParent<GuardStateMachine>().TargetPlayer != null) LosePlayer(GetComponentInParent<GuardStateMachine>().TargetPlayer.transform.position);
+        }
     }
 
     private void LosePlayer(Vector3 position)
@@ -106,6 +133,7 @@ public class GuardVision : MonoBehaviour {
 
     private void SpotPlayer(GameObject player)
     {
+        Debug.Log("spotting player");
         GetComponentInParent<GuardStateMachine>().Alert(player);
     }
 
