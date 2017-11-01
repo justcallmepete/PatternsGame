@@ -80,7 +80,7 @@ public class GuardVision : MonoBehaviour {
         Collider[] targets = Physics.OverlapSphere(transform.position, viewRadiusInLight, playerLayerMask);
         for (int i = 0; i < targets.Length; i++)
         {
-            if (!targets[i].gameObject.GetComponent<Controlable>()) continue;
+            if (!targets[i].gameObject.GetComponent<MainPlayer>()) continue;
             //Check if in sightAngle
             Vector3 dirToTarget = (targets[i].transform.position - transform.position).normalized;
             if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
