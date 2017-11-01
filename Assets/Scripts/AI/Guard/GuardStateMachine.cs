@@ -8,14 +8,14 @@ using UnityEngine.SceneManagement;
 
 public class GuardStateMachine : MonoBehaviour {
 
-    //public enum PatrolStyle
-    //{
-    //   BackAndForth,
-    //   Loop,
-    //   Stationary
-    //}
+    public enum PatrolStyle
+    {
+       BackAndForth,
+       Loop,
+       Roaming
+    }
 
-   // public PatrolStyle patrolStyle = PatrolStyle.Stationary;
+    public PatrolStyle patrolStyle = PatrolStyle.Loop;
 
     //Inspector
     public float rotationSpeed;
@@ -50,12 +50,14 @@ public class GuardStateMachine : MonoBehaviour {
     //Call when guard can currently see a player. (Go to Alert state)
     public void Alert(GameObject player)
     {
+        TargetPlayer = player;
         state.OnSeePlayer(player);
     }
 
     //Call if player is no longer visible (Go to searching state)
     public void PlayerLost(Vector3 lastKnownPosition)
     {
+        TargetPlayer = null;
         GoToState(new SearchingGuardState(this, lastKnownPosition));
     }
     

@@ -4,8 +4,8 @@ using UnityEngine.AI;
 
 /* This state handles all logic for Patrolling Guards */
 public class PatrollingState : CluelessGuardState {
-
     private int waypointIndex = 0;
+    private bool incrementUp = true;
     public Waypoint[] waypoints;
 
     private NavMeshAgent navMeshAgent;
@@ -44,7 +44,7 @@ public override void Update()
         Vector2 currentPos = new Vector2(context.gameObject.transform.position.x, context.gameObject.transform.position.z);
         Vector2 targetPos = new Vector2(GetTargetPosition().x, GetTargetPosition().z);
 
-        if (Vector2.Distance(currentPos, targetPos) < 1.0f && Math.Abs(navMeshAgent.velocity.magnitude) < 0.01f)
+        if (Vector2.Distance(currentPos, targetPos) < 0.5f && Math.Abs(navMeshAgent.velocity.magnitude) < 0.01f)
         {
             if(!waypoints[waypointIndex].matchRotation)
             {
@@ -59,7 +59,7 @@ public override void Update()
                 }
                 RotateGuard(startRotation.y, waypoints[waypointIndex].transform.eulerAngles.y);
             }
-           
+            
         }
     }
 
@@ -108,20 +108,14 @@ public override void Update()
 
     private void OnTargetReached()
     {
-        Debug.Log("Target Reached");
+        //Debug.Log("Target Reached");
 
         int oldIndex = waypointIndex;
 
         startUpdated = false;
 
-        if (waypointIndex == waypoints.Length - 1)
-        {
-            waypointIndex = 0;
-        }
-        else
-        {
-            waypointIndex++;
-        }
+        waypointIndex = SelectNewWaypoint();
+
         context.LastWaypointIndex = waypointIndex;
 
 
@@ -131,6 +125,58 @@ public override void Update()
             context.GoToState(new CluelessWaitingState(context, waypoints[oldIndex].duration, this));
         }
     }
+
+    private int SelectNewWaypoint()
+    {
+        switch(context.patrolStyle)
+        {
+            case GuardStateMachine.PatrolStyle.Loop:
+                if (waypointIndex == waypoints.Length - 1)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return waypointIndex + 1;
+                }
+            case GuardStateMachine.PatrolStyle.BackAndForth:
+                if (incrementUp)
+                {
+                    if (waypointIndex == waypoints.Length - 1)
+                    {
+                        incrementUp = !incrementUp;
+                        return waypoints.Length - 1;
+                     
+                    }
+                    else
+                    {
+                        return waypointIndex + 1;
+                    }
+                } else
+                {
+                    if (waypointIndex == 0)
+                    {
+                        incrementUp = !incrementUp;
+                        return 0;
+                    }
+                    else
+                    {
+                        return waypointIndex - 1;
+                    }
+                }
+            case GuardStateMachine.PatrolStyle.Roaming:
+                return UnityEngine.Random.Range(0, waypoints.Length);
+            default:
+                if (waypointIndex == waypoints.Length - 1)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return waypointIndex + 1;
+                }
+        }
+        }
 
     public override void OnStateExit()
     {

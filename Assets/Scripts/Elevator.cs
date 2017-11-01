@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 
 /*
- * Elevator script opens the elevator if the player has a keycard.
+ * Elevator script opens the elevator if the player has a keycard. 
+ * Use on elivator object. 
  */ 
 
-public class Elevator : MonoBehaviour {
+public class Elevator : Interactable {
 
     private Animator anim;
     private bool locked = true;
@@ -14,15 +15,16 @@ public class Elevator : MonoBehaviour {
         anim = transform.parent.gameObject.GetComponent<Animator>();
 	}
 
-    public void TryOpen()
+    public override void OnInteract(GameObject obj)
     {
-        if (locked)
+        if (obj.GetComponent<Inventory>().Keycard)
         {
-            Debug.Log("Elevator is Locked");
+            UnlockElevator();
+            Open();
+
             return;
         }
-
-        Open();
+        Debug.Log("Elevator is Locked");
     }
 
     public void Open()
