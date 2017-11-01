@@ -17,8 +17,10 @@ using UnityEngine;
 
 public class MainPlayer : MonoBehaviour
 {
+    [HideInInspector]
     public List<GameObject> lightStandingIn;
-
+    [SerializeField]
+    public bool IsStandingInLight { get { return (lightStandingIn.Count > 0); } }
     public enum PlayerIndex
     {
         P1, P2

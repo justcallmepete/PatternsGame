@@ -22,7 +22,7 @@ public class LightComponent : PlayerComponentInterface
     {
         base.LateUpdateComponent();
 
-        if (MainPlayer.lightStandingIn.Count > 0 && !changedToLight)
+        if (MainPlayer.IsStandingInLight && !changedToLight)
         {
             Debug.Log("Player is in light");
 
@@ -32,7 +32,7 @@ public class LightComponent : PlayerComponentInterface
             gameObject.GetComponent<Renderer>().material = lightMaterial;
 
         }
-        else if (MainPlayer.lightStandingIn.Count == 0 && changedToLight)
+        else if (!MainPlayer.IsStandingInLight && changedToLight)
         {
             Debug.Log("Player is in shadow");
             changedToLight = false;
