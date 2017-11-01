@@ -11,8 +11,8 @@ public class TeleportComponent : PlayerComponentInterface
 {
     [Header("General settings")]
     public byte teleportationKey = 2;
-    [Tooltip("Maximal pull distance")]
-    public float maxDistance = 10;
+    //[Tooltip("Maximal pull distance")]
+    //public float maxDistance = 10;
     [Tooltip("Duraction of channelling")]
     public float channelTime = 2;
     [SerializeField]
@@ -92,7 +92,7 @@ public class TeleportComponent : PlayerComponentInterface
         // Draw debug ray
         if (MainPlayer.IsChannelling())
         {
-            Vector3 target = (GetClosestPlayer().transform.position - transform.position).normalized * maxDistance;
+            Vector3 target = (GetClosestPlayer().transform.position - transform.position);
             Debug.DrawRay(transform.position, target, Color.green);
         }
     }
@@ -100,8 +100,8 @@ public class TeleportComponent : PlayerComponentInterface
     {
         RaycastHit hit;
 
-        Vector3 target = (GetClosestPlayer().transform.position - transform.position).normalized * maxDistance;
-        if (Physics.Raycast(transform.position, target, out hit, maxDistance))
+        Vector3 target = GetClosestPlayer().transform.position - transform.position;
+        if (Physics.Raycast(transform.position, target, out hit))
         {
             if (hit.collider.gameObject.tag == "Player")
             {

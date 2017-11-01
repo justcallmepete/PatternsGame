@@ -11,13 +11,13 @@ public class MovementComponent : PlayerComponentInterface
 
     [Header("Movement variables")]
     [Tooltip("Normal movement speed")]
-    [Range(100, 200)]
+    [Range(100, 300)]
     public float movementSpeed;
     [Tooltip("Maximal sprint speed")]
     [Range(200, 500)]
     public float sprintSpeed;
     [Tooltip("Minimal sneak speed")]
-    [Range(50, 150)]
+    [Range(50, 300)]
     public float sneakSpeed;
 
     [Tooltip("Normal rotation speed")]

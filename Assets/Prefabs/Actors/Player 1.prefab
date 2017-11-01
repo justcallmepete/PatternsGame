@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 114676759208471288}
   - component: {fileID: 114778699283208508}
   m_Layer: 9
-  m_Name: Capsule
+  m_Name: Player 1
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -116,7 +116,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1772404688545024}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.8135066, y: 1, z: 1.9286102}
+  m_LocalPosition: {x: 24.7, y: 1, z: -40.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4444704779291416}
@@ -293,15 +293,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sprintButton: 1
   sneakButton: 0
-  movementSpeed: 139.2
-  sprintSpeed: 320
-  sneakSpeed: 90.8
-  rotationMovementSpeed: 18.31
-  rotationSprintSpeed: 18.15
-  acceleration: 18.15
-  deceleration: 18.31
-  fullStopDeceleration: 26.6
-  fullStopSensitivity: 22.5
+  movementSpeed: 300
+  sprintSpeed: 300
+  sneakSpeed: 300
+  rotationMovementSpeed: 20
+  rotationSprintSpeed: 25
+  acceleration: 18.07
+  deceleration: 27.48
+  fullStopDeceleration: 50
+  fullStopSensitivity: 30
 --- !u!114 &114323914245518582
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -389,7 +389,7 @@ MonoBehaviour:
   teleportationKey: 2
   maxDistance: 10
   channelTime: 2
-  teleportDelay: 1
+  teleportDelay: 0.1
   outerRadius: 1.3
 --- !u!114 &114666861192988250
 MonoBehaviour:
@@ -419,7 +419,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerIndex: 0
-  alphaSpeed: 1
+  alphaSpeed: 20
   teleportTarget: {x: 0, y: 0, z: 0}
   buttonDownList: 00000000000000000000
   buttonList: 00000000000000000000

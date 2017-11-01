@@ -7,7 +7,7 @@
 public class WhistleComponent : PlayerComponentInterface {
 
     [Tooltip("Button Code for activating the ability.")]
-    public int whistleKey;
+    public int whistleKey = 3;
     [Tooltip("Radius of the soundwave.")]
     public float radius = 4;
     [Tooltip("Life time of the soundwave")]
