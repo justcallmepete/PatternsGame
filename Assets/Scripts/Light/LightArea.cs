@@ -12,7 +12,8 @@ public class LightArea : MonoBehaviour
     int playerLayerIndex;
     int lightLayerMask; 
     [HideInInspector]
-    public List<Transform> targetsInSight = new List<Transform>();
+    public List<MainPlayer> playersInLight = new List<MainPlayer>();
+    List<MainPlayer> oldPlayersInLight = new List<MainPlayer>();
 
     public float meshResolution;
 
@@ -38,7 +39,11 @@ public class LightArea : MonoBehaviour
 
     private void LateUpdate()
     {
+        playersInLight.Clear();
         DrawFieldOfView();
+        UpdatePlayerLights();
+        oldPlayersInLight.Clear();
+        oldPlayersInLight = new List<MainPlayer>(playersInLight);
     }
 
     /// <summary>
@@ -140,13 +145,34 @@ public class LightArea : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, dir, out hit, viewRadius, lightLayerMask))
         {
-            if (hit.collider.gameObject.GetComponent<PlayerLight>())
+            MainPlayer playerHit = hit.collider.gameObject.GetComponent<MainPlayer>();
+            if (playerHit && !playersInLight.Contains(playerHit))
             {
-                hit.collider.gameObject.GetComponent<PlayerLight>().isInLight = true;
+                playersInLight.Add(playerHit);
             }
             return new ViewCastInfo(true, hit.point, hit.distance, pGlobalAngle);
         }
         return new ViewCastInfo(false, transform.position + dir * viewRadius, viewRadius, pGlobalAngle);
+    }
+
+    void UpdatePlayerLights()
+    {
+        foreach (MainPlayer p in oldPlayersInLight)
+        {
+            if (!playersInLight.Contains(p)) // Left the light
+            {
+                Debug.Log("removing light");
+                p.lightStandingIn.Remove(this.gameObject);
+            }
+        }
+        foreach (MainPlayer p in playersInLight)
+        {
+            if (!oldPlayersInLight.Contains(p)) // new in Light
+            {
+                Debug.Log("add light");
+                p.lightStandingIn.Add(this.gameObject);
+            }
+        }
     }
 
     public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)
