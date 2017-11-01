@@ -4,7 +4,6 @@ using UnityEngine.AI;
 
 /* This state handles all logic for Patrolling Guards */
 public class PatrollingState : CluelessGuardState {
-
     private int waypointIndex = 0;
     private bool incrementUp = true;
     public Waypoint[] waypoints;
@@ -45,19 +44,22 @@ public override void Update()
         Vector2 currentPos = new Vector2(context.gameObject.transform.position.x, context.gameObject.transform.position.z);
         Vector2 targetPos = new Vector2(GetTargetPosition().x, GetTargetPosition().z);
 
-        if (Vector2.Distance(currentPos, targetPos) < 1.0f && Math.Abs(navMeshAgent.velocity.magnitude) < 0.01f)
+        if (Vector2.Distance(currentPos, targetPos) < 0.5f && Math.Abs(navMeshAgent.velocity.magnitude) < 0.01f)
         {
             if(!waypoints[waypointIndex].matchRotation)
             {
                 OnTargetReached();
-            }
-            if (!startUpdated)
+            } else
             {
-                startRotation = context.transform.rotation.eulerAngles;
-                startUpdated = true;
-                lerpTime = 0.0f;
+                if (!startUpdated)
+                {
+                    startRotation = context.transform.rotation.eulerAngles;
+                    startUpdated = true;
+                    lerpTime = 0.0f;
+                }
+                RotateGuard(startRotation.y, waypoints[waypointIndex].transform.eulerAngles.y);
             }
-            RotateGuard(startRotation.y, waypoints[waypointIndex].transform.eulerAngles.y);
+            
         }
     }
 
