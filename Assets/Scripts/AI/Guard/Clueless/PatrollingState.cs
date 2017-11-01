@@ -49,14 +49,17 @@ public override void Update()
             if(!waypoints[waypointIndex].matchRotation)
             {
                 OnTargetReached();
-            }
-            if (!startUpdated)
+            } else
             {
-                startRotation = context.transform.rotation.eulerAngles;
-                startUpdated = true;
-                lerpTime = 0.0f;
+                if (!startUpdated)
+                {
+                    startRotation = context.transform.rotation.eulerAngles;
+                    startUpdated = true;
+                    lerpTime = 0.0f;
+                }
+                RotateGuard(startRotation.y, waypoints[waypointIndex].transform.eulerAngles.y);
             }
-            RotateGuard(startRotation.y, waypoints[waypointIndex].transform.eulerAngles.y);
+           
         }
     }
 
