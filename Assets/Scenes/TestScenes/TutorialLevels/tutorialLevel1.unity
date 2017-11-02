@@ -152,7 +152,8 @@ Prefab:
       propertyPath: m_Name
       value: futuristicDoor (4)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
   m_ParentPrefab: {fileID: 100100000, guid: 8a445e9a4bbb7cc458b7c33ebbd6ec9a, type: 2}
   m_IsPrefabParent: 0
 --- !u!4 &56880544 stripped
@@ -2504,6 +2505,23 @@ GameObject:
   m_PrefabParentObject: {fileID: 1545890002877138, guid: 8a445e9a4bbb7cc458b7c33ebbd6ec9a,
     type: 2}
   m_PrefabInternal: {fileID: 642481010}
+--- !u!1 &1475712105 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1692604764484416, guid: 8a445e9a4bbb7cc458b7c33ebbd6ec9a,
+    type: 2}
+  m_PrefabInternal: {fileID: 27452719}
+--- !u!114 &1475712107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1475712105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea36c64fd6bd2fd42b5e2b9174377031, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  openTime: 3
 --- !u!1001 &1501565414
 Prefab:
   m_ObjectHideFlags: 0
@@ -3486,6 +3504,23 @@ Transform:
   m_PrefabParentObject: {fileID: 4638193622804620, guid: ccfd09bf742a80b4dba99ab460acf0f0,
     type: 2}
   m_PrefabInternal: {fileID: 1751813380}
+--- !u!1 &1981968319 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1110538652286374, guid: 8a445e9a4bbb7cc458b7c33ebbd6ec9a,
+    type: 2}
+  m_PrefabInternal: {fileID: 27452719}
+--- !u!114 &1981968321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1981968319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea36c64fd6bd2fd42b5e2b9174377031, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  openTime: 3
 --- !u!4 &2023998953 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4638193622804620, guid: ccfd09bf742a80b4dba99ab460acf0f0,

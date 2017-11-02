@@ -5,7 +5,7 @@ using UnityEngine;
 public class SlidingDoor : Interactable
 {
     float timer;
-    public float openTime;
+    public float openTime = 3;
 
     private bool lockedWithSwitch = false;
     public bool LockedWithSwitch { get { return lockedWithSwitch; } set { lockedWithSwitch = value; } }
@@ -20,7 +20,7 @@ public class SlidingDoor : Interactable
 
     // Use this for initialization
     void Start () {
-        animator = GetComponent<Animator>();
+        animator = GetComponentInParent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -39,6 +39,7 @@ public class SlidingDoor : Interactable
 
     public override void OnInteract(GameObject obj)
     {
+        print("testing");
         if (lockedWithSwitch)
         {
             Debug.Log("Door is locked by a switch");

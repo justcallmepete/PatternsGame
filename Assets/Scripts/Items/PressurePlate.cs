@@ -28,7 +28,7 @@ public class PressurePlate : MonoBehaviour {
         }
 
         // Lock the door
-        door = lockedObject.GetComponent<SlidingDoor>();
+        door = lockedObject.GetComponentInChildren<SlidingDoor>();
         door.LockedWithSwitch = true;
     }
 
