@@ -10,20 +10,36 @@ public class GuardStateMachine : MonoBehaviour {
 
     public enum PatrolStyle
     {
+       Stationary,
        BackAndForth,
        Loop,
        Roaming
     }
 
-    public PatrolStyle patrolStyle = PatrolStyle.Loop;
+   
 
-    //Inspector
+    /***************************
+     * INSPECTOR VALUES
+     *****************************/
+    [Header("Pathing Options")]
+    public PatrolStyle patrolStyle;
+    [SerializeField]
+    private GuardPatrol patrol;
+    public GuardPatrol PatrolRoute { get { return patrol; } set { patrol = value; } }
     public float rotationSpeed;
+
+    [Header("State")]
     public GameObject indicator;
 
+    //Private values
+    [SerializeField]
     private GuardState state;
 
     //Properties
+    public Vector3 StartLocation { get { return startLocation; } set { startLocation = value; } }
+    private Vector3 startLocation;
+    public float StartRotation { get { return startRotation; } set { startRotation = value; } }
+    private float startRotation;
     public int LastWaypointIndex { get { return lastWaypointIndex; } set { lastWaypointIndex = value; } }
     private int lastWaypointIndex = 0;
     public GameObject TargetPlayer { get { return targetPlayer; } set { targetPlayer = value; } }
@@ -33,6 +49,8 @@ public class GuardStateMachine : MonoBehaviour {
     public Color IndicatorColor { get { return indicator.GetComponent<MeshRenderer>().material.color; } set { indicator.GetComponent<MeshRenderer>().material.color = value;  } }
 
     void Awake () {
+        StartLocation = transform.position;
+        StartRotation = transform.eulerAngles.y;
         agent = GetComponent<NavMeshAgent>();
         GoToState(new PatrollingState(this));
     }

@@ -44,7 +44,7 @@ public class KeyCardUIScript : MonoBehaviour {
             
             i++;
 
-        } while (!playerIsFound || i <= players.Length);
+        } while (!playerIsFound || i < players.Length);
 
         if (!playerIsFound || i > players.Length)
         {
@@ -54,7 +54,11 @@ public class KeyCardUIScript : MonoBehaviour {
 	}
 
 	void Update () {
-
+        if (player == null)
+        {
+            Debug.LogError("KeyCard player: " + playerIndex + " is not found");
+            return;
+        }
         // Set the UI true, 
         if (player.GetComponent<Inventory>().Keycard == true)
         {

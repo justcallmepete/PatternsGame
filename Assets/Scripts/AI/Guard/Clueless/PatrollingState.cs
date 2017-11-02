@@ -24,9 +24,9 @@ public class PatrollingState : CluelessGuardState {
     public override void OnStateEnter()
     {
         base.OnStateEnter();
-        GuardPatrol patrol = context.gameObject.transform.parent.gameObject.GetComponentInChildren<GuardPatrol>();
 
-        waypoints = patrol.GetWaypoints();
+        GuardPatrol patrol = context.PatrolRoute;
+        waypoints = patrol != null ?  patrol.GetWaypoints() : new Waypoint[0];
 
         waypointIndex = context.LastWaypointIndex;
         navMeshAgent = context.GetComponent<NavMeshAgent>();
@@ -37,36 +37,38 @@ public class PatrollingState : CluelessGuardState {
         lerpSpeed = context.rotationSpeed / 180.0f;
 }
 
-public override void Update()
+    public override void Update()
     {
-       navMeshAgent.SetDestination(GetTargetPosition());
+        navMeshAgent.SetDestination(GetTargetPosition());
 
         Vector2 currentPos = new Vector2(context.gameObject.transform.position.x, context.gameObject.transform.position.z);
         Vector2 targetPos = new Vector2(GetTargetPosition().x, GetTargetPosition().z);
 
         if (Vector2.Distance(currentPos, targetPos) < 0.5f && Math.Abs(navMeshAgent.velocity.magnitude) < 0.01f)
         {
-            if(!waypoints[waypointIndex].matchRotation)
-            {
-                OnTargetReached();
-            } else
-            {
+            if (waypoints.Length != 0 && !waypoints[waypointIndex].matchRotation)
+                {
+                    OnTargetReached();
+                }
+                else
+                {
                 if (!startUpdated)
                 {
-                    startRotation = context.transform.rotation.eulerAngles;
+                    startRotation =  context.transform.rotation.eulerAngles; 
                     startUpdated = true;
                     lerpTime = 0.0f;
                 }
-                RotateGuard(startRotation.y, waypoints[waypointIndex].transform.eulerAngles.y);
+                //float endRotation = waypoints.Length == 0 ? context.StartLocation.eulerAngles.y : waypoints[waypointIndex].transform.eulerAngles.y;
+                RotateGuard(startRotation.y, GetTargetAngle());
+                }
             }
-            
         }
-    }
 
     /* Rotate guard to the same rotation as the Waypoint */
     private void RotateGuard(float from, float to)
     {
-            Vector3 toVector = new Vector3(0.0f, to, 0.0f );
+       
+        Vector3 toVector = new Vector3(0.0f, to, 0.0f );
             lerpTime += lerpSpeed * Time.deltaTime;
             if (Vector3.Distance(context.transform.eulerAngles, toVector) > 2.0f)
             {
@@ -81,7 +83,7 @@ public override void Update()
 
     private float GetTargetAngle()
     {
-        return waypoints[waypointIndex].gameObject.transform.rotation.y;
+        return waypoints.Length ==  0 ? context.StartRotation : waypoints[waypointIndex].gameObject.transform.rotation.y;
     }
 
     public override Vector3 GetTargetPosition()
@@ -92,7 +94,7 @@ public override void Update()
         }
         else
         {
-            return context.gameObject.transform.position;
+            return context.StartLocation;
         }
     }
 
@@ -120,7 +122,8 @@ public override void Update()
 
 
         //if the waypoint has a waitingtime go to the waiting state and return here when done waiting.
-        if (waypoints[oldIndex].duration > 0.0f)
+
+        if (waypoints.Length != 0 && waypoints[oldIndex].duration > 0.0f)
         {
             context.GoToState(new CluelessWaitingState(context, waypoints[oldIndex].duration, this));
         }
@@ -130,6 +133,8 @@ public override void Update()
     {
         switch(context.patrolStyle)
         {
+            case GuardStateMachine.PatrolStyle.Stationary:
+                return waypointIndex;
             case GuardStateMachine.PatrolStyle.Loop:
                 if (waypointIndex == waypoints.Length - 1)
                 {
@@ -166,6 +171,7 @@ public override void Update()
                 }
             case GuardStateMachine.PatrolStyle.Roaming:
                 return UnityEngine.Random.Range(0, waypoints.Length);
+
             default:
                 if (waypointIndex == waypoints.Length - 1)
                 {
