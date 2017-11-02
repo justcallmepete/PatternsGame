@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /*
  * Singleton GameManagers contains all guards and all players in a scene
- */ 
+ */
 public class GameManager : MonoBehaviour {
 
     private static GameManager _instance;
@@ -31,5 +32,15 @@ public class GameManager : MonoBehaviour {
         _instance = this;
         guards = GameObject.FindGameObjectsWithTag("Guard");
         players = GameObject.FindGameObjectsWithTag("Player");
+    }
+
+    public void ReloadScene()
+    {
+
+    }
+
+    public void LoadNextScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

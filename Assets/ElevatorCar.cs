@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /*
  * This script will check if any player is in this box collider. A trigger box collider is required.
@@ -15,7 +14,6 @@ public class ElevatorCar : MonoBehaviour
     private int requiredAmountOfPlayers;
     private int nPlayer = 0;
 
-    // Use this for initialization
     void Awake()
     {
         requiredAmountOfPlayers = GameManager.Instance.Players.Length;
@@ -44,13 +42,14 @@ public class ElevatorCar : MonoBehaviour
 
     private IEnumerator LoadNextScene()
     {
+        // Delay the load scene.
         float currentTime = 0;
         while (currentTime < loadSceneDelay)
         {
             currentTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 
+        GameManager.Instance.LoadNextScene();       
     }
 }
