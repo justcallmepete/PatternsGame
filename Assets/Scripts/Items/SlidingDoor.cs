@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlidingDoor : Interactable
+public class SlidingDoor : MonoBehaviour
 {
     float timer;
     public float openTime = 3;
@@ -37,7 +37,7 @@ public class SlidingDoor : Interactable
 
 	}
 
-    public override void OnInteract(GameObject obj)
+    public void OnInteract(GameObject obj)
     {
         print("testing");
         if (lockedWithSwitch)
@@ -56,6 +56,7 @@ public class SlidingDoor : Interactable
                 break;
         }
     }
+
     public void Open()
     {
         //open animation

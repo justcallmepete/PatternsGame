@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33553795173659452}
   - component: {fileID: 23145858212244948}
   - component: {fileID: 64667570504369804}
-  - component: {fileID: 114561510638071286}
+  - component: {fileID: 114289889156022272}
   m_Layer: 8
   m_Name: door_left
   m_TagString: Untagged
@@ -56,8 +56,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4751576072949092}
-  - component: {fileID: 65671889951330474}
   - component: {fileID: 95286852032447842}
+  - component: {fileID: 114108860811493652}
   m_Layer: 8
   m_Name: futuristicDoor
   m_TagString: Untagged
@@ -76,7 +76,7 @@ GameObject:
   - component: {fileID: 33056624585650570}
   - component: {fileID: 23745061277827592}
   - component: {fileID: 64009032789365038}
-  - component: {fileID: 114492340932805274}
+  - component: {fileID: 114512272661226916}
   m_Layer: 8
   m_Name: door_right
   m_TagString: Untagged
@@ -537,18 +537,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65671889951330474
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1545890002877138}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 2, y: 7, z: 6}
-  m_Center: {x: 0, y: 3.5, z: 0}
 --- !u!65 &65835427605357282
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -578,19 +566,19 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114492340932805274
+--- !u!114 &114108860811493652
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1692604764484416}
+  m_GameObject: {fileID: 1545890002877138}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea36c64fd6bd2fd42b5e2b9174377031, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   openTime: 3
---- !u!114 &114561510638071286
+--- !u!114 &114289889156022272
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -598,7 +586,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1110538652286374}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea36c64fd6bd2fd42b5e2b9174377031, type: 3}
+  m_Script: {fileID: 11500000, guid: 4b96c4ab7a72c2947b9bc9dda4114717, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  openTime: 3
+--- !u!114 &114512272661226916
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1692604764484416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b96c4ab7a72c2947b9bc9dda4114717, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
