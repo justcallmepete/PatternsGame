@@ -16,7 +16,7 @@ public class PressurePlate : MonoBehaviour {
 
     // Private settings
     private float currentMass = 0;
-    private Door door;
+    private SlidingDoor door;
 
     // Use this for initialization
     void Start()
@@ -28,7 +28,7 @@ public class PressurePlate : MonoBehaviour {
         }
 
         // Lock the door
-        door = lockedObject.GetComponent<Door>();
+        door = lockedObject.GetComponent<SlidingDoor>();
         door.LockedWithSwitch = true;
     }
 
