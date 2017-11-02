@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 
 /*
  * This state is for the Looking Around Behaviour of the Guard.
@@ -64,14 +65,16 @@ public class InvestigationGuardState : SearchingGuardState
     private void RotateGuard(float from, float to)
     {
         Vector3 toVector = new Vector3(0.0f, to, 0.0f);
-        lerpTime += lerpSpeed * Time.deltaTime;
-        if (Vector3.Distance(context.transform.eulerAngles, toVector) > 5.0f)
+        float deltalerp = Time.deltaTime * (1 / (System.Math.Abs(from - to) / context.rotationSpeed));
+        lerpTime += deltalerp;
+        if (lerpTime < 1.0f)
         {
             context.transform.eulerAngles = new Vector3(0.0f, Mathf.LerpAngle(from, to, lerpTime), 0.0f);
         }
         else
         {
             context.transform.eulerAngles = toVector;
+            Debug.Log(toVector);
             OnTargetReached();
         }
     }

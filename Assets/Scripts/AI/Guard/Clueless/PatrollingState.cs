@@ -69,21 +69,23 @@ public class PatrollingState : CluelessGuardState {
     {
        
         Vector3 toVector = new Vector3(0.0f, to, 0.0f );
-            lerpTime += lerpSpeed * Time.deltaTime;
-            if (Vector3.Distance(context.transform.eulerAngles, toVector) > 2.0f)
+        float deltalerp =  Time.deltaTime * (1 / (Math.Abs(from - to) / context.rotationSpeed));
+        lerpTime += deltalerp;
+            if (lerpTime < 1.0f)
             {
             context.transform.eulerAngles = new Vector3(0.0f, Mathf.LerpAngle(from, to, lerpTime), 0.0f);
             }
             else
             {
                 context.transform.eulerAngles = toVector;
+            Debug.Log(toVector);
                 OnTargetReached();
             }
     }
 
     private float GetTargetAngle()
     {
-        return waypoints.Length ==  0 ? context.StartRotation : waypoints[waypointIndex].gameObject.transform.rotation.y;
+        return waypoints.Length ==  0 ? context.StartRotation : waypoints[waypointIndex].gameObject.transform.eulerAngles.y;
     }
 
     public override Vector3 GetTargetPosition()
@@ -110,7 +112,7 @@ public class PatrollingState : CluelessGuardState {
 
     private void OnTargetReached()
     {
-        //Debug.Log("Target Reached");
+        Debug.Log("Target Reached");
 
         int oldIndex = waypointIndex;
 
