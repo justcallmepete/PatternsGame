@@ -112,6 +112,17 @@ public class MovementComponent : PlayerComponentInterface
         {
             Move();
         }
+
+        MainPlayer.animator.SetFloat("inputV", Mathf.Abs(MainPlayer.rigidBody.velocity.x));
+        MainPlayer.animator.SetFloat("inputH", Mathf.Abs(MainPlayer.rigidBody.velocity.z));
+        Debug.Log(MainPlayer.rigidBody.velocity.x);
+        if (speed > 0)
+        {
+            MainPlayer.animator.SetBool("run", true);
+        } else
+        {
+            MainPlayer.animator.SetBool("run", false);
+        }
     }
 
     private void Move()
