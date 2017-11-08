@@ -18,15 +18,19 @@ public class GuardStateMachine : MonoBehaviour {
 
    
 
-    /***************************
-     * INSPECTOR VALUES
-     *****************************/
+    /****************************
+     *     INSPECTOR VALUES     *
+     ****************************/
     [Header("Pathing Options")]
     public PatrolStyle patrolStyle;
     [SerializeField]
     private GuardPatrol patrol;
     public GuardPatrol PatrolRoute { get { return patrol; } set { patrol = value; } }
     public float rotationSpeed;
+
+    [Header("Chasing Options")]
+    [Range(1.0f, 10.0f)]
+    public float stoppingDistance;
 
     [Header("State")]
     public GameObject indicator;
@@ -37,9 +41,9 @@ public class GuardStateMachine : MonoBehaviour {
 
     //Properties
     public Vector3 StartLocation { get { return startLocation; } set { startLocation = value; } }
-    private Vector3 startLocation;
-    public float StartRotation { get { return startRotation; } set { startRotation = value; } }
-    private float startRotation;
+    private Vector3 startLocation; // Save the spawn location so guards can return to it.
+    public Vector3 StartRotation { get { return startRotation; } set { startRotation = value; } }
+    private Vector3 startRotation; // Save the start rotation so the guard faces the right way spawn.
     public int LastWaypointIndex { get { return lastWaypointIndex; } set { lastWaypointIndex = value; } }
     private int lastWaypointIndex = 0;
     public GameObject TargetPlayer { get { return targetPlayer; } set { targetPlayer = value; } }
@@ -50,7 +54,7 @@ public class GuardStateMachine : MonoBehaviour {
 
     void Awake () {
         StartLocation = transform.position;
-        StartRotation = transform.eulerAngles.y;
+        StartRotation = transform.forward;
         agent = GetComponent<NavMeshAgent>();
         GoToState(new PatrollingState(this));
     }

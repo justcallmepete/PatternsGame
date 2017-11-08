@@ -17,6 +17,7 @@ public class InvestigationGuardState : SearchingGuardState
 
     public InvestigationGuardState(GuardStateMachine context, Vector3 targetPosition) : base(context, targetPosition)
     {
+        startRotation = context.transform.forward;
     }
 
     public override void OnStateEnter()
@@ -25,21 +26,15 @@ public class InvestigationGuardState : SearchingGuardState
         lerpSpeed = context.rotationSpeed / 180.0f;
 
         startRotation = context.transform.rotation.eulerAngles;
-        targetRotation = new Vector3(startRotation.x, startRotation.y + 90.0f, startRotation.z);
-        
-        startUpdated = false;
+        targetRotation = Quaternion.AngleAxis(80, startRotation) * Vector3.left;
+
+
+        done = false;
     }
 
     public override void Update()
     {
-        //base.Update();
-        if (!startUpdated)
-        {
-            startRotation = context.transform.rotation.eulerAngles;
-            startUpdated = true;
-            lerpTime = 0.0f;
-        }
-        RotateGuard(startRotation.y, targetRotation.y);
+        RotateTo(targetRotation);
     }
 
     public override Vector3 GetTargetPosition()
@@ -60,6 +55,17 @@ public class InvestigationGuardState : SearchingGuardState
     public override void OnStateExit()
     {
         base.OnStateExit();
+    }
+
+    private void RotateTo(Vector3 rotateTarget)
+    {
+        Vector3 from = context.transform.forward;
+        Vector3 newRotation = Vector3.RotateTowards(from, rotateTarget, Time.deltaTime * context.rotationSpeed * Mathf.Deg2Rad, 0.0f);
+        context.transform.rotation = Quaternion.LookRotation(newRotation);
+        if (Vector3.Angle(context.transform.forward, rotateTarget) < 0.5f)
+        {
+            OnTargetReached();
+        }
     }
 
     private void RotateGuard(float from, float to)
@@ -84,9 +90,7 @@ public class InvestigationGuardState : SearchingGuardState
         Debug.Log("Target!");
         if (!done)
         {
-            startRotation = targetRotation;
-            targetRotation = new Vector3(startRotation.x, startRotation.y - 90.0f, startRotation.z);
-            lerpTime = 0.0f;
+            targetRotation = Quaternion.AngleAxis(80, startRotation) * Vector3.right;
             done = true;
         } else
         {
