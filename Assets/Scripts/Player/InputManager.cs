@@ -7,7 +7,6 @@ public class InputManager : MonoBehaviour
 {
 
     public static InputManager _instance;
-    private GameObject[] players;
     private ControllerDictionaries controllerDictionaries;
     private string[] controllerNames;
     public string[] actualControllerNames;

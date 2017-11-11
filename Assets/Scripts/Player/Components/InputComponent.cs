@@ -29,7 +29,7 @@ public class InputComponent : PlayerComponentInterface
     private void CheckButton()
     {
         string tempString = "";
-        if (InputManager.Instance.controllerUsed[0].ToString() == "Keyboard")
+        if (InputManager.Instance.controllerUsed[MainPlayer.GetPlayerIndex()].ToString() == "Keyboard")
         {
             tempString = "_K";
         }
@@ -65,7 +65,7 @@ public class InputComponent : PlayerComponentInterface
     private void CheckAxisDirection()
     {
         string tempString = "";
-        if(InputManager.Instance.controllerUsed[0].ToString() == "Keyboard")
+        if(InputManager.Instance.controllerUsed[MainPlayer.GetPlayerIndex()].ToString() == "Keyboard")
         {
             tempString = "_K";
         }
