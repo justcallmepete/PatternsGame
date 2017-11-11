@@ -10,7 +10,7 @@ using UnityEngine;
 public class TeleportComponent : PlayerComponentInterface
 {
     [Header("General settings")]
-    public byte teleportationKey = 2;
+    public int teleportationButton;
     //[Tooltip("Maximal pull distance")]
     //public float maxDistance = 10;
     [Tooltip("Duraction of channelling")]
@@ -29,6 +29,8 @@ public class TeleportComponent : PlayerComponentInterface
     public override void AwakeComponent()
     {
         base.AwakeComponent();
+
+        teleportationButton = InputManager.Instance.GetKey("B", MainPlayer.GetPlayerIndex());
 
         // Set id
         id = 4;
@@ -68,7 +70,7 @@ public class TeleportComponent : PlayerComponentInterface
             return;
         }
 
-        if (MainPlayer.buttonList[teleportationKey])
+        if (MainPlayer.buttonList[teleportationButton])
         {
             // Start channelling if player is in sight and character is free
             if (IsPlayerInSight())
@@ -82,7 +84,6 @@ public class TeleportComponent : PlayerComponentInterface
         }
         else if (MainPlayer.IsChannelling())
         {
-            Debug.Log("cancel channel");
             // Stop channelling is the key is released
             StopChannelling();
         }
@@ -164,14 +165,12 @@ public class TeleportComponent : PlayerComponentInterface
         {
             MainPlayer.CurrentState = MainPlayer.State.Idle;
         }
-        Debug.Log("Stop Channel");
         currentTime = 0;
     }
 
     private void StartChannelling()
     {
         MainPlayer.CurrentState = MainPlayer.State.Channelling;
-        Debug.Log("Start Channel");
     }
 
     // Ratio for the channel bar
@@ -185,7 +184,7 @@ public class TeleportComponent : PlayerComponentInterface
     {
         for (int i = 0; i < MainPlayer.buttonList.Length; i++)
         {
-            if (i == teleportationKey)
+            if (i == teleportationButton)
             {
                 continue;
             }

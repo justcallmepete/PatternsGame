@@ -6,8 +6,8 @@
 
 public class MovementComponent : PlayerComponentInterface
 {
-    public int sprintButton = 1;
-    public int sneakButton = 0;
+    public int sprintButton;
+    public int sneakButton;
 
     [Header("Movement variables")]
     [Tooltip("Normal movement speed")]
@@ -50,6 +50,8 @@ public class MovementComponent : PlayerComponentInterface
         base.AwakeComponent();
 
         id = 1;
+        sprintButton = InputManager.Instance.GetKey("A", MainPlayer.GetPlayerIndex());
+        sneakButton = InputManager.Instance.GetKey("X", MainPlayer.GetPlayerIndex());
     }
 
     public override void FixedUpdateComponent()
