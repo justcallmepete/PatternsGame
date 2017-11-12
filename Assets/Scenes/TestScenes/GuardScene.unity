@@ -340,6 +340,11 @@ Prefab:
       propertyPath: m_Name
       value: Player 1 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 114676759208471288, guid: ff86456180e73ac4eb01590acaaec6da,
+        type: 2}
+      propertyPath: playerIndex
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ff86456180e73ac4eb01590acaaec6da, type: 2}
   m_IsPrefabParent: 0
@@ -397,6 +402,7 @@ MonoBehaviour:
   patrolStyle: 1
   patrol: {fileID: 0}
   rotationSpeed: 180
+  stoppingDistance: 0
   indicator: {fileID: 0}
 --- !u!135 &860253000
 SphereCollider:
@@ -665,6 +671,16 @@ Prefab:
         type: 2}
       propertyPath: patrolStyle
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 195848614501214794, guid: 6b41b6c9fd54eef4a9efd58e9294a358,
+        type: 2}
+      propertyPath: m_AutoRepath
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114699484884198442, guid: 6b41b6c9fd54eef4a9efd58e9294a358,
+        type: 2}
+      propertyPath: viewRadius
+      value: 6.57
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6b41b6c9fd54eef4a9efd58e9294a358, type: 2}

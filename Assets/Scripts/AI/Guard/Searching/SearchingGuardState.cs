@@ -25,7 +25,7 @@ public class SearchingGuardState : GuardState
 
     public override void OnSeePlayer(GameObject player)
     {
-        context.GoToState(new AlertGuardState(context));
+        context.GoToState(new ChaseGuardState(context));
     }
 
     public override void OnStateEnter()

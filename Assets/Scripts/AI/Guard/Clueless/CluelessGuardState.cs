@@ -32,7 +32,7 @@ public class CluelessGuardState : GuardState
     public override void OnSeePlayer(GameObject player)
     {
         //TODO: handle State transition
-        context.GoToState(new AlertGuardState(context));
+        context.GoToState(new ChaseGuardState(context));
         Debug.Log("I see the Player!");
     }
 
