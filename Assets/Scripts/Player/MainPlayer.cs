@@ -9,7 +9,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(InputComponent))]
 [RequireComponent(typeof(MovementComponent))]
-[RequireComponent(typeof(Inventory))]
+//[RequireComponent(typeof(Inventory))]
 [RequireComponent(typeof(WhistleComponent))]
 [RequireComponent(typeof(TeleportComponent))]
 [RequireComponent(typeof(Rigidbody))]
@@ -41,7 +41,7 @@ public class MainPlayer : MonoBehaviour
     private Color color;            // Used to store color reference.
     private Material material;
 
-    private Inventory inventory;
+    
 
     // Used for channelling
     private float channelTimeRatio = 0;
@@ -85,11 +85,13 @@ public class MainPlayer : MonoBehaviour
     private State currentState = State.Idle;
     public State CurrentState { get { return currentState; } set { currentState = value; } }
 
+    public Inventory inventory = new Inventory();
+
+
     private void Awake()
     {
         // Cache stuff for later
         components = gameObject.GetComponents<PlayerComponentInterface>();
-        inventory = gameObject.GetComponent<Inventory>();
         rigidBody = gameObject.GetComponent<Rigidbody>();
         material = gameObject.GetComponent<MeshRenderer>().material;
 
