@@ -112,6 +112,55 @@ public class MainPlayer : MonoBehaviour
         });
     }
 
+    private void Start()
+    {
+        LoadData();
+    }
+
+    private void LoadData()
+    {
+        if (SaveLoadControl.Instance.isSceneBeingLoaded)
+        {
+            if(getPlayerIndex() == "P1")
+            {
+                transform.position = new Vector3(SaveLoadControl.Instance.loadedData.savedPlayer1Data.playerPosX,
+                                                 SaveLoadControl.Instance.loadedData.savedPlayer1Data.playerPosY,
+                                                 SaveLoadControl.Instance.loadedData.savedPlayer1Data.playerPosZ);
+
+                inventory = SaveLoadControl.Instance.loadedData.savedPlayer1Data.inventory;
+                SaveLoadControl.Instance.isPlayer1Loaded = true;
+            }
+            else if(getPlayerIndex() == "P2")
+            {
+                transform.position = new Vector3(SaveLoadControl.Instance.loadedData.savedPlayer2Data.playerPosX,
+                                                 SaveLoadControl.Instance.loadedData.savedPlayer2Data.playerPosY,
+                                                 SaveLoadControl.Instance.loadedData.savedPlayer2Data.playerPosZ);
+
+                inventory = SaveLoadControl.Instance.loadedData.savedPlayer2Data.inventory;
+                SaveLoadControl.Instance.isPlayer2Loaded = true;
+            }
+        }
+    }
+
+    private void SaveData()
+    {
+        if(getPlayerIndex() == "P1")
+        {
+            SaveLoadControl.Instance.updatedSavablePlayer1Data.playerPosX = transform.position.x;
+            SaveLoadControl.Instance.updatedSavablePlayer1Data.playerPosY = transform.position.y;
+            SaveLoadControl.Instance.updatedSavablePlayer1Data.playerPosZ = transform.position.z;
+            SaveLoadControl.Instance.updatedSavablePlayer1Data.inventory = inventory;
+        }
+        else if(getPlayerIndex() == "P2")
+        {
+            SaveLoadControl.Instance.updatedSavablePlayer2Data.playerPosX = transform.position.x;
+            SaveLoadControl.Instance.updatedSavablePlayer2Data.playerPosY = transform.position.y;
+            SaveLoadControl.Instance.updatedSavablePlayer2Data.playerPosZ = transform.position.z;
+            SaveLoadControl.Instance.updatedSavablePlayer2Data.inventory = inventory;
+        }
+    }
+
+
     private void Update()
     {
         // Update all components
@@ -119,6 +168,8 @@ public class MainPlayer : MonoBehaviour
         {
             component.UpdateComponent();
         }
+
+        SaveData();
     }
 
     private void FixedUpdate()
