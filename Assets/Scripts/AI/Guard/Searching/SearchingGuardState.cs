@@ -6,14 +6,14 @@ using UnityEngine.AI;
 public class SearchingGuardState : GuardState
 {
 
-    private Vector3 targetPosition;
+    protected Vector3 targetPosition;
 
     public SearchingGuardState(GuardStateMachine context, Vector3 targetPosition) : base(context)
     {
         this.targetPosition = targetPosition;
     }
 
-    public override Vector3 GetTargetPosition()
+    private Vector3 GetTargetPosition()
     {
         return targetPosition;
     }

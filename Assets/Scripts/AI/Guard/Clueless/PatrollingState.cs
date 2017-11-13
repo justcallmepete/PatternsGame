@@ -61,7 +61,7 @@ public class PatrollingState : CluelessGuardState {
         return waypoints.Length == 0 ? context.StartRotation : waypoints[waypointIndex].gameObject.transform.forward;
     }
 
-    public override Vector3 GetTargetPosition()
+    private Vector3 GetTargetPosition()
     {
         if (waypoints != null && waypoints.Length > 0)
         {
@@ -71,11 +71,6 @@ public class PatrollingState : CluelessGuardState {
         {
             return context.StartLocation;
         }
-    }
-
-    public override void OnDistraction(Vector3 target)
-    {
-        context.GoToState(new SearchingGuardState(context, target));
     }
 
     public override void OnSeePlayer(GameObject player)

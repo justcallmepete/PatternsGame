@@ -30,16 +30,6 @@ public class CluelessWaitingState : CluelessGuardState {
         }
     }
 
-    public override Vector3 GetTargetPosition()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void OnDistraction(Vector3 target)
-    {
-        base.OnDistraction(target);
-    }
-
     public override void OnSeePlayer(GameObject player)
     {
         base.OnSeePlayer(player);

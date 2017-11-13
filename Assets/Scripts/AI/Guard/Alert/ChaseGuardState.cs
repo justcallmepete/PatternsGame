@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class ChaseGuardState : AlertGuardState
 {
@@ -14,14 +15,15 @@ public class ChaseGuardState : AlertGuardState
 
     public override void Update()
     {
-
+        base.Update();
         Vector2 currentPos = new Vector2(context.gameObject.transform.position.x, context.gameObject.transform.position.z);
         Vector2 targetPos = new Vector2(GetTargetPosition().x, GetTargetPosition().z);
 
         if (GetDistanceToTarget() > context.stoppingDistance)
         {
+            context.NavigationAgent.isStopped = false;
             context.NavigationAgent.SetDestination(GetTargetPosition());
-            Debug.Log(GetDistanceToTarget());
+            //Debug.Log(GetDistanceToTarget());
         }
         else
         {
@@ -34,10 +36,11 @@ public class ChaseGuardState : AlertGuardState
 
     public override void OnStateExit()
     {
+        context.NavigationAgent.isStopped = false;
         base.OnStateExit();
     }
 
-    public override Vector3 GetTargetPosition()
+    private Vector3 GetTargetPosition()
     {
         if (context.TargetPlayer)
         {
@@ -70,6 +73,30 @@ public class ChaseGuardState : AlertGuardState
 
     private void OnTargetReached()
     {
-        throw new NotImplementedException();
+        
+    }
+
+    private float GetDistanceToTarget()
+    {
+        Vector2 currentPos = new Vector2(context.gameObject.transform.position.x, context.gameObject.transform.position.z);
+        Vector2 targetPos = new Vector2(GetTargetPosition().x, GetTargetPosition().z);
+
+        NavMeshPath path = new NavMeshPath();
+        path.ClearCorners();
+        if (NavMesh.CalculatePath(currentPos, targetPos, 0, path))
+        {
+            float lng = 0.0f;
+
+            if ((path.status != NavMeshPathStatus.PathInvalid) && (path.corners.Length > 1))
+            {
+                for (int i = 1; i < path.corners.Length; ++i)
+                {
+                    lng += Vector3.Distance(path.corners[i - 1], path.corners[i]);
+                }
+            }
+
+            return lng;
+        }
+        return 0.0f;
     }
 }

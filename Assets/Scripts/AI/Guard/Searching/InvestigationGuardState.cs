@@ -37,9 +37,9 @@ public class InvestigationGuardState : SearchingGuardState
         RotateTo(targetRotation);
     }
 
-    public override Vector3 GetTargetPosition()
+    private Vector3 GetTargetPosition()
     {
-        return base.GetTargetPosition();
+        return base.targetPosition;
     }
 
     public override void OnDistraction(Vector3 target)

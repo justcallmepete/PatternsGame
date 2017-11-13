@@ -18,15 +18,9 @@ public class CluelessGuardState : GuardState
         throw new System.NotImplementedException();
     }
 
-    public override Vector3 GetTargetPosition()
-    {
-        throw new System.NotImplementedException();
-    }
-
     public override void OnDistraction(Vector3 target)
     {
-        //TODO: handle State transition
-        throw new System.NotImplementedException("State Transition not yet handled");
+        context.GoToState(new SearchingGuardState(context, target));
     }
 
     public override void OnSeePlayer(GameObject player)

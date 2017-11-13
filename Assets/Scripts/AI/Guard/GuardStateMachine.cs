@@ -22,6 +22,7 @@ public class GuardStateMachine : MonoBehaviour {
      *     INSPECTOR VALUES     *
      ****************************/
     [Header("Pathing Options")]
+
     public PatrolStyle patrolStyle;
     [SerializeField]
     private GuardPatrol patrol;
