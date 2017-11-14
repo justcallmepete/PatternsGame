@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+/* This class contains all the items that are saved. 
+ */ 
+
 [Serializable]
 public class SerializableData
 {

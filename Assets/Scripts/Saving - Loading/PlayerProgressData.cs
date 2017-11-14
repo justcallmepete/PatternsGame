@@ -2,6 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/* This class is used to contain all the data about the progress. That means the current scene number for now.
+ *  
+ * 
+ */ 
+
+
 public class PlayerProgressData : MonoBehaviour {
 
     public static PlayerProgressData Instance;
@@ -18,7 +25,7 @@ public class PlayerProgressData : MonoBehaviour {
         }
     }
 
-    //private SavablePlayerProgressData localPlayerProgressData;
+    
     private int savedLevel;
 
     private void Start()

@@ -5,6 +5,14 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
+/* This class is placed on a empty game object in the scene. Every scene needs this controler. 
+ *  
+ * This class controls all the saving and loading processes.
+ * For example: I want to save the current inventory status from the player. In the player class you call then:
+ * SaveLoadControl.Instance.updateSavablePlayer1Data.inventory = inventory;
+ * 
+ */
+
 public class SaveLoadControl : MonoBehaviour {
 
     // Singleton
@@ -24,6 +32,7 @@ public class SaveLoadControl : MonoBehaviour {
 
     SerializableData serializableData = new SerializableData();
     public SerializableData loadedData = new SerializableData();
+    public SerializableData loadedCheckpoint = new SerializableData();
 
     public SavablePlayerData updatedSavablePlayer1Data = new SavablePlayerData();
     public SavablePlayerData updatedSavablePlayer2Data = new SavablePlayerData();
@@ -34,6 +43,8 @@ public class SaveLoadControl : MonoBehaviour {
     public bool isPlayer1Loaded;
     public bool isPlayer2Loaded;
     public bool isPlayerProgressDataLoaded;
+
+    public bool isLoadingCheckpoint;
 
     void LoadingLevel()
     {
@@ -59,7 +70,7 @@ public class SaveLoadControl : MonoBehaviour {
     public delegate void SaveDeligate(object sender, EventArgs args);
     public static event SaveDeligate SaveEvent;
 
-    public void SaveData()
+    public void SaveData(bool isCheckpoint)
     {
         if (!Directory.Exists("savegames"))
         {
@@ -69,25 +80,56 @@ public class SaveLoadControl : MonoBehaviour {
         UpdateSerializableData();
 
         BinaryFormatter formatter = new BinaryFormatter();
-        FileStream saveFile = File.Create("savegames/save.mainframe");
+        if (isCheckpoint)
+        {
+            Debug.Log("save checkpoint");
+            FileStream saveFile = File.Create("savegames/checkpoint.mainframe");
+            formatter.Serialize(saveFile, serializableData);
+            saveFile.Close();
+        }
 
-        formatter.Serialize(saveFile, serializableData);
-        saveFile.Close();
+        if (!isCheckpoint)
+        {
+            Debug.Log("save game");
+            FileStream saveFile = File.Create("savegames/save.mainframe");
+            formatter.Serialize(saveFile, serializableData);
+            saveFile.Close();
+        }
     }
 
-    public void LoadData()
+    public void LoadData(bool isCheckpoint)
     {
-        // Deserialize the binary to readable data
-        BinaryFormatter formatter = new BinaryFormatter();
-        FileStream saveFile = File.Open("savegames/save.mainframe", FileMode.Open);
+        if (isCheckpoint)
+        {
 
-        loadedData = (SerializableData)formatter.Deserialize(saveFile);
-        saveFile.Close();
+            Debug.Log("load checkpoint");
+            // Deserialize the binary to readable data
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream saveFile = File.Open("savegames/checkpoint.mainframe", FileMode.Open);
 
-        // Load the scene
-        isSceneBeingLoaded = true;
-        int levelToLoad = loadedData.savedPlayerProgressData.savedSceneID;
-        Application.LoadLevel(levelToLoad);
+            loadedCheckpoint = (SerializableData)formatter.Deserialize(saveFile);
+
+            saveFile.Close();
+
+            isLoadingCheckpoint = true;
+
+        }
+
+        if (!isCheckpoint)
+        {            
+            Debug.Log("load game");
+            // Deserialize the binary to readable data
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream saveFile = File.Open("savegames/save.mainframe", FileMode.Open);
+
+            loadedData = (SerializableData)formatter.Deserialize(saveFile);
+            saveFile.Close();
+
+            // Load the scene
+            isSceneBeingLoaded = true;
+            int levelToLoad = loadedData.savedPlayerProgressData.savedSceneID;
+            Application.LoadLevel(levelToLoad);
+        }       
     }
 
     private void Update()
@@ -98,13 +140,15 @@ public class SaveLoadControl : MonoBehaviour {
         // Debug save/load
         if (Input.GetKeyDown(KeyCode.O))
         {
-            Debug.Log("save");
-            SaveData();
+            SaveData(false);
         }
         if (Input.GetKeyDown(KeyCode.P))
         {
-            Debug.Log("load");
-            LoadData();
+            LoadData(false);
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            LoadData(true);
         }
     }
 
