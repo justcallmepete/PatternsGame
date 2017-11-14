@@ -70,8 +70,10 @@ public class MainPlayer : MonoBehaviour
      * 8 - Select
      * 9 - Start
      */
-     
+    
+    [HideInInspector]
     public bool[] buttonDownList = new bool[10];
+    [HideInInspector]
     public bool[] buttonList = new bool[10];
     [HideInInspector]
     public Vector3 axisDirection = Vector3.zero;

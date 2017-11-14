@@ -6,26 +6,14 @@
 
 public class MovementComponent : PlayerComponentInterface
 {
-    public int sprintButton;
-    public int sneakButton;
-
     [Header("Movement variables")]
     [Tooltip("Normal movement speed")]
     [Range(100, 300)]
     public float movementSpeed;
-    [Tooltip("Maximal sprint speed")]
-    [Range(200, 500)]
-    public float sprintSpeed;
-    [Tooltip("Minimal sneak speed")]
-    [Range(50, 300)]
-    public float sneakSpeed;
 
     [Tooltip("Normal rotation speed")]
     [Range(10, 30)]
     public float rotationMovementSpeed;
-    [Tooltip("Sprint rotation speed")]
-    [Range(10, 30)]
-    public float rotationSprintSpeed;
 
     [Tooltip("Acceleration of the player")]
     [Range(10, 30)]
@@ -50,8 +38,6 @@ public class MovementComponent : PlayerComponentInterface
         base.AwakeComponent();
 
         id = 1;
-        sprintButton = InputManager.Instance.GetKey("A", MainPlayer.GetPlayerIndex());
-        sneakButton = InputManager.Instance.GetKey("X", MainPlayer.GetPlayerIndex());
     }
 
     public override void FixedUpdateComponent()
@@ -66,21 +52,8 @@ public class MovementComponent : PlayerComponentInterface
         if (!MainPlayer.IsBusy())
         {
             //Set max speed and rotation speed to sprint speed or walk speed
-            if (MainPlayer.buttonList[sprintButton])
-            {
-                maxSpeed = sprintSpeed;
-                rotationSpeed = rotationSprintSpeed;
-            }
-            else if (MainPlayer.buttonList[sneakButton])
-            {
-                maxSpeed = sneakSpeed;
-                rotationSpeed = rotationMovementSpeed;
-            }
-            else
-            {
-                maxSpeed = movementSpeed;
-                rotationSpeed = rotationMovementSpeed;
-            }
+            maxSpeed = movementSpeed;
+            rotationSpeed = rotationMovementSpeed;
 
             // Save the direction when the direction is not zero so the controller knows which direction to decelerate in
             if (MainPlayer.axisDirection != Vector3.zero)

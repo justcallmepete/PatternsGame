@@ -87,6 +87,10 @@ public class InputManager : MonoBehaviour
                 //print("XBOX ONE CONTROLLER IS CONNECTED FOR PLAYER " + index);
                 controllerUsed[index] = ControllerType.XBoxOne;
                 break;
+            default:
+                print("A UNKNOWN CONTROLLER IS CONNECTED FOR PLAYER " + index);
+                controllerUsed[index] = ControllerType.PS4;
+                break;
         }     
     }
 

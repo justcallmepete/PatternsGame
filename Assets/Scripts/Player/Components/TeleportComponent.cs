@@ -10,7 +10,8 @@ using UnityEngine;
 public class TeleportComponent : PlayerComponentInterface
 {
     [Header("General settings")]
-    public int teleportationButton;
+    public string teleportButton = "B";
+    private int teleportationKey;
     //[Tooltip("Maximal pull distance")]
     //public float maxDistance = 10;
     [Tooltip("Duraction of channelling")]
@@ -30,7 +31,7 @@ public class TeleportComponent : PlayerComponentInterface
     {
         base.AwakeComponent();
 
-        teleportationButton = InputManager.Instance.GetKey("B", MainPlayer.GetPlayerIndex());
+        teleportationKey = InputManager.Instance.GetKey(teleportButton, MainPlayer.GetPlayerIndex());
 
         // Set id
         id = 4;
@@ -70,7 +71,7 @@ public class TeleportComponent : PlayerComponentInterface
             return;
         }
 
-        if (MainPlayer.buttonList[teleportationButton])
+        if (MainPlayer.buttonList[teleportationKey])
         {
             // Start channelling if player is in sight and character is free
             if (IsPlayerInSight())
@@ -184,7 +185,7 @@ public class TeleportComponent : PlayerComponentInterface
     {
         for (int i = 0; i < MainPlayer.buttonList.Length; i++)
         {
-            if (i == teleportationButton)
+            if (i == teleportationKey)
             {
                 continue;
             }

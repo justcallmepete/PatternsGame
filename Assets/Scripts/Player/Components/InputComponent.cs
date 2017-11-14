@@ -8,6 +8,7 @@ using UnityEngine;
 public class InputComponent : PlayerComponentInterface
 {
     ControllerDictionaries controllerDictionaries;
+    string tempString = "";
     //private ControllerMapping mapping;
     public override void AwakeComponent()
     {
@@ -21,22 +22,14 @@ public class InputComponent : PlayerComponentInterface
     public override void UpdateComponent ()
     {
         base.UpdateComponent();
-
+        
+        CheckKeyboard();
         CheckButton();
-        CheckAxisDirection();
+        CheckAxisDirection();    
 	}
 
     private void CheckButton()
     {
-        string tempString = "";
-        if (InputManager.Instance.controllerUsed[MainPlayer.GetPlayerIndex()].ToString() == "Keyboard")
-        {
-            tempString = "_K";
-        }
-        else
-        {
-            tempString = "";
-        }
         for (int i = 0; i < MainPlayer.buttonList.Length; i++)
         {
             // Check when button is pressed 
@@ -64,8 +57,15 @@ public class InputComponent : PlayerComponentInterface
     // Get axis input
     private void CheckAxisDirection()
     {
-        string tempString = "";
-        if(InputManager.Instance.controllerUsed[MainPlayer.GetPlayerIndex()].ToString() == "Keyboard")
+        float axis_Horizontal = Input.GetAxis(MainPlayer.playerIndex+ "_Axis_1" + tempString);
+        float axis_Vertical = Input.GetAxis(MainPlayer.playerIndex + "_Axis_2" + tempString);
+        Vector3 axisDirection = new Vector3(axis_Horizontal, 0, axis_Vertical);
+        MainPlayer.axisDirection = Quaternion.Euler(0, 45, 0) * axisDirection;
+    }
+
+    private void CheckKeyboard()
+    {
+        if (InputManager.Instance.controllerUsed[MainPlayer.GetPlayerIndex()].ToString() == "Keyboard")
         {
             tempString = "_K";
         }
@@ -73,9 +73,5 @@ public class InputComponent : PlayerComponentInterface
         {
             tempString = "";
         }
-        float axis_Horizontal = Input.GetAxis(MainPlayer.playerIndex+ "_Axis_1" + tempString);
-        float axis_Vertical = Input.GetAxis(MainPlayer.playerIndex + "_Axis_2" + tempString);
-        Vector3 axisDirection = new Vector3(axis_Horizontal, 0, axis_Vertical);
-        MainPlayer.axisDirection = Quaternion.Euler(0, 45, 0) * axisDirection;
     }
 }
