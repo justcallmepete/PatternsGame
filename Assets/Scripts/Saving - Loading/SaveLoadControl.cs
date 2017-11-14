@@ -116,15 +116,21 @@ public class SaveLoadControl : MonoBehaviour {
 
             Debug.Log("load checkpoint");
             // Deserialize the binary to readable data
-            BinaryFormatter formatter = new BinaryFormatter();            
-            FileStream saveFile = File.Open("savegames/checkpoint.mainframe", FileMode.Open);
+            if (File.Exists("savegames/checkpoint.mainframe"))
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                FileStream saveFile = File.Open("savegames/checkpoint.mainframe", FileMode.Open);
+                
+                loadedCheckpoint = (SerializableData)formatter.Deserialize(saveFile);
 
-            loadedCheckpoint = (SerializableData)formatter.Deserialize(saveFile);
+                saveFile.Close();
 
-            saveFile.Close();
-
-            isLoadingCheckpoint = true;
-
+                isLoadingCheckpoint = true;
+            }
+            else
+            {
+                LoadData(false);
+            }
         }
 
         if (!isCheckpoint)
