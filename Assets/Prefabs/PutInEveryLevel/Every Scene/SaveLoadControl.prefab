@@ -51,7 +51,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01280e6899ad448458b3ab5978cc7a43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadedData:
+    savedPlayer1Data:
+      playerPosX: 0
+      playerPosY: 0
+      playerPosZ: 0
+    savedPlayer2Data:
+      playerPosX: 0
+      playerPosY: 0
+      playerPosZ: 0
+    savedPlayerProgressData:
+      savedSceneID: 0
+  loadedCheckpoint:
+    savedPlayer1Data:
+      playerPosX: 0
+      playerPosY: 0
+      playerPosZ: 0
+    savedPlayer2Data:
+      playerPosX: 0
+      playerPosY: 0
+      playerPosZ: 0
+    savedPlayerProgressData:
+      savedSceneID: 0
+  updatedSavablePlayer1Data:
+    playerPosX: 0
+    playerPosY: 0
+    playerPosZ: 0
+  updatedSavablePlayer2Data:
+    playerPosX: 0
+    playerPosY: 0
+    playerPosZ: 0
+  updatedSavablePlayerProgressData:
+    savedSceneID: 0
   isSceneBeingLoaded: 0
   isPlayer1Loaded: 0
   isPlayer2Loaded: 0
   isPlayerProgressDataLoaded: 0
+  isLoadingCheckpoint: 0

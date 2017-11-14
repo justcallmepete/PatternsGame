@@ -1,6 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
+
+// Triggers the save function for a checkpoint
 
 public class Checkpoint : MonoBehaviour {
 
@@ -10,5 +11,11 @@ public class Checkpoint : MonoBehaviour {
         {
             SaveLoadControl.Instance.SaveData(true);
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireCube(transform.position, gameObject.GetComponent<BoxCollider>().size);
     }
 }
