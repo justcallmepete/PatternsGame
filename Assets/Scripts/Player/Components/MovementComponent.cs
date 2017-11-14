@@ -115,7 +115,7 @@ public class MovementComponent : PlayerComponentInterface
 
         MainPlayer.animator.SetFloat("inputV", Mathf.Abs(MainPlayer.rigidBody.velocity.x));
         MainPlayer.animator.SetFloat("inputH", Mathf.Abs(MainPlayer.rigidBody.velocity.z));
-        Debug.Log(MainPlayer.rigidBody.velocity.x);
+        print(speed);
         if (speed > 0)
         {
             MainPlayer.animator.SetBool("run", true);
