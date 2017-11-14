@@ -58,6 +58,16 @@ public class SaveLoadControl : MonoBehaviour {
                 isPlayerProgressDataLoaded = false;
             }
         }
+
+        if (isLoadingCheckpoint)
+        {
+            if(isPlayer1Loaded && isPlayer2Loaded)
+            {
+                isLoadingCheckpoint = false;
+                isPlayer1Loaded = false;
+                isPlayer2Loaded = false;
+            }
+        }
     }
 
     void UpdateSerializableData()

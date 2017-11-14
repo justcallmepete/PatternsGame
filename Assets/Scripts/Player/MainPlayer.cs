@@ -136,14 +136,17 @@ public class MainPlayer : MonoBehaviour
                 transform.position = new Vector3(SaveLoadControl.Instance.loadedCheckpoint.savedPlayer1Data.playerPosX,
                                                  SaveLoadControl.Instance.loadedCheckpoint.savedPlayer1Data.playerPosY,
                                                  SaveLoadControl.Instance.loadedCheckpoint.savedPlayer1Data.playerPosZ);
+
+                SaveLoadControl.Instance.isPlayer1Loaded = true;
             }
             else if (getPlayerIndex() == "P2")
             {
                 transform.position = new Vector3(SaveLoadControl.Instance.loadedCheckpoint.savedPlayer2Data.playerPosX,
                                                  SaveLoadControl.Instance.loadedCheckpoint.savedPlayer2Data.playerPosY,
                                                  SaveLoadControl.Instance.loadedCheckpoint.savedPlayer2Data.playerPosZ);
+
+                SaveLoadControl.Instance.isPlayer2Loaded = true;
             }
-            SaveLoadControl.Instance.isLoadingCheckpoint = false;
         }
     }
 
