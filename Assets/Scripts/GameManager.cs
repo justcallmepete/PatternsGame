@@ -44,6 +44,11 @@ public class GameManager : MonoBehaviour {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+    public void ReloadCheckpoint()
+    {
+        SaveLoadControl.Instance.LoadData(true);
+    }
+
     public void LoadNextScene()
     {
         // Loads next scene in Build Settings

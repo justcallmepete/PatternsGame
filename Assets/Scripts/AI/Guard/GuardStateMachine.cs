@@ -82,7 +82,7 @@ public class GuardStateMachine : MonoBehaviour {
     // Shoot a player.
     public void Shoot()
     {
-        GameManager.Instance.ReloadScene();
+        GameManager.Instance.ReloadCheckpoint();
     }
 
     public void GoToState(GuardState state)
