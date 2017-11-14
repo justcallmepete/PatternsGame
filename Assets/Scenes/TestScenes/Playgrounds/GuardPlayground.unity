@@ -108,7 +108,7 @@ NavMeshSettings:
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
-  m_NavMeshData: {fileID: 23800000, guid: 6aeec71be7ee5fa47958220332ba2c5d, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 33249bb01d4cdc5449ade9e9edc427d5, type: 2}
 --- !u!1001 &268759
 Prefab:
   m_ObjectHideFlags: 0
@@ -1167,11 +1167,6 @@ Prefab:
       propertyPath: patrol
       value: 
       objectReference: {fileID: 1673839348}
-    - target: {fileID: 114996640709443084, guid: 6b41b6c9fd54eef4a9efd58e9294a358,
-        type: 2}
-      propertyPath: patrolStyle
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 4150217926764002, guid: 6b41b6c9fd54eef4a9efd58e9294a358, type: 2}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 90
@@ -1179,12 +1174,27 @@ Prefab:
     - target: {fileID: 114996640709443084, guid: 6b41b6c9fd54eef4a9efd58e9294a358,
         type: 2}
       propertyPath: stoppingDistance
-      value: 3.15
+      value: 3.01
       objectReference: {fileID: 0}
     - target: {fileID: 114699484884198442, guid: 6b41b6c9fd54eef4a9efd58e9294a358,
         type: 2}
       propertyPath: viewRadius
-      value: 5.1
+      value: 13.79
+      objectReference: {fileID: 0}
+    - target: {fileID: 114996640709443084, guid: 6b41b6c9fd54eef4a9efd58e9294a358,
+        type: 2}
+      propertyPath: logStateTransitions
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114699484884198442, guid: 6b41b6c9fd54eef4a9efd58e9294a358,
+        type: 2}
+      propertyPath: viewRadiusInLight
+      value: 13.79
+      objectReference: {fileID: 0}
+    - target: {fileID: 114996640709443084, guid: 6b41b6c9fd54eef4a9efd58e9294a358,
+        type: 2}
+      propertyPath: patrolStyle
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6b41b6c9fd54eef4a9efd58e9294a358, type: 2}

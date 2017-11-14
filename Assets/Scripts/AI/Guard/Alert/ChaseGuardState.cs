@@ -1,7 +1,9 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
+/*
+ * In this state the guard is chasing the player.
+ */
 public class ChaseGuardState : AlertGuardState
 {
     public ChaseGuardState(GuardStateMachine context) : base(context)
@@ -23,7 +25,6 @@ public class ChaseGuardState : AlertGuardState
         {
             context.NavigationAgent.isStopped = false;
             context.NavigationAgent.SetDestination(GetTargetPosition());
-            //Debug.Log(GetDistanceToTarget());
         }
         else
         {
@@ -31,11 +32,11 @@ public class ChaseGuardState : AlertGuardState
             Vector3 target = -(context.transform.position - context.TargetPlayer.transform.position);
             RotateTo(target.normalized);
         }
-
     }
 
     public override void OnStateExit()
     {
+        Debug.Log("EXIT CHASE");
         context.NavigationAgent.isStopped = false;
         base.OnStateExit();
     }
@@ -73,17 +74,17 @@ public class ChaseGuardState : AlertGuardState
 
     private void OnTargetReached()
     {
-        
+        //Nothing here yet.
     }
 
     private float GetDistanceToTarget()
     {
-        Vector2 currentPos = new Vector2(context.gameObject.transform.position.x, context.gameObject.transform.position.z);
-        Vector2 targetPos = new Vector2(GetTargetPosition().x, GetTargetPosition().z);
+        Vector3 currentPos = context.NavigationAgent.transform.position;
+        Vector3 targetPos = GetTargetPosition();
 
         NavMeshPath path = new NavMeshPath();
         path.ClearCorners();
-        if (NavMesh.CalculatePath(currentPos, targetPos, 0, path))
+        if (NavMesh.CalculatePath(currentPos, targetPos, 1, path))
         {
             float lng = 0.0f;
 

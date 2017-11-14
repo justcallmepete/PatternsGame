@@ -22,19 +22,21 @@ public class GuardStateMachine : MonoBehaviour {
      *     INSPECTOR VALUES     *
      ****************************/
     [Header("Pathing Options")]
-
     public PatrolStyle patrolStyle;
     [SerializeField]
     private GuardPatrol patrol;
-    public GuardPatrol PatrolRoute { get { return patrol; } set { patrol = value; } }
     public float rotationSpeed;
 
     [Header("Chasing Options")]
     [Range(1.0f, 10.0f)]
     public float stoppingDistance;
 
-    [Header("State")]
+    [Header("General")]
     public GameObject indicator;
+
+    [Header("Debug Options")]
+    [SerializeField]
+    private bool logStateTransitions;
 
     //Private values
     [SerializeField]
@@ -52,6 +54,7 @@ public class GuardStateMachine : MonoBehaviour {
     public NavMeshAgent NavigationAgent { get { return agent; }  set { } }
     private NavMeshAgent agent;
     public Color IndicatorColor { get { return indicator.GetComponent<MeshRenderer>().material.color; } set { indicator.GetComponent<MeshRenderer>().material.color = value;  } }
+    public GuardPatrol PatrolRoute { get { return patrol; } set { patrol = value; } }
 
     void Awake () {
         StartLocation = transform.position;
@@ -84,19 +87,25 @@ public class GuardStateMachine : MonoBehaviour {
         GoToState(new SearchingGuardState(this, lastKnownPosition));
     }
     
-    // Shoot a player.
+    // Call if one of the players is shot.
     public void Shoot()
     {
         GameManager.Instance.ReloadScene();
     }
 
-    public void GoToState(GuardState state)
+    public void GoToState(GuardState newState)
     {
         if (state != null)
         {
             state.OnStateExit();
         }
-        this.state = state;
+        this.state = newState;
         state.OnStateEnter();
+        
+        //Debug Option
+        if (logStateTransitions)
+        {
+            Debug.Log("Transitioned to: " + state.ToString());
+        }
     }
 }
