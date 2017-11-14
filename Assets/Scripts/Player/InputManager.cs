@@ -42,12 +42,15 @@ public class InputManager : MonoBehaviour
         actualControllerNames = new string[2];
 
         controllerUsed = new ControllerType[2];
-        controllerUsed[0] = ControllerType.Keyboard;
-        controllerUsed[1] = ControllerType.Keyboard;
 
         checkedController = new bool[2];
-        checkedController[0] = false;
-        checkedController[1] = false;
+        
+        for( int i = 0; i < 2; i++)
+        {
+            controllerUsed[i] = ControllerType.Keyboard;
+            checkedController[i] = false;
+            actualControllerNames[i] = "";
+        }
     }
 	
 	// Update is called once per frame
@@ -60,9 +63,14 @@ public class InputManager : MonoBehaviour
     {
         checkedController[index] = true;
         controllerNames = Input.GetJoystickNames();
-
-        actualControllerNames[0] = controllerNames[0];
-        actualControllerNames[1] = controllerNames[1];
+       if(controllerNames.Length!=0)
+        {
+            actualControllerNames[0] = controllerNames[0];
+            if (controllerNames.Length > 1)
+            {
+                actualControllerNames[1] = controllerNames[1];
+            }
+        }
         if (actualControllerNames[index] == "")
         {
             //print("NO CONTROLLER FOR PLAYER "+index);

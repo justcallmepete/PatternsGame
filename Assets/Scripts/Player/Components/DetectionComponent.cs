@@ -12,7 +12,7 @@ public class DetectionComponent : PlayerComponentInterface
 {
     [Header("General Settings")]
     [Tooltip("The key which triggers detection.")]
-    public int detectionKey = 1;
+    public int detectionKey;
     [Tooltip("Range of detection.")]
     public float detectionRange = 2;
 
@@ -25,6 +25,8 @@ public class DetectionComponent : PlayerComponentInterface
 
         // Set id
         id = 2;
+
+        detectionKey = InputManager.Instance.GetKey("A", MainPlayer.GetPlayerIndex());
     }
 
     public override void UpdateComponent()

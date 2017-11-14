@@ -30,10 +30,10 @@ public class ControllerDictionaries : MonoBehaviour {
     };
     public Dictionary<string, int> xbox = new Dictionary<string, int>()
     {
-        {"X", 3},
+        {"X", 2},
         {"A", 0},
         {"B", 1},
-        {"Y", 2},
+        {"Y", 3},
         {"L1", 4},
         {"R1", 5},
         {"L2", 8},
