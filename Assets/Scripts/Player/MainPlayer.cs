@@ -126,6 +126,27 @@ public class MainPlayer : MonoBehaviour
         LoadData();        
     }
 
+    private void LoadCheckpoint()
+    {
+        if (SaveLoadControl.Instance.isLoadingCheckpoint)
+        {
+            Debug.Log("Loading player checkpoint");
+            if (getPlayerIndex() == "P1")
+            {
+                transform.position = new Vector3(SaveLoadControl.Instance.loadedCheckpoint.savedPlayer1Data.playerPosX,
+                                                 SaveLoadControl.Instance.loadedCheckpoint.savedPlayer1Data.playerPosY,
+                                                 SaveLoadControl.Instance.loadedCheckpoint.savedPlayer1Data.playerPosZ);
+            }
+            else if (getPlayerIndex() == "P2")
+            {
+                transform.position = new Vector3(SaveLoadControl.Instance.loadedCheckpoint.savedPlayer2Data.playerPosX,
+                                                 SaveLoadControl.Instance.loadedCheckpoint.savedPlayer2Data.playerPosY,
+                                                 SaveLoadControl.Instance.loadedCheckpoint.savedPlayer2Data.playerPosZ);
+            }
+            SaveLoadControl.Instance.isLoadingCheckpoint = false;
+        }
+    }
+
     private void LoadData()
     {
         if (SaveLoadControl.Instance.isSceneBeingLoaded)
@@ -179,6 +200,7 @@ public class MainPlayer : MonoBehaviour
         }
 
         SaveData();
+        LoadCheckpoint();
     }
 
     private void FixedUpdate()
