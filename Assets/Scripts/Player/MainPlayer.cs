@@ -114,7 +114,16 @@ public class MainPlayer : MonoBehaviour
 
     private void Start()
     {
-        LoadData();
+        if (getPlayerIndex() == "P1")
+        {
+            inventory = SaveLoadControl.Instance.updatedSavablePlayer1Data.inventory;
+        }
+        else if (getPlayerIndex() == "P2")
+        {
+            inventory = SaveLoadControl.Instance.updatedSavablePlayer2Data.inventory;
+        }
+
+        LoadData();        
     }
 
     private void LoadData()

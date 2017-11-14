@@ -47,6 +47,10 @@ public class GameManager : MonoBehaviour {
     public void LoadNextScene()
     {
         // Loads next scene in Build Settings
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].GetComponent<MainPlayer>().inventory.Keycard = false;
+        }
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }
