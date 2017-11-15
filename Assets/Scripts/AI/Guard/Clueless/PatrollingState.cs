@@ -80,8 +80,6 @@ public class PatrollingState : CluelessGuardState {
 
     private void OnTargetReached()
     {
-        Debug.Log("Target Reached");
-
         int oldIndex = waypointIndex;
 
         waypointIndex = SelectNewWaypoint();
