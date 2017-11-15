@@ -40,8 +40,13 @@ public class DetectionComponent : PlayerComponentInterface
         {
             if (MainPlayer.buttonDownList[detectionKey])
             {
+                MainPlayer.animator.SetBool("interact", true);
                 // Interact with the interactable object
                 interactableObject.GetComponent<Interactable>().OnInteract(gameObject);
+            }
+            else
+            {
+                MainPlayer.animator.SetBool("interact", false);
             }
         }
     }
