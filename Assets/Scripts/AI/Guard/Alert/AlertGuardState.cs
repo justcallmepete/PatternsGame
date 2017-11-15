@@ -28,7 +28,7 @@ public class AlertGuardState : GuardState
 
     public override void Update()
     {
-        //timer += Time.deltaTime;
+        timer += Time.deltaTime;
         if (timer > deathTime)
         {
             context.Shoot();

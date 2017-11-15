@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
+using Mainframe.Utils;
 
 /*
  * In this state the guard is chasing the player.
@@ -29,7 +30,12 @@ public class ChaseGuardState : AlertGuardState
         else
         {
             context.NavigationAgent.isStopped = true;
-            Vector3 target = -(context.transform.position - context.TargetPlayer.transform.position);
+            Vector3 guardPos = context.NavigationAgent.transform.position;
+            guardPos.y = 0.0f;
+            Vector3 playerPos = context.TargetPlayer.transform.position;
+            playerPos.y = 0.0f;
+
+            Vector3 target = -(guardPos - playerPos);
             RotateTo(target.normalized);
         }
     }
@@ -65,7 +71,8 @@ public class ChaseGuardState : AlertGuardState
     {
         Vector3 from = context.transform.forward;
         Vector3 newRotation = Vector3.RotateTowards(from, rotateTarget, Time.deltaTime * context.rotationSpeed * Mathf.Deg2Rad, 0.0f);
-        context.transform.rotation = Quaternion.LookRotation(newRotation);
+        context.transform.rotation = Quaternion.LookRotation(newRotation, Vector3.up);
+
         if (Vector3.Angle(context.transform.forward, rotateTarget) < 0.5f)
         {
             OnTargetReached();
@@ -79,25 +86,6 @@ public class ChaseGuardState : AlertGuardState
 
     private float GetDistanceToTarget()
     {
-        Vector3 currentPos = context.NavigationAgent.transform.position;
-        Vector3 targetPos = GetTargetPosition();
-
-        NavMeshPath path = new NavMeshPath();
-        path.ClearCorners();
-        if (NavMesh.CalculatePath(currentPos, targetPos, 1, path))
-        {
-            float lng = 0.0f;
-
-            if ((path.status != NavMeshPathStatus.PathInvalid) && (path.corners.Length > 1))
-            {
-                for (int i = 1; i < path.corners.Length; ++i)
-                {
-                    lng += Vector3.Distance(path.corners[i - 1], path.corners[i]);
-                }
-            }
-
-            return lng;
-        }
-        return 0.0f;
+        return NavMeshUtils.CalculatePathLength(context.NavigationAgent.transform.position, GetTargetPosition());
     }
 }
