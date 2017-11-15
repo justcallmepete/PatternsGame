@@ -61,7 +61,7 @@ public class MainPlayer : MonoBehaviour
     /*
      * 0 - X
      * 1 - A
-     * 2 - B 
+     * 2 - B
      * 3 - Y
      * 4 - L1
      * 5 - R1
@@ -70,7 +70,7 @@ public class MainPlayer : MonoBehaviour
      * 8 - Select
      * 9 - Start
      */
-     
+    
     [HideInInspector]
     public bool[] buttonDownList = new bool[10];
     [HideInInspector]
@@ -191,5 +191,10 @@ public class MainPlayer : MonoBehaviour
                 yield return null;
             }
         }
+    }
+    public int GetPlayerIndex()
+    {
+        int index = Array.IndexOf(Enum.GetValues(playerIndex.GetType()), playerIndex);
+        return index;
     }
 }

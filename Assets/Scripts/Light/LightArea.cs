@@ -161,7 +161,6 @@ public class LightArea : MonoBehaviour
         {
             if (!playersInLight.Contains(p)) // Left the light
             {
-                Debug.Log("removing light");
                 p.lightStandingIn.Remove(this.gameObject);
             }
         }
@@ -169,7 +168,6 @@ public class LightArea : MonoBehaviour
         {
             if (!oldPlayersInLight.Contains(p)) // new in Light
             {
-                Debug.Log("add light");
                 p.lightStandingIn.Add(this.gameObject);
             }
         }
