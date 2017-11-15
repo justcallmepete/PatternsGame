@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.AI;
 using Mainframe.Utils;
 
 /*
@@ -19,9 +18,6 @@ public class ChaseGuardState : AlertGuardState
     public override void Update()
     {
         base.Update();
-        Vector2 currentPos = new Vector2(context.gameObject.transform.position.x, context.gameObject.transform.position.z);
-        Vector2 targetPos = new Vector2(GetTargetPosition().x, GetTargetPosition().z);
-
         if (GetDistanceToTarget() > context.stoppingDistance)
         {
             context.NavigationAgent.isStopped = false;
@@ -30,10 +26,8 @@ public class ChaseGuardState : AlertGuardState
         else
         {
             context.NavigationAgent.isStopped = true;
-            Vector3 guardPos = context.NavigationAgent.transform.position;
-            guardPos.y = 0.0f;
-            Vector3 playerPos = context.TargetPlayer.transform.position;
-            playerPos.y = 0.0f;
+            Vector3 guardPos = Vector3.ProjectOnPlane(context.NavigationAgent.transform.position, Vector3.up);
+            Vector3 playerPos = Vector3.ProjectOnPlane(context.TargetPlayer.transform.position, Vector3.up);            //playerPos.y = 0.0f;
 
             Vector3 target = -(guardPos - playerPos);
             RotateTo(target.normalized);
@@ -88,4 +82,5 @@ public class ChaseGuardState : AlertGuardState
     {
         return NavMeshUtils.CalculatePathLength(context.NavigationAgent.transform.position, GetTargetPosition());
     }
+
 }

@@ -87,7 +87,6 @@ public class InvestigationGuardState : SearchingGuardState
 
     private void OnTargetReached()
     {
-        Debug.Log("Target!");
         if (!done)
         {
             targetRotation = Quaternion.AngleAxis(80, startRotation) * Vector3.right;
