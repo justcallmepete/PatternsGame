@@ -39,7 +39,6 @@ public class SlidingDoor : MonoBehaviour
 
     public void OnInteract(GameObject obj)
     {
-        print("testing");
         if (lockedWithSwitch)
         {
             Debug.Log("Door is locked by a switch");
@@ -60,7 +59,6 @@ public class SlidingDoor : MonoBehaviour
     public void Open()
     {
         //open animation
-        Debug.Log("open");
         currentState = State.Open;
         animator.SetBool("open", true);
     }
@@ -68,7 +66,6 @@ public class SlidingDoor : MonoBehaviour
     public void Close()
     {
         //close animation
-        Debug.Log("close");
         currentState = State.Closed;
         animator.SetBool("open", false);
     }
