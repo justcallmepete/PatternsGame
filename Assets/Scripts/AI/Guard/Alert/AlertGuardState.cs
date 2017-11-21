@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 
 /* This state contains the logic for when the guard can see the player. */
 public class AlertGuardState : GuardState
@@ -17,11 +18,6 @@ public class AlertGuardState : GuardState
     {
         timer = 0.0f;
         context.IndicatorColor = Color.red;
-    }
-
-    public override Vector3 GetTargetPosition()
-    {
-        throw new System.NotImplementedException();
     }
 
     public override void OnDistraction(Vector3 target)
@@ -48,4 +44,5 @@ public class AlertGuardState : GuardState
     {
     }
 
-}
+   
+    }
