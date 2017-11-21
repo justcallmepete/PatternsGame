@@ -8,12 +8,12 @@ public class MovementComponent : PlayerComponentInterface
 {
     [Header("Movement variables")]
     [Tooltip("Normal movement speed")]
-    [Range(100, 300)]
+    [Range(100, 450)]
     public float movementSpeed;
 
     [Tooltip("Normal rotation speed")]
     [Range(10, 30)]
-    public float rotationMovementSpeed;
+    public float rotationSpeed;
 
     [Tooltip("Acceleration of the player")]
     [Range(10, 30)]
@@ -28,7 +28,9 @@ public class MovementComponent : PlayerComponentInterface
     [Range(10, 40)]
     public float fullStopSensitivity;
 
-    private float rotationSpeed;
+    [Range(0, 1)]
+    public float startRunningSpeed;
+
     private float speed;
     private float maxSpeed;
     private Vector3 saveDirection;
@@ -49,18 +51,26 @@ public class MovementComponent : PlayerComponentInterface
 
     private void SetMovementValues()
     {
-        if (!MainPlayer.IsBusy())
+        if (MainPlayer.IsChannelling())
         {
-            //Set max speed and rotation speed to sprint speed or walk speed
-            maxSpeed = movementSpeed;
-            rotationSpeed = rotationMovementSpeed;
-
-            // Save the direction when the direction is not zero so the controller knows which direction to decelerate in
-            if (MainPlayer.axisDirection != Vector3.zero)
-            {
-                saveDirection = MainPlayer.axisDirection;
-            }
+            speed = 0;
         }
+        //Set max speed and rotation speed to sprint speed or walk speed
+        if (MainPlayer.axisDirection != Vector3.zero)
+        {
+            maxSpeed = movementSpeed;
+        }
+        else
+        {
+            maxSpeed = 0;
+        }
+
+        // Save the direction when the direction is not zero so the controller knows which direction to decelerate in
+        if (MainPlayer.axisDirection != Vector3.zero)
+        {
+            saveDirection = MainPlayer.axisDirection;
+        }
+        
         // Rotate our transform a step closer to the target's
         Vector3 targetRotation = Vector3.Normalize(MainPlayer.axisDirection);
         if (targetRotation != Vector3.zero)
@@ -83,10 +93,22 @@ public class MovementComponent : PlayerComponentInterface
         //apply deceleration when needed
         CheckDeceleration();
         // Apply movement when the player is free
-        if (MainPlayer.IsFree())
+
+
+        Move();
+
+        MainPlayer.animator.SetFloat("inputV", Mathf.Abs(MainPlayer.rigidBody.velocity.x));
+        MainPlayer.animator.SetFloat("inputH", Mathf.Abs(MainPlayer.rigidBody.velocity.z));
+
+        print(MainPlayer.playerIndex + ": "+ Mathf.Abs(MainPlayer.rigidBody.velocity.z));
+        if (MainPlayer.axisDirection.magnitude > startRunningSpeed && !MainPlayer.IsChannelling())
         {
-            Move();
+            MainPlayer.animator.SetBool("run", true);
         }
+        else
+        {
+            MainPlayer.animator.SetBool("run", false);
+        }          
     }
 
     private void Move()
@@ -115,6 +137,7 @@ public class MovementComponent : PlayerComponentInterface
     }
     private void CheckAcceleration()
     {
+        if (MainPlayer.IsChannelling()) return;
         //Apply accelararion
         if (MainPlayer.axisDirection != Vector3.zero)
         {

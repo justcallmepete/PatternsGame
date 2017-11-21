@@ -146,6 +146,7 @@ public class TeleportComponent : PlayerComponentInterface
             if (!IsPlayerInSight() || !MainPlayer.IsChannelling() || 
                 pPlayerMainPlayer.IsBusy() || CheckAnyButton())
             {
+                // print(!IsPlayerInSight() +","+  !MainPlayer.IsChannelling() + "," + pPlayerMainPlayer.IsBusy() + "," + CheckAnyButton());
                 StopChannelling();
                 yield break;
             }
@@ -162,6 +163,7 @@ public class TeleportComponent : PlayerComponentInterface
 
     private void StopChannelling()
     {
+        MainPlayer.animator.SetBool("teleport", false);
         if (MainPlayer.CurrentState != MainPlayer.State.Busy)
         {
             MainPlayer.CurrentState = MainPlayer.State.Idle;
@@ -171,6 +173,7 @@ public class TeleportComponent : PlayerComponentInterface
 
     private void StartChannelling()
     {
+        MainPlayer.animator.SetBool("teleport", true);
         MainPlayer.CurrentState = MainPlayer.State.Channelling;
     }
 
