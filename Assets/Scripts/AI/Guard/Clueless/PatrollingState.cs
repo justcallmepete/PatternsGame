@@ -10,13 +10,6 @@ public class PatrollingState : CluelessGuardState {
 
     private NavMeshAgent navMeshAgent;
 
-    private Vector3 startRotation;
-    private bool startUpdated;
-
-    private float lerpSpeed;
-    private float lerpTime;
-
-
     public PatrollingState(GuardStateMachine context) : base(context)
     {
     }
@@ -30,11 +23,6 @@ public class PatrollingState : CluelessGuardState {
 
         waypointIndex = context.LastWaypointIndex;
         navMeshAgent = context.GetComponent<NavMeshAgent>();
-
-        startRotation = context.transform.rotation.eulerAngles;
-        startUpdated = false;
-
-        lerpSpeed = context.rotationSpeed / 180.0f;
 }
 
     public override void Update()
@@ -47,47 +35,33 @@ public class PatrollingState : CluelessGuardState {
         if (Vector2.Distance(currentPos, targetPos) < 0.5f && Math.Abs(navMeshAgent.velocity.magnitude) < 0.01f)
         {
             if (waypoints.Length != 0 && !waypoints[waypointIndex].matchRotation)
-                {
-                    OnTargetReached();
-                }
-                else
-                {
-                if (!startUpdated)
-                {
-                    startRotation =  context.transform.rotation.eulerAngles; 
-                    startUpdated = true;
-                    lerpTime = 0.0f;
-                }
-                //float endRotation = waypoints.Length == 0 ? context.StartLocation.eulerAngles.y : waypoints[waypointIndex].transform.eulerAngles.y;
-                RotateGuard(startRotation.y, GetTargetAngle());
-                }
-            }
-        }
-
-    /* Rotate guard to the same rotation as the Waypoint */
-    private void RotateGuard(float from, float to)
-    {
-       
-        Vector3 toVector = new Vector3(0.0f, to, 0.0f );
-        float deltalerp =  Time.deltaTime * (1 / (Math.Abs(from - to) / context.rotationSpeed));
-        lerpTime += deltalerp;
-            if (lerpTime < 1.0f)
             {
-            context.transform.eulerAngles = new Vector3(0.0f, Mathf.LerpAngle(from, to, lerpTime), 0.0f);
+                OnTargetReached();
             }
             else
             {
-                context.transform.eulerAngles = toVector;
-                OnTargetReached();
+                RotateTo(GetWaypointRotation());
             }
-    }
+            }
+        }
 
-    private float GetTargetAngle()
+    private void RotateTo(Vector3 rotateTarget)
     {
-        return waypoints.Length ==  0 ? context.StartRotation : waypoints[waypointIndex].gameObject.transform.eulerAngles.y;
+        Vector3 from = context.transform.forward;
+        Vector3 newRotation =  Vector3.RotateTowards(from, rotateTarget, Time.deltaTime * context.rotationSpeed * Mathf.Deg2Rad, 0.0f);
+        context.transform.rotation = Quaternion.LookRotation(newRotation);
+        if(Vector3.Angle(context.transform.forward, rotateTarget) < 0.5f)
+        {
+            OnTargetReached();
+        }
     }
 
-    public override Vector3 GetTargetPosition()
+    private Vector3 GetWaypointRotation()
+    {
+        return waypoints.Length == 0 ? context.StartRotation : waypoints[waypointIndex].gameObject.transform.forward;
+    }
+
+    private Vector3 GetTargetPosition()
     {
         if (waypoints != null && waypoints.Length > 0)
         {
@@ -99,11 +73,6 @@ public class PatrollingState : CluelessGuardState {
         }
     }
 
-    public override void OnDistraction(Vector3 target)
-    {
-        context.GoToState(new SearchingGuardState(context, target));
-    }
-
     public override void OnSeePlayer(GameObject player)
     {
         base.OnSeePlayer(player);
@@ -113,8 +82,6 @@ public class PatrollingState : CluelessGuardState {
     {
 
         int oldIndex = waypointIndex;
-
-        startUpdated = false;
 
         waypointIndex = SelectNewWaypoint();
 
