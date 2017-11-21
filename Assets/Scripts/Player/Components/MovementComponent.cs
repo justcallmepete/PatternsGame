@@ -100,7 +100,6 @@ public class MovementComponent : PlayerComponentInterface
         MainPlayer.animator.SetFloat("inputV", Mathf.Abs(MainPlayer.rigidBody.velocity.x));
         MainPlayer.animator.SetFloat("inputH", Mathf.Abs(MainPlayer.rigidBody.velocity.z));
 
-        print(MainPlayer.playerIndex + ": "+ Mathf.Abs(MainPlayer.rigidBody.velocity.z));
         if (MainPlayer.axisDirection.magnitude > startRunningSpeed && !MainPlayer.IsChannelling())
         {
             MainPlayer.animator.SetBool("run", true);
