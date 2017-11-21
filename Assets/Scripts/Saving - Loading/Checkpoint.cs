@@ -7,10 +7,13 @@ public class Checkpoint : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
-        {
-            SaveLoadControl.Instance.SaveData(true);
-        }
+
+
+            if (other.gameObject.tag == "Player")
+            {
+                SaveLoadControl.Instance.SaveData(true);
+            }
+        
     }
 
     private void OnDrawGizmos()

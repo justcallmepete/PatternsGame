@@ -4,18 +4,17 @@
 
 public class Autosave : MonoBehaviour{
 
-    bool saved;
+
 
     private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Player")
-        {
-            if (!saved)
-            {
-                SaveLoadControl.Instance.SaveData(false);
-                saved = true;
-            }
-        }
+    {        
+         if (other.gameObject.tag == "Player")
+         {
+             
+             SaveLoadControl.Instance.SaveData(false);
+        
+         }
+        
     }
 
     private void OnDrawGizmos()

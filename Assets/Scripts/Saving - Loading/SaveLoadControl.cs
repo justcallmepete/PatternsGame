@@ -46,6 +46,7 @@ public class SaveLoadControl : MonoBehaviour {
     public bool isPlayerProgressDataLoaded;
 
     public bool isLoadingCheckpoint;
+    bool isSaving; 
 
     void LoadingLevel()
     {
@@ -83,71 +84,80 @@ public class SaveLoadControl : MonoBehaviour {
 
     public void SaveData(bool isCheckpoint)
     {
-        if (!Directory.Exists("savegames"))
+        if (!isLoadingCheckpoint && !isSceneBeingLoaded && !Application.isLoadingLevel)
         {
-            Directory.CreateDirectory("savegames");
-        }
+            isSaving = true;
 
-        UpdateSerializableData();
+            if (!Directory.Exists("savegames"))
+            {
+                Directory.CreateDirectory("savegames");
+            }
 
-        BinaryFormatter formatter = new BinaryFormatter();
-        if (isCheckpoint)
-        {
-            Debug.Log("save checkpoint");
-            FileStream saveFile = File.Create("savegames/checkpoint.mainframe");
-            formatter.Serialize(saveFile, serializableData);
-            saveFile.Close();
-        }
+            UpdateSerializableData();
 
-        if (!isCheckpoint)
-        {
-            Debug.Log("save game");
-            File.Delete("savegames/checkpoint.mainframe"); // Delete the checkpoint
-            FileStream saveFile = File.Create("savegames/save.mainframe");
-            formatter.Serialize(saveFile, serializableData);
-            saveFile.Close();
+            BinaryFormatter formatter = new BinaryFormatter();
+            if (isCheckpoint)
+            {
+                Debug.Log("save checkpoint");
+                FileStream saveFile = File.Create("savegames/checkpoint.mainframe");
+                formatter.Serialize(saveFile, serializableData);
+                saveFile.Close();
+            }
+
+            if (!isCheckpoint)
+            {
+                Debug.Log("save game");
+                File.Delete("savegames/checkpoint.mainframe"); // Delete the checkpoint
+                FileStream saveFile = File.Create("savegames/save.mainframe");
+                formatter.Serialize(saveFile, serializableData);
+                saveFile.Close();
+            }
+            isSaving = false;
         }
     }
 
     public void LoadData(bool isCheckpoint)
     {
-        if (isCheckpoint)
+        if (!isSaving && !Application.isLoadingLevel)
         {
-
-            Debug.Log("load checkpoint");
-            // Deserialize the binary to readable data
-            if (File.Exists("savegames/checkpoint.mainframe"))
+            if (isCheckpoint)
             {
-                BinaryFormatter formatter = new BinaryFormatter();
-                FileStream saveFile = File.Open("savegames/checkpoint.mainframe", FileMode.Open);
-                
-                loadedCheckpoint = (SerializableData)formatter.Deserialize(saveFile);
 
+                Debug.Log("load checkpoint");
+                // Deserialize the binary to readable data
+                if (File.Exists("savegames/checkpoint.mainframe"))
+                {
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    FileStream saveFile = File.Open("savegames/checkpoint.mainframe", FileMode.Open);
+
+                    loadedCheckpoint = (SerializableData)formatter.Deserialize(saveFile);
+
+                    saveFile.Close();
+
+                    isLoadingCheckpoint = true;
+                }
+                else
+                {
+                    LoadData(false);
+                }
+            }
+
+            if (!isCheckpoint)
+            {
+                Debug.Log("load game");
+                // Deserialize the binary to readable data
+                BinaryFormatter formatter = new BinaryFormatter();
+                FileStream saveFile = File.Open("savegames/save.mainframe", FileMode.Open);
+
+                loadedData = (SerializableData)formatter.Deserialize(saveFile);
                 saveFile.Close();
 
-                isLoadingCheckpoint = true;
-            }
-            else
-            {
-                LoadData(false);
+                // Load the scene
+                isSceneBeingLoaded = true;
+                int levelToLoad = loadedData.savedPlayerProgressData.savedSceneID;
+                Application.LoadLevel(levelToLoad);
             }
         }
-
-        if (!isCheckpoint)
-        {            
-            Debug.Log("load game");
-            // Deserialize the binary to readable data
-            BinaryFormatter formatter = new BinaryFormatter();
-            FileStream saveFile = File.Open("savegames/save.mainframe", FileMode.Open);
-
-            loadedData = (SerializableData)formatter.Deserialize(saveFile);
-            saveFile.Close();
-
-            // Load the scene
-            isSceneBeingLoaded = true;
-            int levelToLoad = loadedData.savedPlayerProgressData.savedSceneID;
-            Application.LoadLevel(levelToLoad);
-        }       
     }
 
     private void Update()
