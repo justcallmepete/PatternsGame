@@ -1,5 +1,4 @@
-﻿using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 
 // Autosave when entering scene. Add always on the beginning, but NOT with players inside the collider. 
 
@@ -22,6 +21,6 @@ public class Autosave : MonoBehaviour{
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(transform.position, gameObject.GetComponent<BoxCollider>().size);
+        Gizmos.DrawWireCube(transform.position, transform.localScale);
     }
 }

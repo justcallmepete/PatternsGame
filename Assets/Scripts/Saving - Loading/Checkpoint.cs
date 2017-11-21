@@ -16,6 +16,6 @@ public class Checkpoint : MonoBehaviour {
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.magenta;
-        Gizmos.DrawWireCube(transform.position, gameObject.GetComponent<BoxCollider>().size);
+        Gizmos.DrawWireCube(transform.position , transform.localScale);
     }
 }

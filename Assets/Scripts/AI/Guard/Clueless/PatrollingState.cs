@@ -78,7 +78,7 @@ public class PatrollingState : CluelessGuardState {
             else
             {
                 context.transform.eulerAngles = toVector;
-            Debug.Log(toVector);
+ //           Debug.Log(toVector);
                 OnTargetReached();
             }
     }
@@ -112,7 +112,7 @@ public class PatrollingState : CluelessGuardState {
 
     private void OnTargetReached()
     {
-        Debug.Log("Target Reached");
+  //    Debug.Log("Target Reached");
 
         int oldIndex = waypointIndex;
 
