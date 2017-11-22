@@ -44,9 +44,18 @@ public class GameManager : MonoBehaviour {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+    public void ReloadCheckpoint()
+    {
+        SaveLoadControl.Instance.LoadData(true);
+    }
+
     public void LoadNextScene()
     {
         // Loads next scene in Build Settings
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].GetComponent<MainPlayer>().inventory.Keycard = false;
+        }
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

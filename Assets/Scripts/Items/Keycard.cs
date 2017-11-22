@@ -10,7 +10,7 @@ public class Keycard : MonoBehaviour {
     {
         if (other.tag == "Player")
         {
-            other.GetComponent<Inventory>().Keycard = true;
+            other.GetComponent<MainPlayer>().inventory.Keycard = true;
             Destroy(gameObject);
         }
     }

@@ -17,7 +17,7 @@ public class Elevator : Interactable {
 
     public override void OnInteract(GameObject obj)
     {
-        if (obj.GetComponent<Inventory>().Keycard)
+        if (obj.GetComponent<MainPlayer>().inventory.Keycard)
         {
             UnlockElevator();
             Open();
