@@ -9,6 +9,7 @@ public class InputComponent : PlayerComponentInterface
 {
     ControllerDictionaries controllerDictionaries;
     string tempString = "";
+    private bool onKeyboard = false;
     //private ControllerMapping mapping;
     public override void AwakeComponent()
     {
@@ -60,6 +61,10 @@ public class InputComponent : PlayerComponentInterface
         float axis_Horizontal = Input.GetAxis(MainPlayer.playerIndex+ "_Axis_1" + tempString);
         float axis_Vertical = Input.GetAxis(MainPlayer.playerIndex + "_Axis_2" + tempString);
         Vector3 axisDirection = new Vector3(axis_Horizontal, 0, axis_Vertical);
+        if (onKeyboard)
+        {
+            axisDirection = axisDirection.normalized;
+        }
         MainPlayer.axisDirection = Quaternion.Euler(0, 45, 0) * axisDirection;
     }
 
@@ -68,10 +73,12 @@ public class InputComponent : PlayerComponentInterface
         if (InputManager.Instance.controllerUsed[MainPlayer.GetPlayerIndex()].ToString() == "Keyboard")
         {
             tempString = "_K";
+            onKeyboard = true;
         }
         else
         {
             tempString = "";
+            onKeyboard = false;
         }
     }
 }

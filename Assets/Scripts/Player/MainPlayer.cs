@@ -86,17 +86,18 @@ public class MainPlayer : MonoBehaviour
     public State CurrentState { get { return currentState; } set { currentState = value; } }
 
     public Inventory inventory = new Inventory();
-
+    public Animator animator;
 
     private void Awake()
     {
         // Cache stuff for later
         components = gameObject.GetComponents<PlayerComponentInterface>();
         rigidBody = gameObject.GetComponent<Rigidbody>();
-        material = gameObject.GetComponent<MeshRenderer>().material;
+        animator = GetComponent<Animator>();
+        // material = gameObject.GetComponent<MeshRenderer>().material;
 
         // Save current color
-        color = material.color;
+        //color = material.color;
 
         // Initialize
         foreach (PlayerComponentInterface component in components)
@@ -247,6 +248,7 @@ public class MainPlayer : MonoBehaviour
 
     public IEnumerator AlphaFade(float pAlpha = 0)
     {
+        yield return null;
         // Alpha start value.
         float currentAlpha = material.color.a;
 

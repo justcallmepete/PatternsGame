@@ -34,5 +34,6 @@ public class WhistleComponent : PlayerComponentInterface {
             SoundWave obj = SoundWave.Create(radius, lifeTime);
             obj.transform.position = this.transform.position;
         }
+            
     }
 }

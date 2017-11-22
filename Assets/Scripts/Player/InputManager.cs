@@ -77,21 +77,29 @@ public class InputManager : MonoBehaviour
             controllerUsed[index] = ControllerType.Keyboard;
             return;
         }
-        switch (actualControllerNames[index].Length)
+        switch (actualControllerNames[index])
         {
-            case 19:
+            case "Wireless Controller":
                 //print("PS4 CONTROLLER IS CONNECTED FOR PLAYER " + index);
                 controllerUsed[index] = ControllerType.PS4;
                 break;
-            case 33:
+            case "Controller (XBOX 360 For Windows)":
+                //print("XBOX ONE CONTROLLER IS CONNECTED FOR PLAYER " + index);
+                controllerUsed[index] = ControllerType.XBoxOne;
+                break;
+            case "Controller (Xbox One For Windows)":
+                //print("XBOX ONE CONTROLLER IS CONNECTED FOR PLAYER " + index);
+                controllerUsed[index] = ControllerType.XBoxOne;
+                break;
+            case "Controller (Xbox 360 Wireless Receiver for Windows)":
                 //print("XBOX ONE CONTROLLER IS CONNECTED FOR PLAYER " + index);
                 controllerUsed[index] = ControllerType.XBoxOne;
                 break;
             default:
                 print("A UNKNOWN CONTROLLER IS CONNECTED FOR PLAYER " + index);
-                controllerUsed[index] = ControllerType.PS4;
+                controllerUsed[index] = ControllerType.XBoxOne;
                 break;
-        }     
+        }
     }
 
     public int GetKey(string button, int index)
