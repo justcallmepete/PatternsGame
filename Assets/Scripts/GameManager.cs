@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /*
@@ -16,6 +17,8 @@ public class GameManager : MonoBehaviour {
 
     public GameObject[] Guards { get { return guards; } }
     public GameObject[] Players { get { return players; } }
+
+    private Coroutine slowMotionCoroutine;
 
     public static GameManager Instance
     {
@@ -57,5 +60,22 @@ public class GameManager : MonoBehaviour {
             players[i].GetComponent<MainPlayer>().inventory.Keycard = false;
         }
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    public void SlowMotion(float timeScale = 1, float duration = 2)
+    {
+        if (slowMotionCoroutine != null)
+        {
+            StopCoroutine(slowMotionCoroutine);
+        }
+
+        slowMotionCoroutine = StartCoroutine(DoSlowMotion(timeScale, duration));
+    }
+
+    private IEnumerator DoSlowMotion(float timeScale, float duration)
+    {
+        Time.timeScale = timeScale;
+        yield return new WaitForSeconds(duration);
+        Time.timeScale = 1;
     }
 }
