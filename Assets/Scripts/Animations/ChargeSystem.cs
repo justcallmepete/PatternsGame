@@ -19,6 +19,9 @@ public class ChargeSystem : MonoBehaviour {
     ParticleSystem ps_chargeParticles, ps_chargeCenter, ps_chargeCenter_2;
 
 
+    enum ChargeState { start, charging, stopCharging, shooting, done };
+    ChargeState currentState = ChargeState.start;
+
     bool isCharging;
     public bool startCharge;
     public bool endCharge;
@@ -31,20 +34,41 @@ public class ChargeSystem : MonoBehaviour {
 	void Update () {
         if (startCharge)
         {
-            StartAnimation();
+            BeginCharge();
             startCharge = false;
         }
         if (endCharge)
         {
-            EndAnimation();
+            StopCharge();
             endCharge = false;
         }
-        if (isCharging)
+
+        switch (currentState)
         {
-            currentChargeTime += Time.deltaTime;
-            HandleChargeValues();
+            case ChargeState.charging:
+                HandleCharging();
+                break;
+            case ChargeState.stopCharging:
+                HandleStopCharging();
+                break;
+            case ChargeState.shooting:
+                HandleShoot();
+                break;
+            default:
+                break;
         }
 	}
+
+    void BeginCharge()
+    {
+        StartAnimation();
+        currentState = ChargeState.charging;
+    }
+
+    void StopCharge()
+    {
+        currentState = ChargeState.stopCharging;
+    }
 
     void StartAnimation()
     {
@@ -55,6 +79,15 @@ public class ChargeSystem : MonoBehaviour {
         ps_chargeCenter.Play();
     }
 
+    void StopAnimation()
+    {
+        isCharging = false;
+        currentChargeTime = 0;
+        ps_chargeParticles.Stop();
+        ps_chargeCenter_2.Stop();
+        ps_chargeCenter.Stop();
+    }
+
     void EndAnimation()
     {
         isCharging = false;
@@ -62,6 +95,8 @@ public class ChargeSystem : MonoBehaviour {
 
     void HandleChargeValues()
     {
+        if (!isCharging) return;
+
         var main_chargeParticles = ps_chargeParticles.main;
         var main_chargeCenter = ps_chargeCenter_2.main;
         var main_chargeCenter_2 = ps_chargeCenter.main;
@@ -70,5 +105,39 @@ public class ChargeSystem : MonoBehaviour {
         main_chargeCenter.simulationSpeed = Mathf.Lerp(startSimulateSpeed, endSimulateSpeed, currentChargeTime / chargeTime);
         main_chargeCenter_2.simulationSpeed = Mathf.Lerp(startSimulateSpeed, endSimulateSpeed, currentChargeTime / chargeTime);
         emission_chargeParticles.rateOverTime = Mathf.Lerp(startRateOverTime, endRateOverTime, currentChargeTime/chargeTime);
+    }
+
+    void HandleCharging()
+    {
+        currentChargeTime += Time.deltaTime;
+        if (currentChargeTime >= chargeTime)
+        {
+            Shoot();
+            currentState = ChargeState.shooting;
+        }
+        HandleChargeValues();
+    }
+
+    void HandleStopCharging()
+    {
+        currentChargeTime -= Time.deltaTime;
+        if (currentChargeTime <= 0)
+        {
+            StopAnimation();
+            currentState = ChargeState.start;
+            return;
+        }
+        HandleChargeValues();
+    }
+
+    void Shoot()
+    {
+        Debug.Log("Shoot");
+    }
+
+    void HandleShoot()
+    {
+        //Stop charge animations
+        //Handle line rederer distance
     }
 }
