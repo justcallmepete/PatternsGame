@@ -59,15 +59,18 @@ public class ChargeSystem : MonoBehaviour {
         }
 	}
 
-    void BeginCharge()
+    public void BeginCharge()
     {
         StartAnimation();
+        Debug.Log("begin charge");
         currentState = ChargeState.charging;
     }
 
-    void StopCharge()
+    public void StopCharge()
     {
         currentState = ChargeState.stopCharging;
+        Debug.Log("stop charge");
+
     }
 
     void StartAnimation()
