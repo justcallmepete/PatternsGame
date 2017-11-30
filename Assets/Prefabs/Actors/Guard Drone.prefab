@@ -319,8 +319,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1224667214683130}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -44.11399, y: 2.1044339e-15, z: -94.77528}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -1.01, y: -0.36, z: -1}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 4423946606856088}
@@ -328,7 +328,7 @@ Transform:
   - {fileID: 4695153437690020}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!4 &4275145164488246
 Transform:
   m_ObjectHideFlags: 1
@@ -885,6 +885,7 @@ MonoBehaviour:
   endSimulateSpeed: 5
   startRateOverTime: 2
   endRateOverTime: 25
+  laserMoveSpeed: 0.5
   ps_chargeParticles: {fileID: 198447098074708906}
   ps_chargeCenter: {fileID: 198819911896289596}
   ps_chargeCenter_2: {fileID: 198006746809761428}
@@ -901,7 +902,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e159da4561c1304c92cded0f142752f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewRadius: 1
+  viewRadius: 6.95
   viewRadiusInLight: 10
   viewAngle: 90
   meshResolution: 1
@@ -932,7 +933,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6075ed6fd772bd2479cde007aa544dd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patrolStyle: 0
+  patrolStyle: 2
   patrol: {fileID: 0}
   rotationSpeed: 180
   stoppingDistance: 0

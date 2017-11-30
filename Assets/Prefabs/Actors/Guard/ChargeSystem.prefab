@@ -155,7 +155,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1739462663832004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.01, y: 0.8, z: 2.72}
+  m_LocalPosition: {x: -11.410123, y: 0.95, z: -44.569134}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4507118155285694}
@@ -181,7 +181,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  chargeTime: 5
+  chargeTime: 2
   startSimulateSpeed: 2.5
   endSimulateSpeed: 5
   startRateOverTime: 2
@@ -189,7 +189,7 @@ MonoBehaviour:
   ps_chargeParticles: {fileID: 198736516586239928}
   ps_chargeCenter: {fileID: 198170196941691714}
   ps_chargeCenter_2: {fileID: 198164308071939034}
-  startCharge: 1
+  startCharge: 0
   endCharge: 0
 --- !u!120 &120896733839292714
 LineRenderer:

@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+/** This class represents the guard charge animation
+ * This class is part of the Guard prefab and the methods are being called from the gaurd methods.
+ * 
+ * */
 public class ChargeSystem : MonoBehaviour {
 
     public UnityEvent methods;
@@ -14,35 +18,30 @@ public class ChargeSystem : MonoBehaviour {
     [SerializeField]
     float startRateOverTime, endRateOverTime;
 
-
+    [Range (0.01f, 1f)]
+    [SerializeField]
+    float laserMoveSpeed = 0.2f;
+    float currentDistanceToTarget = 0f;
     [SerializeField]
     ParticleSystem ps_chargeParticles, ps_chargeCenter, ps_chargeCenter_2;
 
+    GuardStateMachine myGuard;
+    GameObject target;
 
+    LineRenderer laserRenderer;
     enum ChargeState { start, charging, stopCharging, shooting, done };
     ChargeState currentState = ChargeState.start;
 
     bool isCharging;
-    public bool startCharge;
-    public bool endCharge;
 	// Use this for initialization
 	void Start () {
         methods.Invoke();
+        myGuard = GetComponentInParent<GuardStateMachine>();
+        laserRenderer = GetComponent<LineRenderer>();
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if (startCharge)
-        {
-            BeginCharge();
-            startCharge = false;
-        }
-        if (endCharge)
-        {
-            StopCharge();
-            endCharge = false;
-        }
-
         switch (currentState)
         {
             case ChargeState.charging:
@@ -62,15 +61,12 @@ public class ChargeSystem : MonoBehaviour {
     public void BeginCharge()
     {
         StartAnimation();
-        Debug.Log("begin charge");
         currentState = ChargeState.charging;
     }
 
     public void StopCharge()
     {
         currentState = ChargeState.stopCharging;
-        Debug.Log("stop charge");
-
     }
 
     void StartAnimation()
@@ -136,11 +132,43 @@ public class ChargeSystem : MonoBehaviour {
     void Shoot()
     {
         Debug.Log("Shoot");
+        GameManager.Instance.SlowMotion(0.2f, 3);
+        target = myGuard.TargetPlayer.gameObject;
+        currentDistanceToTarget = 0f;
+
+
     }
 
     void HandleShoot()
     {
-        //Stop charge animations
-        //Handle line rederer distance
+        target = myGuard.TargetPlayer.gameObject;
+        Vector3 targetPos = target.transform.position;
+        targetPos.y = transform.position.y;
+        float distanceToTarget = Vector3.Distance(transform.position, targetPos);
+        currentDistanceToTarget += laserMoveSpeed;
+        Vector3 dirToTarget = (targetPos - transform.position).normalized;
+        float distanceRatio = currentDistanceToTarget / distanceToTarget;
+        Debug.Log("distiance ratio: " + distanceRatio + " currentDistanceToTarget " + currentDistanceToTarget);
+        laserRenderer.SetPosition(1, transform.InverseTransformPoint(transform.position + (targetPos- transform.position) * distanceRatio));
+       
+        if(distanceRatio >= 1)//Reached target
+        {
+            PlayerHit();
+        }
+    }
+
+    void PlayerHit()
+    {
+        Debug.Log("Player shot");
+        currentState = ChargeState.done;
+        StartCoroutine(DelayBeforeReload(1f));
+        GameManager.Instance.SlowMotion(0, 20);
+    }
+
+    IEnumerator DelayBeforeReload(float sec)
+    {
+        yield return new WaitForSecondsRealtime(sec);
+        // Should be in, doesnt work atm
+        // GameManager.Instance.ReloadCheckpoint();
     }
 }
