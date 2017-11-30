@@ -12,7 +12,7 @@ public class FillLight : MonoBehaviour {
     public int cookieHeight = 500;
     public float gradientLength = 100;
     public Texture2D cookie;
-    public TextureImporter tImporter;
+    // public TextureImporter tImporter;
 
     // Use this for initialization
     void Start () {
@@ -25,9 +25,10 @@ public class FillLight : MonoBehaviour {
         // this.GetComponent<Renderer>().material.mainTexture = cookie;
      
         byte[] bytes = cookie.EncodeToPNG();
-        File.WriteAllBytes(Application.dataPath + "/Materials/Cookies/cookie6.png", bytes);
+        File.WriteAllBytes(Application.dataPath + "/Materials/Cookies/cookie9.png", bytes);
 
-        SetTextureImporterFormat(Application.dataPath + "/Materials/Cookies/cookie6.png", true);
+        AssetDatabase.Refresh();
+        SetTextureImporterFormat("Assets/Materials/Cookies/cookie9.png", true);
         
         light = this.transform.GetChild(0).gameObject.AddComponent<Light>();
         light.type = LightType.Directional;
@@ -94,9 +95,9 @@ public class FillLight : MonoBehaviour {
     {
         // if (null == texture) return;
 
-        //string assetPath = AssetDatabase.GetAssetPath(texture);
+        // string assetPath = AssetDatabase.GetAssetPath(texture);
 
-        tImporter = AssetImporter.GetAtPath(path) as TextureImporter;
+        var tImporter = TextureImporter.GetAtPath(path) as TextureImporter;
         Debug.Log(path);
         if (tImporter != null)
         {
@@ -108,6 +109,7 @@ public class FillLight : MonoBehaviour {
 
             AssetDatabase.ImportAsset(path);
             AssetDatabase.Refresh();
+            cookie = (Texture2D)AssetDatabase.LoadAssetAtPath(path, typeof(Texture2D));
         }
     }
 }
