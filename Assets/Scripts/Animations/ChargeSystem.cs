@@ -131,7 +131,6 @@ public class ChargeSystem : MonoBehaviour {
 
     void Shoot()
     {
-        Debug.Log("Shoot");
         GameManager.Instance.SlowMotion(0.2f, 3);
         target = myGuard.TargetPlayer.gameObject;
         currentDistanceToTarget = 0f;
@@ -148,7 +147,6 @@ public class ChargeSystem : MonoBehaviour {
         currentDistanceToTarget += laserMoveSpeed;
         Vector3 dirToTarget = (targetPos - transform.position).normalized;
         float distanceRatio = currentDistanceToTarget / distanceToTarget;
-        Debug.Log("distiance ratio: " + distanceRatio + " currentDistanceToTarget " + currentDistanceToTarget);
         laserRenderer.SetPosition(1, transform.InverseTransformPoint(transform.position + (targetPos- transform.position) * distanceRatio));
        
         if(distanceRatio >= 1)//Reached target
@@ -159,7 +157,6 @@ public class ChargeSystem : MonoBehaviour {
 
     void PlayerHit()
     {
-        Debug.Log("Player shot");
         currentState = ChargeState.done;
         StartCoroutine(DelayBeforeReload(1f));
         GameManager.Instance.SlowMotion(0, 20);
