@@ -1,4 +1,6 @@
-﻿Shader "Custom/VisionMaskShader" {
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Custom/VisionMaskShader" {
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
@@ -16,6 +18,42 @@
 			Pass replace
 			
 		}
+
+		Pass {
+            Tags { "RenderType"="Opaque" }
+            Cull Front
+ 
+            CGPROGRAM
+ 
+            #pragma vertex vert
+            #pragma fragment frag
+            #include "UnityCG.cginc"
+ 
+            struct v2f {
+                float4 pos : SV_POSITION;
+            };
+ 
+            float _Outline;
+            float4 _OutlineColor;
+ 
+            float4 vert(appdata_base v) : SV_POSITION {
+                v2f o;
+                o.pos = UnityObjectToClipPos(v.vertex);
+                float3 normal = mul((float3x3) UNITY_MATRIX_MV, v.normal);
+                normal.x *= UNITY_MATRIX_P[0][0];
+                normal.y *= UNITY_MATRIX_P[1][1];
+                o.pos.xy += normal.xy * _Outline;
+                return o.pos;
+            }
+ 
+            half4 frag(v2f i) : COLOR {
+                return _OutlineColor;
+            }
+ 
+            ENDCG
+        }
+		
+
 		
 		CGPROGRAM
 		// Physically based Standard lighting model, and enable shadows on all light types
