@@ -67,7 +67,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1290394963560278}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.049044147, y: 3.9, z: 0.5159422}
+  m_LocalPosition: {x: 0.049044147, y: 5.85, z: 0.5159422}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4652801548366468}
@@ -92,15 +92,15 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1090445035867970}
-  m_LocalRotation: {x: -0, y: -0.92387956, z: 0, w: 0.38268343}
-  m_LocalPosition: {x: 49.6, y: 0.1, z: 23}
+  m_LocalRotation: {x: -0, y: -0.92477876, z: 0, w: -0.3805055}
+  m_LocalPosition: {x: 47.19, y: 0.1, z: 7.36}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4408452388786234}
   - {fileID: 4265070371829286}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -224.73, z: 0}
 --- !u!23 &23007902162297874
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -149,13 +149,13 @@ Light:
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 2
-  m_Color: {r: 0.6287272, g: 1, b: 1, a: 1}
-  m_Intensity: 16.25
-  m_Range: 8.37
+  m_Color: {r: 0.7607843, g: 0.03137255, b: 0.5882353, a: 1}
+  m_Intensity: 14
+  m_Range: 16.37
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -187,10 +187,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a68cb7e46646ae43a8185df8233be15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewRadius: 9.73
-  viewAngle: 186
-  targetsInSight: []
+  viewRadius: 4.22
+  viewAngle: 293
+  playersInLight: []
   meshResolution: 1
   viewMeshFiler: {fileID: 33084209166845556}
   edgeCheckIteration: 4
-  edgeThresholdDistance: 0.5
+  edgeThresholdDistance: -0.3

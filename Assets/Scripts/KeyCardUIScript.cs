@@ -60,7 +60,7 @@ public class KeyCardUIScript : MonoBehaviour {
             return;
         }
         // Set the UI true, 
-        if (player.GetComponent<Inventory>().Keycard == true)
+        if (player.GetComponent<MainPlayer>().inventory.Keycard)
         {
             keycardSprite.SetActive(true);
         }

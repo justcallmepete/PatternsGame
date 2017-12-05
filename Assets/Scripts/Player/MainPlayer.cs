@@ -9,7 +9,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(InputComponent))]
 [RequireComponent(typeof(MovementComponent))]
-[RequireComponent(typeof(Inventory))]
+//[RequireComponent(typeof(Inventory))]
 [RequireComponent(typeof(WhistleComponent))]
 [RequireComponent(typeof(TeleportComponent))]
 [RequireComponent(typeof(Rigidbody))]
@@ -41,7 +41,7 @@ public class MainPlayer : MonoBehaviour
     private Color color;            // Used to store color reference.
     private Material material;
 
-    private Inventory inventory;
+    
 
     // Used for channelling
     private float channelTimeRatio = 0;
@@ -85,13 +85,13 @@ public class MainPlayer : MonoBehaviour
     private State currentState = State.Idle;
     public State CurrentState { get { return currentState; } set { currentState = value; } }
 
+    public Inventory inventory = new Inventory();
     public Animator animator;
 
     private void Awake()
     {
         // Cache stuff for later
         components = gameObject.GetComponents<PlayerComponentInterface>();
-        inventory = gameObject.GetComponent<Inventory>();
         rigidBody = gameObject.GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         // material = gameObject.GetComponent<MeshRenderer>().material;
@@ -113,6 +113,88 @@ public class MainPlayer : MonoBehaviour
         });
     }
 
+    private void Start()
+    {
+        if (getPlayerIndex() == "P1")
+        {
+            inventory = SaveLoadControl.Instance.updatedSavablePlayer1Data.inventory;
+        }
+        else if (getPlayerIndex() == "P2")
+        {
+            inventory = SaveLoadControl.Instance.updatedSavablePlayer2Data.inventory;
+        }
+
+        LoadData();        
+    }
+
+    private void LoadCheckpoint()
+    {
+        if (SaveLoadControl.Instance.isLoadingCheckpoint)
+        {
+            Debug.Log("Loading player checkpoint");
+            if (getPlayerIndex() == "P1")
+            {
+                transform.position = new Vector3(SaveLoadControl.Instance.loadedCheckpoint.savedPlayer1Data.playerPosX,
+                                                 SaveLoadControl.Instance.loadedCheckpoint.savedPlayer1Data.playerPosY,
+                                                 SaveLoadControl.Instance.loadedCheckpoint.savedPlayer1Data.playerPosZ);
+
+                SaveLoadControl.Instance.isPlayer1Loaded = true;
+            }
+            else if (getPlayerIndex() == "P2")
+            {
+                transform.position = new Vector3(SaveLoadControl.Instance.loadedCheckpoint.savedPlayer2Data.playerPosX,
+                                                 SaveLoadControl.Instance.loadedCheckpoint.savedPlayer2Data.playerPosY,
+                                                 SaveLoadControl.Instance.loadedCheckpoint.savedPlayer2Data.playerPosZ);
+
+                SaveLoadControl.Instance.isPlayer2Loaded = true;
+            }
+        }
+    }
+
+    private void LoadData()
+    {
+        if (SaveLoadControl.Instance.isSceneBeingLoaded)
+        {
+            if(getPlayerIndex() == "P1")
+            {
+                transform.position = new Vector3(SaveLoadControl.Instance.loadedData.savedPlayer1Data.playerPosX,
+                                                 SaveLoadControl.Instance.loadedData.savedPlayer1Data.playerPosY,
+                                                 SaveLoadControl.Instance.loadedData.savedPlayer1Data.playerPosZ);
+
+                inventory = SaveLoadControl.Instance.loadedData.savedPlayer1Data.inventory;
+                SaveLoadControl.Instance.isPlayer1Loaded = true;
+            }
+            else if(getPlayerIndex() == "P2")
+            {
+                transform.position = new Vector3(SaveLoadControl.Instance.loadedData.savedPlayer2Data.playerPosX,
+                                                 SaveLoadControl.Instance.loadedData.savedPlayer2Data.playerPosY,
+                                                 SaveLoadControl.Instance.loadedData.savedPlayer2Data.playerPosZ);
+
+                inventory = SaveLoadControl.Instance.loadedData.savedPlayer2Data.inventory;
+                SaveLoadControl.Instance.isPlayer2Loaded = true;
+            }
+        }
+    }
+
+    private void SaveData()
+    {
+        if(getPlayerIndex() == "P1")
+        {
+            SaveLoadControl.Instance.updatedSavablePlayer1Data.playerPosX = transform.position.x;
+            SaveLoadControl.Instance.updatedSavablePlayer1Data.playerPosY = transform.position.y;
+            SaveLoadControl.Instance.updatedSavablePlayer1Data.playerPosZ = transform.position.z;
+            SaveLoadControl.Instance.updatedSavablePlayer1Data.inventory = inventory;
+        }
+        else if(getPlayerIndex() == "P2")
+        {
+            SaveLoadControl.Instance.updatedSavablePlayer2Data.playerPosX = transform.position.x;
+            SaveLoadControl.Instance.updatedSavablePlayer2Data.playerPosY = transform.position.y;
+            SaveLoadControl.Instance.updatedSavablePlayer2Data.playerPosZ = transform.position.z;
+            SaveLoadControl.Instance.updatedSavablePlayer2Data.inventory = inventory;
+        }
+    }
+
+
     private void Update()
     {
         // Update all components
@@ -120,6 +202,9 @@ public class MainPlayer : MonoBehaviour
         {
             component.UpdateComponent();
         }
+
+        SaveData();
+        LoadCheckpoint();
     }
 
     private void FixedUpdate()
