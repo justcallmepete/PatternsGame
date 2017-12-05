@@ -139,6 +139,8 @@ public class MainPlayer : MonoBehaviour
                                                  SaveLoadControl.Instance.loadedCheckpoint.savedPlayer1Data.playerPosZ);
 
                 SaveLoadControl.Instance.isPlayer1Loaded = true;
+
+                ResetPlayer();
             }
             else if (getPlayerIndex() == "P2")
             {
@@ -147,6 +149,9 @@ public class MainPlayer : MonoBehaviour
                                                  SaveLoadControl.Instance.loadedCheckpoint.savedPlayer2Data.playerPosZ);
 
                 SaveLoadControl.Instance.isPlayer2Loaded = true;
+
+                ResetPlayer();
+
             }
         }
     }
@@ -226,24 +231,25 @@ public class MainPlayer : MonoBehaviour
     }
 
     // Check current states
-    public bool IsBusy()
+    public bool IsBusy() { return CurrentState == State.Teleported || CurrentState == State.Dead; }
+    public bool IsFree() { return CurrentState == State.Idle; }
+    public bool IsChannelling() { return CurrentState == State.Channelling; }
+    public bool IsTeleported() { return CurrentState == State.Teleported; }
+    public bool IsDead() { return CurrentState == State.Dead; }
+
+    public void GetHit()
     {
-        return CurrentState == State.Teleported || CurrentState == State.Dead;
+        if (currentState != State.Dead)
+        {
+            currentState = State.Dead;
+            animator.SetTrigger("die");
+        }
     }
 
-    public bool IsFree()
+    private void ResetPlayer()
     {
-        return CurrentState == State.Idle;
-    }
-
-    public bool IsChannelling()
-    {
-        return CurrentState == State.Channelling;
-    }
-
-    public bool IsTeleported()
-    {
-        return CurrentState == State.Teleported;
+        currentState = State.Idle;
+        animator.SetTrigger("reset");
     }
 
     public IEnumerator AlphaFade(float pAlpha = 0)
