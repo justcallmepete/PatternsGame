@@ -1,10 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class LightCheckComponent : PlayerComponentInterface {
+/*
+ * Checks to see if one of the players is in the light. Adds lights to an array stored in the player to determine if the player is in light.
+ */
+public class LightCheck : MonoBehaviour {
 
-    public bool lightIsActive;
+    public bool LightIsActive { get { return lightIsActive; } set { lightIsActive = value; } }
+    public bool lightIsActive = true;
 
     private void OnTriggerEnter(Collider other)
     {
