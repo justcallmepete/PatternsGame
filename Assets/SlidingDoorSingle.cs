@@ -17,4 +17,14 @@ public class SlidingDoorSingle : Interactable {
 
         slidingDoor.OnInteract(obj);
     }
+
+    public override void TurnOnOutline()
+    {
+        slidingDoor.ChangeOutlineSlidingDoor(false);
+    }
+
+    public override void TurnOffOutline()
+    {
+        slidingDoor.ChangeOutlineSlidingDoor(true);
+    }
 }

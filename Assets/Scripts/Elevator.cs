@@ -3,17 +3,20 @@
 /*
  * Elevator script opens the elevator if the player has a keycard. 
  * Use on elivator object. 
- */ 
+ */
 
-public class Elevator : Interactable {
+public class Elevator : Interactable
+{
 
     private Animator anim;
     private bool locked = true;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    public override void Start()
+    {
+        base.Start();
         anim = transform.parent.gameObject.GetComponent<Animator>();
-	}
+    }
 
     public override void OnInteract(GameObject obj)
     {

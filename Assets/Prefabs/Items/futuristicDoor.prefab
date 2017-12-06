@@ -22,7 +22,8 @@ GameObject:
   - component: {fileID: 33553795173659452}
   - component: {fileID: 23145858212244948}
   - component: {fileID: 64667570504369804}
-  - component: {fileID: 114289889156022272}
+  - component: {fileID: 114500497586482910}
+  - component: {fileID: 114376833540890934}
   m_Layer: 8
   m_Name: door_left
   m_TagString: Untagged
@@ -76,7 +77,8 @@ GameObject:
   - component: {fileID: 33056624585650570}
   - component: {fileID: 23745061277827592}
   - component: {fileID: 64009032789365038}
-  - component: {fileID: 114512272661226916}
+  - component: {fileID: 114018524694457920}
+  - component: {fileID: 114723297727162360}
   m_Layer: 8
   m_Name: door_right
   m_TagString: Untagged
@@ -209,7 +211,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1545890002877138}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -10.81, y: -0.066431, z: -35.6}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
@@ -566,6 +568,21 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114018524694457920
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1692604764484416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: 0
+  eraseRenderer: 1
+  originalLayer: 0
+  originalMaterials: []
 --- !u!114 &114108860811493652
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -578,7 +595,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   openTime: 3
---- !u!114 &114289889156022272
+--- !u!114 &114376833540890934
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1110538652286374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: 0
+  eraseRenderer: 1
+  originalLayer: 0
+  originalMaterials: []
+--- !u!114 &114500497586482910
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -589,7 +621,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b96c4ab7a72c2947b9bc9dda4114717, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114512272661226916
+  outline: {fileID: 0}
+--- !u!114 &114723297727162360
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -600,3 +633,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b96c4ab7a72c2947b9bc9dda4114717, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outline: {fileID: 0}
