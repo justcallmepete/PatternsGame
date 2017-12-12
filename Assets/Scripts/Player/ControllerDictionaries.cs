@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ControllerDictionaries : MonoBehaviour {
+public class ControllerDictionaries {
        /*
     * 0 - X
     * 1 - A

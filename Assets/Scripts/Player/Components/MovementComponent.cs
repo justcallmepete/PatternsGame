@@ -44,8 +44,16 @@ public class MovementComponent : PlayerComponentInterface
 
     public override void FixedUpdateComponent()
     {
-        base.FixedUpdateComponent();
+        if (MainPlayer.IsDead())
+        {
+            return;
+        }
 
+        base.FixedUpdateComponent();
+        if (MainPlayer.IsBusy())
+        {
+            return;
+        }
         SetMovementValues();
     }
 

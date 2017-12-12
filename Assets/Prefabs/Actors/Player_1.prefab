@@ -1094,7 +1094,6 @@ GameObject:
   - component: {fileID: 114218081173711464}
   - component: {fileID: 114300635645881074}
   - component: {fileID: 114174791727804314}
-  - component: {fileID: 114405430654758610}
   - component: {fileID: 114526465125706674}
   - component: {fileID: 114514695329652724}
   - component: {fileID: 114822445379874146}
@@ -2671,17 +2670,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e3d837a98721a14889e9e739b6338c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114405430654758610
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1782929250056026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15b7290d1b879064f88020330d18d94a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114432495840451282
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2732,7 +2720,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teleportButton: B
-  channelTime: 2
+  channelTime: 1
   teleportDelay: 1
   outerRadius: 1.3
 --- !u!114 &114526465125706674
