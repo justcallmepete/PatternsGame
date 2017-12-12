@@ -3,34 +3,15 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+
 public class resizeLight : MonoBehaviour {
 
-    // [Range(0, 2)]
-    // public float cookieSizeIncreaser = 1;
-    // public Texture2D cookie;
-    // public Bounds bounds;
+    [SerializeField]
     public Light light;
     public float cookieSize = 30;
-    // float biggerSize;
-	// Use this for initialization
+
 	void Start () {
-        // bounds = this.GetComponent<MeshFilter>().mesh.bounds;
-        // cookie = (Texture2D)light.cookie;
-        // cookieSize = light.cookieSize;
-        // if(this.transform.localScale.x>= this.transform.localScale.z)
-        // {
-        //     print(this.transform.localScale.x);
-        //     biggerSize = this.transform.localScale.x;
-        // }
-        // else
-        // {
-        //     print(this.transform.localScale.z);
-        //     biggerSize = this.transform.localScale.z;
-        // }
-        // light.cookieSize = light.cookieSize * (biggerSize * cookieSizeIncreaser);
-        // 
-        // light.enabled = true;
-        // this.GetComponent<Renderer>().enabled = false;
+
     }
     public void ChangeRatio(int numerator, int denominator)
     {
@@ -56,6 +37,10 @@ public class LightEditor: Editor
         resizeLight light = (resizeLight)target;
         light.cookieSize = EditorGUILayout.Slider("Cookie size", light.cookieSize, 10, 100);
         light.gameObject.GetComponent<Light>().cookieSize = light.cookieSize;
+        if (GUI.changed)
+        {
+            EditorUtility.SetDirty(light);
+        }
         if (GUILayout.Button("Rotate cookie"))
         {
             light.Rotate();
