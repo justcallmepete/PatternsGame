@@ -155,10 +155,15 @@ public class TeleportComponent : PlayerComponentInterface
         }
 
         // Set teleport values for the other players
-        pPlayerMainPlayer.teleportTarget = gameObject.transform.position + 
-            (pPlayer.transform.position - gameObject.transform.position).normalized * outerRadius;
-        pPlayerMainPlayer.CurrentState = MainPlayer.State.Teleported;
+        //pPlayerMainPlayer.teleportTarget = gameObject.transform.position + 
+        //    (pPlayer.transform.position - gameObject.transform.position).normalized * outerRadius;
+        //pPlayerMainPlayer.CurrentState = MainPlayer.State.Teleported;
         StopChannelling();
+        MainPlayer.teleportTarget = pPlayer.transform.position +
+            (-pPlayer.transform.position + gameObject.transform.position).normalized * outerRadius;
+        MainPlayer.CurrentState = MainPlayer.State.Teleported;
+        UpdateChannelTimeRatio();
+        print(currentTime);
     }
 
     private void StopChannelling()
