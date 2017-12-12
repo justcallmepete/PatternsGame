@@ -889,8 +889,6 @@ MonoBehaviour:
   ps_chargeParticles: {fileID: 198447098074708906}
   ps_chargeCenter: {fileID: 198819911896289596}
   ps_chargeCenter_2: {fileID: 198006746809761428}
-  startCharge: 0
-  endCharge: 0
 --- !u!114 &114699484884198442
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -936,7 +934,7 @@ MonoBehaviour:
   patrolStyle: 2
   patrol: {fileID: 0}
   rotationSpeed: 180
-  stoppingDistance: 0
+  stoppingDistance: 4.5
   indicator: {fileID: 1724743845177202}
   logStateTransitions: 0
 --- !u!120 &120403160515138806
