@@ -5,8 +5,8 @@ public class LaserScript : MonoBehaviour {
 	public Transform endPoint;
     public float detectionRange = 5f;
 	LineRenderer laserLine;
-
     private ParticleSystem particleSystem;
+
 	// Use this for initialization
 	void Start () {
 		laserLine = GetComponentInChildren<LineRenderer>();
@@ -20,8 +20,6 @@ public class LaserScript : MonoBehaviour {
         laserLine.SetPosition(0, endPoint.position);
         RaycastHit hit;
         Vector3 fwd = endPoint.TransformDirection(Vector3.forward);
-        // Debug ray cast
-        Debug.DrawRay(endPoint.position, fwd * detectionRange, Color.green);
 
         if (Physics.Raycast(endPoint.position, fwd, out hit))
         {
