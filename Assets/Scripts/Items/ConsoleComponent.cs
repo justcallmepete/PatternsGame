@@ -10,9 +10,8 @@ using UnityEngine.Events;
 public class ConsoleComponent : MonoBehaviour {
     public UnityEvent methods;
 
-    public void onConsole()
+    public void OnConsole()
     {
-        Debug.Log("methods.Invoke()");
         methods.Invoke();
     }
 }
