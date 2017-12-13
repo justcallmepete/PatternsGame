@@ -9,14 +9,16 @@ public class LaserMovement : MonoBehaviour
     private int currentPathIndex = 0;
     private Waypoint[] patrolPoints;
 
+    public bool isMoveable = true;
+
     private float step;
     public enum State
     {
         Move,
         Rotate,
-        Wait
+        Wait,
     }
-    
+
     private State currentState = State.Move;
     private bool waiting = false;
     // Use this for initialization
@@ -26,24 +28,31 @@ public class LaserMovement : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        switch(currentState)
+        if (!isMoveable)
         {
-            case State.Move: MoveLaser();
+            return;
+        }
+
+        switch (currentState)
+        {
+            case State.Move:
+                MoveLaser();
                 break;
-            case State.Rotate: RotateLaser();
+            case State.Rotate:
+                RotateLaser();
                 break;
-            case State.Wait: if (!waiting)
+            case State.Wait:
+                if (!waiting)
                 {
                     StartCoroutine(NextPatrolPoint(patrolPoints[currentPathIndex].duration));
                 }
                 break;
-            default: MoveLaser();
+            default:
+                MoveLaser();
                 break;
         }
-
-
     }
 
     private void MoveLaser()
@@ -94,7 +103,7 @@ public class LaserMovement : MonoBehaviour
         waiting = false;
     }
 
-    private void ChangeState(State state) 
+    private void ChangeState(State state)
     {
         currentState = state;
         step = 0;
