@@ -16,7 +16,7 @@ public class LaserScript : MonoBehaviour
         laserLine = GetComponentInChildren<LineRenderer>();
         laserLine.useWorldSpace = true;
 
-        particleSystem = GetComponentInChildren<ParticleSystem>();  
+        particleSystem = GetComponentInChildren<ParticleSystem>();
         laserLine.SetWidth(.2f, .2f);
 
         laserMovement = GetComponent<LaserMovement>();
