@@ -12,6 +12,7 @@ public class GuardCamera : MonoBehaviour {
 
     Material visionMaterial;
     GameObject guardCameraVision;
+    
     // Use this for initialization
     void Start () {
         guardCameraVision = transform.Find("GuardCameraVisualisation").gameObject;
