@@ -14,8 +14,8 @@ public class GuardCamera : MonoBehaviour {
     GameObject guardCameraVision;
 
     //Rotate parameters
-    enum RotateState { rotatingToTarget, reachedTarget, waitingForNextTarget, none };
-    RotateState currentState;
+    public enum RotateState { rotatingToTarget, reachedTarget, waitingForNextTarget, turnedOff, none };
+    public RotateState currentState;
     enum RotateMode { loop, backAndForth, random }
     [SerializeField]
     RotateMode myRotateMode;
@@ -51,7 +51,6 @@ public class GuardCamera : MonoBehaviour {
         {
             //get dirction
             watchDirections[i] = Mainframe.utils.MathUtils.DirFromAngle(watchAngles[i]+ transform.eulerAngles.y, true, this.transform);
-            Debug.Log(transform.position + watchDirections[i]);
             Debug.DrawLine(transform.position, transform.position + watchDirections[i] * 50,Color.white, 10f);
         }
         rotateTargetDirection = 0;
@@ -75,6 +74,8 @@ public class GuardCamera : MonoBehaviour {
                 //Handle rotation
                 HandleRotate();
                 break;
+            case RotateState.turnedOff:
+                return;            
         }
 
         if (isAlerted)
@@ -195,5 +196,29 @@ public class GuardCamera : MonoBehaviour {
     void SetVisionColor(Color pColor)
     {
         visionMaterial.SetColor("_Color", pColor);
+    }
+
+    public void SwitchOnOff()
+    {
+        if(currentState == RotateState.turnedOff)
+        {
+            TurnOn();
+        }
+        else
+        {
+            TurnOff();
+        }
+    }
+
+    void TurnOn()
+    {
+        guardCameraVision.SetActive(true);
+        GetNextRotatePosition();
+    }
+
+    void TurnOff()
+    {
+        guardCameraVision.SetActive(false);
+        currentState = RotateState.turnedOff;
     }
 }
