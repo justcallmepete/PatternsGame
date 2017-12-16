@@ -12,6 +12,7 @@ namespace Mainframe.utils
             float sign = (vec2.y < vec1.y) ? -1.0f : 1.0f;
             return Vector2.Angle(Vector2.right, diference) * sign;
         }
+
         public static Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal, Transform transform)
         {
             if (!angleIsGlobal)
