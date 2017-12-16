@@ -30,6 +30,9 @@ public class GuardCamera : MonoBehaviour {
     int rotateTargetDirection;
     int rotatePreviousTarget;
 
+    [SerializeField]
+    GuardStateMachine[] guardsToAlert;
+
     [ExecuteInEditMode]
     void OnValidate()
     {
@@ -80,6 +83,10 @@ public class GuardCamera : MonoBehaviour {
             if(playersInVision.Count <= 0)
             {
                 SetSemiAlert();
+            }
+            else
+            {
+                AlertGuards();
             }
             return;
         }
@@ -159,9 +166,18 @@ public class GuardCamera : MonoBehaviour {
         currentState = RotateState.reachedTarget;
     }
 
+    void AlertGuards()
+    {
+        for (int i = 0; i < guardsToAlert.Length; i++)
+        {
+            guardsToAlert[i].Alert(playersInVision[0].gameObject);
+        }
+    }
+
     void Alert()
     {
         isAlerted = true;
+        AlertGuards();
         SetVisionColor(colorAlert);
     }
 

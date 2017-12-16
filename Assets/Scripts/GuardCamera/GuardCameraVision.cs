@@ -50,20 +50,25 @@ public class GuardCameraVision : MonoBehaviour
     void CheckPlayerInAngle()
     {
         myCamera.playersInVision.Clear();
-        GameObject[] playersToCheck = GameManager.Instance.Players;
-        for (int i = 0; i < playersToCheck.Length; i++)
+        Collider[] playersInArea = Physics.OverlapSphere(transform.position, viewRadius, (1 << playerLayerIndex));
+        if (playersInArea.Length > 0)
         {
-            Vector3 dirToTarget = (playersToCheck[i].transform.position - transform.position).normalized;
-            if (Vector3.Angle(transform.forward, dirToTarget) < (viewAngle+4) / 2)
+            GameObject[] playersToCheck = GameManager.Instance.Players;
+            for (int i = 0; i < playersInArea.Length; i++)
             {
-                //Block check
-                float distToTarget = Vector3.Distance(transform.position, playersToCheck[i].transform.position);
-                if (!Physics.Raycast(transform.position, dirToTarget, distToTarget, (1<<obstacleLayersIndex)))
+                GameObject playerToCheck = playersInArea[i].gameObject;
+                Vector3 dirToTarget = (playerToCheck.transform.position - transform.position).normalized;
+                if (Vector3.Angle(transform.forward, dirToTarget) < (viewAngle + 4) / 2)
                 {
-                    //Draw line if in sight
-                    myCamera.playersInVision.Add(playersToCheck[i].GetComponent<MainPlayer>());
-                }
+                    //Block check
+                    float distToTarget = Vector3.Distance(transform.position, playerToCheck.transform.position);
+                    if (!Physics.Raycast(transform.position, dirToTarget, distToTarget, (1 << obstacleLayersIndex)))
+                    {
+                        //Draw line if in sight
+                        myCamera.playersInVision.Add(playerToCheck.GetComponent<MainPlayer>());
+                    }
 
+                }
             }
         }
     }
