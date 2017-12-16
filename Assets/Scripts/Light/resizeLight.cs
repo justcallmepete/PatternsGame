@@ -9,12 +9,18 @@ public class resizeLight : MonoBehaviour {
     [SerializeField]
     public Light light;
     public float cookieSize = 30;
+    public BoxCollider collider;
+    private float currentRatioNumerator;
+    private float currentRatioDenominator;
+    public float boxSizeMultiplier;
 
-	void Start () {
+    void Start () {
 
     }
     public void ChangeRatio(int numerator, int denominator)
     {
+        currentRatioNumerator = numerator;
+        currentRatioDenominator = denominator;
         light = GetComponent<Light>();
         light.cookie = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Materials/Cookies/cookie" + numerator+"-" + denominator + ".png", typeof(Texture2D));
     }
@@ -22,7 +28,13 @@ public class resizeLight : MonoBehaviour {
     {
         this.gameObject.transform.Rotate(new Vector3(0, 0, 90));
     }
-
+    public void SetColliderSize(float cookieSize)
+    {
+        if (currentRatioNumerator == 0) return;
+        boxSizeMultiplier = 0.57f;
+        collider = GetComponent<BoxCollider>();
+        collider.size = new Vector3(cookieSize * boxSizeMultiplier, ((cookieSize * boxSizeMultiplier) / currentRatioDenominator) * currentRatioNumerator, 2);
+    }
     // Update is called once per frame
     void Update () {
 		
@@ -37,6 +49,7 @@ public class LightEditor: Editor
         resizeLight light = (resizeLight)target;
         light.cookieSize = EditorGUILayout.Slider("Cookie size", light.cookieSize, 10, 100);
         light.gameObject.GetComponent<Light>().cookieSize = light.cookieSize;
+        light.SetColliderSize(light.cookieSize);
         if (GUI.changed)
         {
             EditorUtility.SetDirty(light);
