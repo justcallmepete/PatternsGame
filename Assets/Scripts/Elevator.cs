@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using EazyTools.SoundManager;
 
 /*
  * Elevator script opens the elevator if the player has a keycard. 
@@ -9,6 +10,8 @@ public class Elevator : Interactable {
 
     private Animator anim;
     private bool locked = true;
+
+    public AudioClip elevatorDoorOpenSFX;
 
 	// Use this for initialization
 	void Start () {
@@ -30,6 +33,7 @@ public class Elevator : Interactable {
     public void Open()
     {
         anim.SetBool("doOpen", true);
+        SoundManager.PlaySound(elevatorDoorOpenSFX, 0.1f);
     }
 
     public void UnlockElevator()

@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4637389462741648}
   - component: {fileID: 114700941144054852}
+  - component: {fileID: 81236469081400312}
   m_Layer: 0
   m_Name: Camera
   m_TagString: CameraFocus
@@ -38,7 +39,6 @@ GameObject:
   - component: {fileID: 20005199521075840}
   - component: {fileID: 92888162632938318}
   - component: {fileID: 124842106982097914}
-  - component: {fileID: 81757962423643550}
   - component: {fileID: 114265151368987644}
   m_Layer: 0
   m_Name: Main Camera
@@ -67,7 +67,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1048557263956130}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.213739, y: -3.27841e-16, z: 14.764647}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4533063399274662}
@@ -110,12 +110,12 @@ Camera:
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
   m_StereoMirrorMode: 0
---- !u!81 &81757962423643550
+--- !u!81 &81236469081400312
 AudioListener:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1534483588434972}
+  m_GameObject: {fileID: 1048557263956130}
   m_Enabled: 1
 --- !u!92 &92888162632938318
 Behaviour:
@@ -138,7 +138,7 @@ MonoBehaviour:
   target: {fileID: 1048557263956130}
   speed: 2.5
   zoomSpeed: 1.125
-  minZoomLevel: 30
+  minZoomLevel: 20
   maxZoomLevel: 60
   initialCameraPoisitionRelativeToFocuspoint: {x: -20, y: 50, z: -20}
 --- !u!114 &114700941144054852

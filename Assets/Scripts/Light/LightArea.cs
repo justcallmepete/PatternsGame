@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class LightArea : MonoBehaviour
 {
+    public bool isOn;
     public float viewRadius;
     [Range(0, 360)]
     public float viewAngle;
@@ -26,6 +27,7 @@ public class LightArea : MonoBehaviour
     float edgeThresholdDistance = 0.5f;
     private void Start()
     {
+        isOn = true;
         viewMesh = new Mesh();
         viewMesh.name = "viewMesh";
         viewMeshFiler.mesh = viewMesh;
@@ -39,11 +41,24 @@ public class LightArea : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (!isOn) return;
         playersInLight.Clear();
         DrawFieldOfView();
         UpdatePlayerLights();
         oldPlayersInLight.Clear();
         oldPlayersInLight = new List<MainPlayer>(playersInLight);
+    }
+
+    public void SwitchOnOff()
+    {
+        Debug.Log("SwitchOnOff");
+        if (isOn)
+        {
+            isOn = false;
+            return;
+        }
+
+        isOn = true;
     }
 
     /// <summary>

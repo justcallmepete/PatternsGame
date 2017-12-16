@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /*
@@ -16,6 +17,9 @@ public class GameManager : MonoBehaviour {
 
     public GameObject[] Guards { get { return guards; } }
     public GameObject[] Players { get { return players; } }
+
+    private Coroutine slowMotionCoroutine;
+    private float lerpSpeed;
 
     public static GameManager Instance
     {
@@ -35,6 +39,8 @@ public class GameManager : MonoBehaviour {
         _instance = this;
         guards = GameObject.FindGameObjectsWithTag("Guard");
         players = GameObject.FindGameObjectsWithTag("Player");
+
+        Time.timeScale = 1;
         gameOver = false;
     }
 
@@ -57,5 +63,38 @@ public class GameManager : MonoBehaviour {
             players[i].GetComponent<MainPlayer>().inventory.Keycard = false;
         }
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    public void SlowMotion(float timeScale = 1, float duration = 2)
+    {
+        if (slowMotionCoroutine != null)
+        {
+            StopCoroutine(slowMotionCoroutine);
+        }
+
+        slowMotionCoroutine = StartCoroutine(DoSlowMotion(timeScale, duration));
+    }
+
+    private IEnumerator DoSlowMotion(float timeScale, float duration)
+    {
+        float elapsedTime = 0;
+        float thirdOfDuration = duration / 3;
+
+        while (elapsedTime < thirdOfDuration)
+        {
+            Time.timeScale = Mathf.Lerp(Time.timeScale, timeScale, elapsedTime / thirdOfDuration);
+            elapsedTime += Time.unscaledDeltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+
+        elapsedTime = 0;
+        yield return new WaitForSeconds(thirdOfDuration);
+
+        while (elapsedTime < thirdOfDuration)
+        {
+            Time.timeScale = Mathf.Lerp(Time.timeScale, 1, elapsedTime / thirdOfDuration);
+            elapsedTime += Time.unscaledDeltaTime;
+            yield return new WaitForEndOfFrame();
+        }
     }
 }
