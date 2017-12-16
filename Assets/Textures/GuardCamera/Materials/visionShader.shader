@@ -12,7 +12,8 @@
 		Tags { "Queue"="Transparent" "RenderType"="Transparent" }
 		LOD 100
 		ZWrite off
-		Blend SrcAlpha One
+		BlendOp Max
+		Blend SrcAlpha One 
 
 		Pass
 		{

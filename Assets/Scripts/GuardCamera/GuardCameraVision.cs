@@ -92,6 +92,7 @@ public class GuardCameraVision : MonoBehaviour
                 if (edge.pointA != Vector3.zero) viewPoints.Add(edge.pointA);
                 if (edge.pointB != Vector3.zero) viewPoints.Add(edge.pointB);
             }
+            newViewCast.point.y = 0.25f;
             viewPoints.Add(newViewCast.point);
             oldViewCast = newViewCast;
         }

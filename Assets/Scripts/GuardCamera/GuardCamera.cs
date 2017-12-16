@@ -13,12 +13,12 @@ public class GuardCamera : MonoBehaviour {
     Material visionMaterial;
     GameObject guardCameraVision;
 
+    //Rotate parameters
     enum RotateState { rotatingToTarget, reachedTarget, waitingForNextTarget, none };
     RotateState currentState;
     enum RotateMode { loop, backAndForth, random }
     [SerializeField]
     RotateMode myRotateMode;
-    //Rotate parameters
     [SerializeField]
     float rotateSpeed;
     [SerializeField, Range(0,360)]
@@ -27,8 +27,8 @@ public class GuardCamera : MonoBehaviour {
     [SerializeField]
     float rotateDelay;
 
-    int targetDirection;
-    int previousTarget;
+    int rotateTargetDirection;
+    int rotatePreviousTarget;
 
     [ExecuteInEditMode]
     void OnValidate()
@@ -51,8 +51,9 @@ public class GuardCamera : MonoBehaviour {
             Debug.Log(transform.position + watchDirections[i]);
             Debug.DrawLine(transform.position, transform.position + watchDirections[i] * 50,Color.white, 10f);
         }
-        targetDirection = 0;
+        rotateTargetDirection = 0;
 
+        setStandard();
         GetNextRotatePosition();
 	}
 	
@@ -92,7 +93,7 @@ public class GuardCamera : MonoBehaviour {
     void HandleRotate()
     {
         // distance between target and the actual rotating object
-        Vector3 dir = transform.position + watchDirections[targetDirection] - transform.position;
+        Vector3 dir = transform.position + watchDirections[rotateTargetDirection] - transform.position;
 
         // calculate the Quaternion for the rotation
         Quaternion rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), rotateSpeed * Time.deltaTime);
@@ -104,7 +105,7 @@ public class GuardCamera : MonoBehaviour {
         transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
 
 
-        if(Vector3.Angle(transform.forward, watchDirections[targetDirection]) < 1f)
+        if(Vector3.Angle(transform.forward, watchDirections[rotateTargetDirection]) < 1f)
         {
             //Reached target
             ReachedTarget();
@@ -113,27 +114,27 @@ public class GuardCamera : MonoBehaviour {
 
     void GetNextRotatePosition()
     {
-        targetDirection += 1;
-        int nextDirection = targetDirection;
+        rotateTargetDirection += 1;
+        int nextDirection = rotateTargetDirection;
 
         switch (myRotateMode)
         {
             case RotateMode.loop:
-                if(targetDirection > watchDirections.Length - 1)
+                if(rotateTargetDirection > watchDirections.Length - 1)
                 {
-                    targetDirection = 0;
+                    rotateTargetDirection = 0;
                     nextDirection = 0;
                 }
                 break;
             case RotateMode.backAndForth:
-                if(previousTarget >= targetDirection) //is moving back
+                if(rotatePreviousTarget >= rotateTargetDirection) //is moving back
                 {
-                    if(previousTarget > 2)
+                    if(rotatePreviousTarget > 2)
                     {
                         nextDirection -= 2;
                     }
                 }
-                else if(targetDirection > watchDirections.Length - 1) //reached end, start moveback
+                else if(rotateTargetDirection > watchDirections.Length - 1) //reached end, start moveback
                 {
                     nextDirection = watchDirections.Length - 2;
                 }
@@ -148,14 +149,13 @@ public class GuardCamera : MonoBehaviour {
 
     void RotateToPosition(int pPosition)
     {
-        previousTarget = targetDirection;
-        targetDirection = pPosition;
+        rotatePreviousTarget = rotateTargetDirection;
+        rotateTargetDirection = pPosition;
         currentState = RotateState.rotatingToTarget;
     }
 
     void ReachedTarget()
     {
-        Debug.Log("Reached target");
         currentState = RotateState.reachedTarget;
     }
 
