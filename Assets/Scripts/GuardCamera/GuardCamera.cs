@@ -31,7 +31,7 @@ public class GuardCamera : MonoBehaviour {
     int rotatePreviousTarget;
 
     [SerializeField]
-    GuardStateMachine[] guardsToAlert;
+    List<GuardStateMachine> guardsToAlert;
 
     [ExecuteInEditMode]
     void OnValidate()
@@ -169,8 +169,14 @@ public class GuardCamera : MonoBehaviour {
 
     void AlertGuards()
     {
-        for (int i = 0; i < guardsToAlert.Length; i++)
+        for (int i = 0; i < guardsToAlert.Count; i++)
         {
+            if (guardsToAlert[i] == null)
+            {
+                Debug.LogWarning("Guard isnt assigned to camera but array is not empty, removing index");
+                guardsToAlert.RemoveAt(i);
+                continue;
+            }
             guardsToAlert[i].Alert(playersInVision[0].gameObject);
         }
     }
