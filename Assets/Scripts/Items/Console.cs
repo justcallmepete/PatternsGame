@@ -13,6 +13,7 @@ public class Console : Interactable
         base.OnInteract(obj);
         for (int i = 0; i < linkedObjects.Count; i++)
         {
+            if (linkedObjects[i] == null) return;
             linkedObjects[i].OnConsole();
         }
     }
