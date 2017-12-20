@@ -4,14 +4,13 @@ using UnityEngine;
 
 /*
  * Same principle as the Light Area code. Guard raycasts multiple times infront of him to detect walls and players. These points will be made into one mesh. This represents the vision.
+ * To change the dimensions of the vision you can adjust viewRadius and viewAngle.
  */ 
 
 public class GuardVision : MonoBehaviour {
 
     [Range(0, 20)]
     public float viewRadius;
-    [Range(0, 20)]
-    public float viewRadiusInLight; 
     [Range(0, 360)]
     public float viewAngle;
 
@@ -35,13 +34,7 @@ public class GuardVision : MonoBehaviour {
 
     [SerializeField]
     float checkPlayerInSightDelay = 0.5f;
-    // Use this for initialization
 
-    [ExecuteInEditMode]
-    void OnValidate()
-    {
-        if (viewRadiusInLight < viewRadius) viewRadiusInLight = viewRadius;
-    }
     void Start () {
         viewMesh = new Mesh();
         viewMesh.name = "viewMesh";
@@ -74,7 +67,7 @@ public class GuardVision : MonoBehaviour {
     void CheckIfPlayerInSight()
     {
         playersInSight.Clear();
-        Collider[] targets = Physics.OverlapSphere(transform.position, viewRadiusInLight, playerLayerMask);
+        Collider[] targets = Physics.OverlapSphere(transform.position, viewRadius, playerLayerMask);
         for (int i = 0; i < targets.Length; i++)
         {
             if (!targets[i].gameObject.GetComponent<MainPlayer>()) continue;
