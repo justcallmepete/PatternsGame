@@ -1373,6 +1373,14 @@ Prefab:
       propertyPath: teleportDelay
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1493135507134634, guid: 890ca876e208eec40a82dd890b49f6ac, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1883591668543524, guid: 890ca876e208eec40a82dd890b49f6ac, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 890ca876e208eec40a82dd890b49f6ac, type: 2}
   m_IsPrefabParent: 0
@@ -2419,6 +2427,11 @@ Prefab:
     - target: {fileID: 4356340535628190, guid: 26afd3f36eb960848889c6ce7d1e14ab, type: 2}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114514695329652724, guid: 26afd3f36eb960848889c6ce7d1e14ab,
+        type: 2}
+      propertyPath: teleportDelay
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 26afd3f36eb960848889c6ce7d1e14ab, type: 2}
