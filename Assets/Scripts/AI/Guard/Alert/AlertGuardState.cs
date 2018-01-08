@@ -9,6 +9,7 @@ public class AlertGuardState : GuardState
 
     private bool canSeePlayer;
 
+    private ChargeSystem chargeSystem;
 
     public AlertGuardState(GuardStateMachine context) : base(context)
     {
@@ -18,6 +19,9 @@ public class AlertGuardState : GuardState
     {
         timer = 0.0f;
         context.IndicatorColor = Color.red;
+
+        chargeSystem = context.transform.GetComponentInChildren<ChargeSystem>();
+        chargeSystem.BeginCharge();
     }
 
     public override void OnDistraction(Vector3 target)
@@ -28,11 +32,7 @@ public class AlertGuardState : GuardState
 
     public override void Update()
     {
-        timer += Time.deltaTime;
-        if (timer > deathTime)
-        {
-            context.Shoot();
-        }
+
     }
 
     public override void OnSeePlayer(GameObject player)
@@ -42,7 +42,6 @@ public class AlertGuardState : GuardState
 
     public override void OnStateExit()
     {
+        chargeSystem.StopCharge();
     }
-
-   
-    }
+}
