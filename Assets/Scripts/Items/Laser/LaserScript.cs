@@ -56,14 +56,21 @@ public class LaserScript : MonoBehaviour
     }
 
     // Turn on or off the laser.
-    public void ToggleLaser(bool turnLaserOn)
+    public void ToggleLaser()
     {
-        raycastOn = turnLaserOn;
-
-        laserLine.enabled = turnLaserOn;
-
         ParticleSystem.EmissionModule emission = particleSystem.emission;
-        emission.enabled = turnLaserOn;
+        if (!raycastOn)
+        {
+            raycastOn = true;
+            laserLine.enabled = true;
+            emission.enabled = true;
+        }
+        else
+        {
+            raycastOn = false;
+            laserLine.enabled = false;
+            emission.enabled = false;
+        }
     }
 
     // Turn on or off the movement of the laser.
