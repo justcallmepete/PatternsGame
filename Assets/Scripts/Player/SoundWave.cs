@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+using EazyTools.SoundManager;
 /*
  * Class for the soundwaves. 
  */
@@ -9,6 +9,9 @@ public class SoundWave : MonoBehaviour {
 
     public float radius;
     public float lifeTime;
+
+    [Tooltip("Audio for whistle")]
+    public AudioClip whistleSound;
 
     private float timer;
 
@@ -25,6 +28,7 @@ public class SoundWave : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        SoundManager.PlaySound(whistleSound, false);
         gameObject.GetComponent<SphereCollider>().radius = this.radius;
     }
 

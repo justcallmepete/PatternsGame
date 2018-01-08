@@ -4,14 +4,13 @@ using UnityEngine;
 
 /*
  * Same principle as the Light Area code. Guard raycasts multiple times infront of him to detect walls and players. These points will be made into one mesh. This represents the vision.
+ * To change the dimensions of the vision you can adjust viewRadius and viewAngle.
  */ 
 
 public class GuardVision : MonoBehaviour {
 
     [Range(0, 20)]
     public float viewRadius;
-    [Range(0, 20)]
-    public float viewRadiusInLight; 
     [Range(0, 360)]
     public float viewAngle;
 
@@ -24,9 +23,7 @@ public class GuardVision : MonoBehaviour {
     public float meshResolution;
 
     public MeshFilter viewMeshFiler;
-    public MeshFilter viewMeshFilerInLight;
     Mesh viewMesh;
-    Mesh viewMeshInLight;
 
     [SerializeField]
     int edgeCheckIteration;
@@ -37,20 +34,11 @@ public class GuardVision : MonoBehaviour {
 
     [SerializeField]
     float checkPlayerInSightDelay = 0.5f;
-    // Use this for initialization
 
-    [ExecuteInEditMode]
-    void OnValidate()
-    {
-        if (viewRadiusInLight < viewRadius) viewRadiusInLight = viewRadius;
-    }
     void Start () {
         viewMesh = new Mesh();
         viewMesh.name = "viewMesh";
         viewMeshFiler.mesh = viewMesh;
-        viewMeshInLight = new Mesh();
-        viewMeshInLight.name = "viewMeshInLight";
-        viewMeshFilerInLight.mesh = viewMeshInLight;
 
         obstacleLayersIndex = LayerMask.NameToLayer("Wall");
         playerLayerIndex = LayerMask.NameToLayer("Player");
@@ -79,7 +67,7 @@ public class GuardVision : MonoBehaviour {
     void CheckIfPlayerInSight()
     {
         playersInSight.Clear();
-        Collider[] targets = Physics.OverlapSphere(transform.position, viewRadiusInLight, playerLayerMask);
+        Collider[] targets = Physics.OverlapSphere(transform.position, viewRadius, playerLayerMask);
         for (int i = 0; i < targets.Length; i++)
         {
             if (!targets[i].gameObject.GetComponent<MainPlayer>()) continue;
@@ -109,16 +97,15 @@ public class GuardVision : MonoBehaviour {
                 float distToTarget = Vector3.Distance(transform.position, playersInSight[i].transform.position);
                 if (distToTarget < closestDistance)
                 {
-                    float sightDistance = viewRadius;
-                    if (playersInSight[i].GetComponent<MainPlayer>().IsStandingInLight)
+                    if (distToTarget <= viewRadius)
                     {
-                        sightDistance = viewRadiusInLight;
+                        if (playersInSight[i].GetComponent<MainPlayer>().IsStandingInLight)
+                        {
+                            closestDistance = distToTarget;
+                            closestPlayer = playersInSight[i].gameObject;
+                        }
                     }
-                    if (distToTarget <= sightDistance)
-                    {
-                        closestDistance = distToTarget;
-                        closestPlayer = playersInSight[i].gameObject;
-                    }
+
                 }
             }
         }
@@ -157,19 +144,8 @@ public class GuardVision : MonoBehaviour {
 
         //This part will raycast multiple times to get the hitpoints. 
         List<Vector3> viewPoints = new List<Vector3>();
-        List<Vector3> viewPointsInLight = new List<Vector3>();
         ViewCastInfo oldViewCast = ViewCast(transform.position, transform.eulerAngles.y - viewAngle / 2, viewRadius);
         viewPoints.Add(oldViewCast.point);
-        if (!oldViewCast.hit)
-        {
-            ViewCastInfo lightViewCast = ViewCast(oldViewCast.point, transform.eulerAngles.y - viewAngle / 2, viewRadiusInLight - viewRadius);
-            viewPointsInLight.Add(lightViewCast.point);
-        }
-        else
-        {
-            viewPointsInLight.Add(oldViewCast.point);
-        }
-
         for (int i = 1; i <= stepCount; i++)
         {
             float angle = transform.eulerAngles.y - viewAngle / 2 + stepAngleSize * i;
@@ -183,23 +159,11 @@ public class GuardVision : MonoBehaviour {
                 if (edge.pointB != Vector3.zero) viewPoints.Add(edge.pointB);
             }
             viewPoints.Add(newViewCast.point);
-
-            // Seccond layer (in light area)
-            if(!newViewCast.hit)
-            {
-                ViewCastInfo lightViewCast = ViewCast(newViewCast.point, angle, viewRadiusInLight - viewRadius);
-                viewPointsInLight.Add(lightViewCast.point);
-            }
-            else
-            {
-                viewPointsInLight.Add(newViewCast.point);
-            }
             oldViewCast = newViewCast;
         }
         int vertexCount = viewPoints.Count + 1; // +1 is transform position
         Vector3[] vertices = new Vector3[vertexCount];
         int[] triangles = new int[(vertexCount - 2) * 3];
-        int vertexCountInLight = viewPointsInLight.Count;
 
         //Mesh will be a child of, so need to calculate in world space
         vertices[0] = Vector3.zero;
@@ -207,8 +171,9 @@ public class GuardVision : MonoBehaviour {
         //This part will set the vertices and trinagles for the viewmesh.
         for (int i = 0; i < vertexCount - 1; i++)
         {
-            vertices[i + 1] = transform.InverseTransformPoint(viewPoints[i]);
             vertices[i + 1].y = 0.1f;
+            vertices[i + 1] = transform.InverseTransformPoint(viewPoints[i]);
+            
             if (i < vertexCount - 2)
             {
                 triangles[i * 3] = 0;
@@ -217,30 +182,6 @@ public class GuardVision : MonoBehaviour {
             }
         }
         CreateMesh(viewMesh, vertices, triangles);
-
-        if (vertexCountInLight > 2)
-        {
-            Vector3[] verticesInLight = new Vector3[vertexCountInLight + vertexCount - 1];
-            int[] trianglesInLight = new int[(vertexCountInLight) * 3];
-            for (int i = 0; i < vertexCountInLight; i += 2)
-            {
-                verticesInLight[i] = transform.InverseTransformPoint(viewPoints[i]);            // 0, 2, 4, 6, 8
-                verticesInLight[i+1] = transform.InverseTransformPoint(viewPointsInLight[i]);   // 1, 3, 5, 7
-                verticesInLight[i].y = 0.1f;
-                verticesInLight[i+1].y = 0.1f;
-                if (i < vertexCountInLight - 2)
-                {
-                    trianglesInLight[i * 3] = i;                // 0 [0]
-                    trianglesInLight[i * 3 + 1] = i+1;          // 1 [1]
-                    trianglesInLight[i * 3 + 2] = i + 2;        // 2 [2]
-
-                    trianglesInLight[(i + 1) * 3] = i + 1;      // 1 [3]
-                    trianglesInLight[(i + 1) * 3 + 1] = i + 3;  // 3 [4]
-                    trianglesInLight[(i + 1) * 3 + 2] = i + 2;  // 2 [5]
-                }
-            }
-            CreateMesh(viewMeshInLight, verticesInLight, trianglesInLight);
-        }
     }
 
     /// <summary>
@@ -290,7 +231,7 @@ public class GuardVision : MonoBehaviour {
     {
         Vector3 dir = DirFromAngle(pGlobalAngle, true);
         RaycastHit hit;
-        if (Physics.Raycast(fromPosition, dir, out hit, distance, lightLayerMask))
+        if (Physics.Raycast(fromPosition, dir, out hit, distance, (1 << obstacleLayersIndex)))
         {
             if (hit.collider.gameObject.GetComponent<PlayerLight>())
             {

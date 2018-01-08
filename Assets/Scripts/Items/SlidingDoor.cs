@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EazyTools.SoundManager;
 
 public class SlidingDoor : MonoBehaviour
 {
@@ -10,6 +11,10 @@ public class SlidingDoor : MonoBehaviour
     private bool lockedWithSwitch = false;
     public bool LockedWithSwitch { get { return lockedWithSwitch; } set { lockedWithSwitch = value; } }
     private Animator animator;
+
+    [Header("Audio Setting")]
+    public AudioClip openSFX;
+    public AudioClip closeSFX;
 
     public enum State
     {
@@ -68,5 +73,24 @@ public class SlidingDoor : MonoBehaviour
         //close animation
         currentState = State.Closed;
         animator.SetBool("open", false);
+    }
+
+    public void PlayOpenSFX()
+    {
+        int id = SoundManager.PlaySound(openSFX, 0.4f, false, gameObject.transform);
+        Audio open = SoundManager.GetAudio(id);
+        open.audioSource.rolloffMode = AudioRolloffMode.Custom;
+        open.Set3DDistances(2f, 15f);
+        open.audioSource.spatialBlend = 1f;
+    }
+
+    public void PlayCloseSFX()
+    {
+        int id = SoundManager.PlaySound(openSFX, 0.4f, false, gameObject.transform);
+        Audio open = SoundManager.GetAudio(id);
+        open.audioSource.rolloffMode = AudioRolloffMode.Custom;
+
+        open.Set3DDistances(2f, 15f);
+        open.audioSource.spatialBlend = 1f;
     }
 }
