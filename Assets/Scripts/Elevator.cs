@@ -62,7 +62,7 @@ public class Elevator : Interactable {
         locked = false;
     }
 
-    public void elevatorArrived()
+    public void ElevatorArrived()
     {       
         floor.GetComponent<MeshCollider>().enabled = true;
     }
