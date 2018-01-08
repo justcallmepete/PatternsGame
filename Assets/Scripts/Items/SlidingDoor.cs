@@ -80,7 +80,6 @@ public class SlidingDoor : MonoBehaviour
 
     public void ChangeOutlineSlidingDoor(bool eraseRenderer)
     {
-        print("testing");
         for (int i = 0; i < listOfDoors.Length; i++)
         {
             listOfDoors[i].outline.eraseRenderer = eraseRenderer;
