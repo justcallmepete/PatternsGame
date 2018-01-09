@@ -13,10 +13,12 @@ public class ElevatorCar : MonoBehaviour
 
     private int requiredAmountOfPlayers;
     private int nPlayer = 0;
+    private Elevator elevator;
 
     void Awake()
     {
         requiredAmountOfPlayers = GameManager.Instance.Players.Length;
+        elevator = GetComponentInParent<Elevator>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -27,7 +29,8 @@ public class ElevatorCar : MonoBehaviour
 
             if (nPlayer == requiredAmountOfPlayers)
             {
-                StartCoroutine(LoadNextScene());
+                DepartElevator();
+                SetDepartElevator(true);
             }
         }
     }
@@ -37,19 +40,17 @@ public class ElevatorCar : MonoBehaviour
         if (other.tag == "Player")
         {
             nPlayer--;
+            SetDepartElevator(false);
         }
     }
 
-    private IEnumerator LoadNextScene()
+    private void DepartElevator()
     {
-        // Delay the load scene.
-        float currentTime = 0;
-        while (currentTime < loadSceneDelay)
-        {
-            currentTime += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
+        elevator.DepartElevator();
+    }
 
-        GameManager.Instance.LoadNextScene();       
+    public void SetDepartElevator(bool canDepart)
+    {
+        elevator.Anim.SetBool("doDepart", canDepart);
     }
 }

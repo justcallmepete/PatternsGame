@@ -1,5 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using EazyTools.SoundManager;
 
 /*
  * Elevator script opens the elevator if the player has a keycard. 
@@ -9,7 +10,14 @@ using UnityEngine;
 public class Elevator : Interactable {
 
     private Animator anim;
+    public Animator Anim { get { return anim; } }
     private bool locked = true;
+
+    [Header("Audio Setting")]
+    public AudioClip openSFX;
+    public AudioClip closeSFX;
+    public AudioClip arriveSFX;
+    public AudioClip departSFX;
 
     public bool isExitElevator = true;
     GameObject[] players;
@@ -40,7 +48,7 @@ public class Elevator : Interactable {
 
     public override void OnInteract(GameObject obj)
     {
-        if (obj.GetComponent<MainPlayer>().inventory.Keycard)
+        if (obj.GetComponent<MainPlayer>().inventory.Keycard || !locked)
         {
             UnlockElevator();
             Open();
@@ -63,5 +71,51 @@ public class Elevator : Interactable {
     public void ElevatorArrived()
     {       
         floor.GetComponent<MeshCollider>().enabled = true;
+    }
+
+    public void DepartElevator()
+    {
+        if (isExitElevator)
+        {
+            anim.SetBool("doOpen", false);
+        }
+    }
+
+    public void LoadNextScene()
+    {
+        GameManager.Instance.LoadNextScene();
+    }
+
+    public void PlayOpenSFX()
+    {
+        int id = SoundManager.PlaySound(openSFX, 0.4f, false, gameObject.transform);
+        Audio open = SoundManager.GetAudio(id);
+        open.audioSource.rolloffMode = AudioRolloffMode.Custom;
+        open.Set3DDistances(2f, 15f);
+        open.audioSource.spatialBlend = 1f;
+    }
+
+    public void PlayCloseSFX()
+    {
+        int id = SoundManager.PlaySound(openSFX, 0.4f, false, gameObject.transform);
+        Audio open = SoundManager.GetAudio(id);
+        open.audioSource.rolloffMode = AudioRolloffMode.Custom;
+
+        open.Set3DDistances(2f, 15f);
+        open.audioSource.spatialBlend = 1f;
+    }
+
+    public void PlayArriveSFX()
+    {
+        int id = SoundManager.PlaySound(arriveSFX, 0.4f, false, gameObject.transform);
+        Audio open = SoundManager.GetAudio(id);
+        open.audioSource.rolloffMode = AudioRolloffMode.Custom;
+    }
+
+    public void PlayDepartSFX()
+    {   
+        int id = SoundManager.PlaySound(departSFX, 0.4f, false, gameObject.transform);
+        Audio open = SoundManager.GetAudio(id);
+        open.audioSource.rolloffMode = AudioRolloffMode.Custom;
     }
 }
