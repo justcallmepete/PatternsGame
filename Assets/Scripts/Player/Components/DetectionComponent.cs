@@ -49,6 +49,10 @@ public class DetectionComponent : PlayerComponentInterface
                 MainPlayer.animator.SetBool("interact", false);
             }
         }
+        else
+        {
+            MainPlayer.animator.SetBool("interact", false);
+        }
     }
 
     private void GetInteractableObject()
