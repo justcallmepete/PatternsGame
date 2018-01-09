@@ -19,6 +19,7 @@ public class AlertGuardState : GuardState
     {
         timer = 0.0f;
         context.IndicatorColor = Color.red;
+        context.MovementSpeed = context.alertMovementSpeed;
 
         chargeSystem = context.transform.GetComponentInChildren<ChargeSystem>();
         chargeSystem.BeginCharge();

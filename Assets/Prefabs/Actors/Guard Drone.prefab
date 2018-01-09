@@ -831,7 +831,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewRadius: 6.95
-  viewRadiusInLight: 10
   viewAngle: 90
   meshResolution: 1
   viewMeshFiler: {fileID: 33061055651489592}
@@ -862,7 +861,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   patrolStyle: 2
   patrol: {fileID: 0}
-  rotationSpeed: 180
+  cluelessMovementSpeed: 3.5
+  searchingMovementSpeed: 3.5
+  alertMovementSpeed: 3.5
+  cluelessRotationSpeed: 180
+  searchingRotationSpeed: 180
+  alertRotationSpeed: 180
   stoppingDistance: 4.5
   indicator: {fileID: 1724743845177202}
   logStateTransitions: 0

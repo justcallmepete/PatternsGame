@@ -48,7 +48,7 @@ public class PatrollingState : CluelessGuardState {
     private void RotateTo(Vector3 rotateTarget)
     {
         Vector3 from = context.transform.forward;
-        Vector3 newRotation =  Vector3.RotateTowards(from, rotateTarget, Time.deltaTime * context.rotationSpeed * Mathf.Deg2Rad, 0.0f);
+        Vector3 newRotation =  Vector3.RotateTowards(from, rotateTarget, Time.deltaTime * context.RotationSpeed * Mathf.Deg2Rad, 0.0f);
         context.transform.rotation = Quaternion.LookRotation(newRotation);
         if(Vector3.Angle(context.transform.forward, rotateTarget) < 0.5f)
         {
