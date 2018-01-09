@@ -71,9 +71,9 @@ public class GuardStateMachine : MonoBehaviour {
     {
         get
         {
-            if (state is AlertGuardState) { return alertMovementSpeed; }
-            else if (state is SearchingGuardState) { return searchingMovementSpeed; }
-            else return cluelessMovementSpeed;
+            if (state is AlertGuardState) { return alertRotationSpeed; }
+            else if (state is SearchingGuardState) { return searchingRotationSpeed; }
+            else return cluelessRotationSpeed;
         }
         set { }
     }
