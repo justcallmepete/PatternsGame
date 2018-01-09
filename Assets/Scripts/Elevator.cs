@@ -19,24 +19,22 @@ public class Elevator : Interactable {
 
     // Use this for initialization
     void Start () {
-        players = GameObject.FindGameObjectsWithTag("Player");
-        playerPositions = new Vector3[2];
-        floor = GameObject.FindGameObjectWithTag("Floor");
-        floor.GetComponent < MeshCollider>().enabled = false;
-        for (int i = 0; i < players.Length; i++)
-        {
-            playerPositions[i] = players[i].transform.position;
-            players[i].transform.position = new Vector3(playerPositions[i].x, playerPositions[i].y - 10, playerPositions[i].z);
-        }
         anim = gameObject.GetComponent<Animator>();
-
-        if (isExitElevator)
-        {
-            anim.runtimeAnimatorController = AssetDatabase.LoadAssetAtPath("Assets/Animations/Elevator_depart.controller", typeof(RuntimeAnimatorController)) as RuntimeAnimatorController;
+        if (!isExitElevator) {
+            players = GameObject.FindGameObjectsWithTag("Player");
+            playerPositions = new Vector3[2];
+            floor = GameObject.FindGameObjectWithTag("Floor");
+            floor.GetComponent < MeshCollider>().enabled = false;
+            for (int i = 0; i < players.Length; i++)
+            {
+                playerPositions[i] = players[i].transform.position;
+                players[i].transform.position = new Vector3(playerPositions[i].x, playerPositions[i].y - 10, playerPositions[i].z);
+            }
+            anim.runtimeAnimatorController = AssetDatabase.LoadAssetAtPath("Assets/Animations/Elevator_arrive.controller", typeof(RuntimeAnimatorController)) as RuntimeAnimatorController;
         }
         else
         {
-            anim.runtimeAnimatorController = AssetDatabase.LoadAssetAtPath("Assets/Animations/Elevator_arrive.controller", typeof(RuntimeAnimatorController)) as RuntimeAnimatorController;
+            anim.runtimeAnimatorController = AssetDatabase.LoadAssetAtPath("Assets/Animations/Elevator_depart.controller", typeof(RuntimeAnimatorController)) as RuntimeAnimatorController;
         }
 	}
 

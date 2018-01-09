@@ -92,7 +92,6 @@ GameObject:
   - component: {fileID: 33538917981060964}
   - component: {fileID: 65543319546716812}
   - component: {fileID: 23030226234421460}
-  - component: {fileID: 114983757112373952}
   m_Layer: 0
   m_Name: Button
   m_TagString: Elevator
@@ -146,7 +145,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1977367262386026}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.851, y: 0.918, z: 0.305}
+  m_LocalPosition: {x: -1.851, y: 1.09, z: 0.305}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4878010921323000}
@@ -159,8 +158,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1126635316705854}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -10.083988, y: -0.7106, z: -42.3358}
-  m_LocalScale: {x: 1.7, y: 1.7, z: 1.7}
+  m_LocalPosition: {x: 102.71, y: 0.000042796135, z: -36.63}
+  m_LocalScale: {x: 1.7539, y: 1.7, z: 1.7}
   m_Children:
   - {fileID: 4106697973828592}
   - {fileID: 4177248027302536}
@@ -379,14 +378,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadSceneDelay: 3
---- !u!114 &114983757112373952
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1977367262386026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d9bbe17c1edf174c9cddce9f997c0eb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
