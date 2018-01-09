@@ -6,6 +6,9 @@ using Mainframe.Utils;
  */
 public class ChaseGuardState : AlertGuardState
 {
+
+    private float timer;
+
     public ChaseGuardState(GuardStateMachine context) : base(context)
     {
     }
@@ -13,6 +16,7 @@ public class ChaseGuardState : AlertGuardState
     public override void OnStateEnter()
     {
         base.OnStateEnter();
+        timer = 0.0f;
     }
 
     public override void Update()
@@ -31,6 +35,15 @@ public class ChaseGuardState : AlertGuardState
 
             Vector3 target = -(guardPos - playerPos);
             RotateTo(target.normalized);
+        }
+
+        if (!context.PlayerVisible)
+        {
+            timer += Time.deltaTime;
+            if (timer > context.chaseTime)
+            {
+                context.ForgetPlayer();
+            }
         }
     }
 
@@ -59,6 +72,11 @@ public class ChaseGuardState : AlertGuardState
     public override void OnSeePlayer(GameObject player)
     {
         base.OnSeePlayer(player);
+    }
+
+    public void LosePlayer()
+    {
+
     }
 
     private void RotateTo(Vector3 rotateTarget)
