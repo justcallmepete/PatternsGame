@@ -50,7 +50,10 @@ public class MovementComponent : PlayerComponentInterface
         }
 
         base.FixedUpdateComponent();
-
+        if (MainPlayer.IsBusy())
+        {
+            return;
+        }
         SetMovementValues();
     }
 

@@ -17,6 +17,9 @@ public class SlidingDoor : MonoBehaviour
     public AudioClip openSFX;
     public AudioClip closeSFX;
 
+    [Header("This shows the player if the door is closed with a switch")]
+    public GameObject[] lockedEffect;
+
     public enum State
     {
         Open,
@@ -41,15 +44,33 @@ public class SlidingDoor : MonoBehaviour
                 animator.SetBool("open", false);
                 timer = 0f; 
             }
-        } 
+        }
 
-	}
+        if (lockedWithSwitch)
+        {
+            if (currentState == State.Closed)
+            {
+                for (int i = 0; i < lockedEffect.Length; i++)
+                {
+                    lockedEffect[i].SetActive(true);
+                }                
+            }
+            else if(currentState == State.Open)
+            {
+                for (int i = 0; i < lockedEffect.Length; i++)
+                {
+                    lockedEffect[i].SetActive(false);
+                }
+            }
+        }
+
+    }
 
     public void OnInteract(GameObject obj)
     {
         if (lockedWithSwitch)
         {
-            Debug.Log("Door is locked by a switch");
+            //Debug.Log("Door is locked by a switch");
             return;
         }
 
