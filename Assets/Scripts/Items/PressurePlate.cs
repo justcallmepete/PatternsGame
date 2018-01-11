@@ -52,7 +52,7 @@ public class PressurePlate : MonoBehaviour {
         // Check mass difference
         if (currentMass >= minimalMass)
         {
-            Debug.Log("Open the door");
+            //Debug.Log("Open the door");
             door.Open();
 
             // Remove the lock if must not hold
@@ -89,7 +89,7 @@ public class PressurePlate : MonoBehaviour {
         // Check mass difference
         if (currentMass < minimalMass)
         {
-            Debug.Log("Lock the door");
+            //Debug.Log("Lock the door");
             door.Close();
         }
     }

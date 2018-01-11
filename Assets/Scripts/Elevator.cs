@@ -14,7 +14,8 @@ public class Elevator : Interactable {
     public AudioClip elevatorDoorOpenSFX;
 
 	// Use this for initialization
-	void Start () {
+	public override void Start () { 
+        base.Start();
         anim = transform.parent.gameObject.GetComponent<Animator>();
 	}
 

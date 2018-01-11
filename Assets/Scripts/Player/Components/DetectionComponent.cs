@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+using cakeslice;
 /*
  * This script gives the player the ability to use interactable objects. 
  * Interactables are objects which use the interface Interactable.cs 
@@ -18,7 +18,7 @@ public class DetectionComponent : PlayerComponentInterface
     public float detectionRange = 2;
 
     // Private Settings
-    private GameObject interactableObject;
+    private Interactable interactableObject;
 
     public override void AwakeComponent()
     {
@@ -69,16 +69,36 @@ public class DetectionComponent : PlayerComponentInterface
             // If component exist, save the interactable object, else delete it
             if (component)
             {
-                interactableObject = hit.transform.gameObject;
+                SetOutlineRenderer(true);
+                interactableObject = hit.transform.gameObject.GetComponent<Interactable>();
+                SetOutlineRenderer(false);
             }
             else
             {
+                SetOutlineRenderer(true);
                 interactableObject = null;
             }
         }
         else
         {
+            SetOutlineRenderer(true);
             interactableObject = null;
+        }
+    }
+
+    private void SetOutlineRenderer(bool eraseRenderer)
+    {
+        if (interactableObject)
+        {
+            switch (eraseRenderer)
+            {
+                case false:
+                    interactableObject.TurnOnOutline();
+                    break;
+                default:
+                    interactableObject.TurnOffOutline();
+                    break;
+            }
         }
     }
 }
