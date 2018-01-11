@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using EazyTools.SoundManager;
 
 /** This class represents the guard charge animation
  * This class is part of the Guard prefab and the methods are being called from the gaurd methods.
@@ -9,7 +10,7 @@ using UnityEngine.Events;
  * */
 public class ChargeSystem : MonoBehaviour
 {
-
+    public AudioClip shootSFX;
     public UnityEvent methods;
     [SerializeField]
     float chargeTime;
@@ -134,6 +135,7 @@ public class ChargeSystem : MonoBehaviour
 
     void Shoot()
     {
+        PlayShootSFX();
         GameManager.Instance.SlowMotion(0.2f, 3);
         target = myGuard.TargetPlayer.gameObject;
         currentDistanceToTarget = 0f;
@@ -178,5 +180,15 @@ public class ChargeSystem : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(sec);
         laserRenderer.SetPosition(1, transform.InverseTransformPoint(transform.position));
+    }
+
+    public void PlayShootSFX()
+    {
+        int id = SoundManager.PlaySound(shootSFX, 0.4f, false, gameObject.transform);
+        Audio open = SoundManager.GetAudio(id);
+        open.audioSource.rolloffMode = AudioRolloffMode.Custom;
+
+        open.Set3DDistances(2f, 15f);
+        open.audioSource.spatialBlend = 1f;
     }
 }
