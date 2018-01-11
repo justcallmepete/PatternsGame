@@ -12,6 +12,7 @@ public class SlidingDoor : MonoBehaviour
     public bool LockedWithSwitch { get { return lockedWithSwitch; } set { lockedWithSwitch = value; } }
     private Animator animator;
 
+    private SlidingDoorSingle[] listOfDoors;
     [Header("Audio Setting")]
     public AudioClip openSFX;
     public AudioClip closeSFX;
@@ -30,6 +31,7 @@ public class SlidingDoor : MonoBehaviour
     void Start () {
         animator = GetComponentInParent<Animator>();
 
+        listOfDoors = GetComponentsInChildren<SlidingDoorSingle>();
 	}
 	
 	// Update is called once per frame
@@ -95,6 +97,14 @@ public class SlidingDoor : MonoBehaviour
         //close animation
         currentState = State.Closed;
         animator.SetBool("open", false);
+    }
+
+    public void ChangeOutlineSlidingDoor(bool eraseRenderer)
+    {
+        for (int i = 0; i < listOfDoors.Length; i++)
+        {
+            listOfDoors[i].outline.eraseRenderer = eraseRenderer;
+        }
     }
 
     public void PlayOpenSFX()
