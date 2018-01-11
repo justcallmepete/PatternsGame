@@ -184,11 +184,18 @@ public class ChargeSystem : MonoBehaviour
 
     public void PlayShootSFX()
     {
-        int id = SoundManager.PlaySound(shootSFX, 0.4f, false, gameObject.transform);
-        Audio open = SoundManager.GetAudio(id);
-        open.audioSource.rolloffMode = AudioRolloffMode.Custom;
+        Audio sound = SoundManager.GetAudio(shootSFX);
 
-        open.Set3DDistances(2f, 15f);
-        open.audioSource.spatialBlend = 1f;
+        if (sound == null)
+        {
+            SoundManager.PlaySound(shootSFX, 0.4f, false, gameObject.transform);
+
+            sound = SoundManager.GetAudio(shootSFX);
+            sound.Set3DSettings();
+            return;
+        }
+
+        sound.Play();
+        sound.Set3DSettings();
     }
 }

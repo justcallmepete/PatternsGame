@@ -293,11 +293,18 @@ public class MainPlayer : MonoBehaviour
 
     public void PlayFootStepSFX()
     {
-        int id = SoundManager.PlaySound(footstepSFX, 0.4f, false, gameObject.transform);
-        Audio open = SoundManager.GetAudio(id);
-        open.audioSource.rolloffMode = AudioRolloffMode.Custom;
+        Audio sound = SoundManager.GetAudio(footstepSFX);
 
-        open.Set3DDistances(2f, 15f);
-        open.audioSource.spatialBlend = 1f;
+        if (sound == null)
+        {
+            SoundManager.PlaySound(footstepSFX, 0.4f, false, gameObject.transform);
+
+            sound = SoundManager.GetAudio(footstepSFX);
+            sound.Set3DSettings();
+            return;
+        }
+
+        sound.Play();
+        sound.Set3DSettings();
     }
 }

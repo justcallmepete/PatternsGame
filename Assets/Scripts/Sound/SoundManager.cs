@@ -1055,6 +1055,14 @@ namespace EazyTools.SoundManager
             Set3DMaxDistance(max);
         }
 
+        public void Set3DSettings(float min = 2f, float max = 15f, float spatialBlend = 1f)
+        {
+            audioSource.rolloffMode = AudioRolloffMode.Custom;
+
+            Set3DDistances(min, max);
+            audioSource.spatialBlend = spatialBlend;
+        }
+
         public void Update()
         {
             if(audioSource == null)
