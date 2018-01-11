@@ -1805,7 +1805,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1782929250056026}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.1248169, y: 8.230791e-16, z: -37.068188}
+  m_LocalPosition: {x: -22.24, y: 8.506368e-16, z: -38.309277}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 4571842017286298}
@@ -2625,6 +2625,7 @@ MonoBehaviour:
   lightStandingIn: []
   playerIndex: 0
   alphaSpeed: 1
+  footstepSFX: {fileID: 8300000, guid: 8433880bc5f8ced43964be6e9cdedb8d, type: 3}
   teleportTarget: {x: 0, y: 0, z: 0}
   buttonDownList: 00000000000000000000
   buttonList: 00000000000000000000
