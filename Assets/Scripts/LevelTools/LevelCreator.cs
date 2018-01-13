@@ -11,21 +11,21 @@ public class LevelCreator : MonoBehaviour {
     [HideInInspector]
     public GameObject levelBaseMain;
     private LevelBase levelBasePrefab;
+    private Room basicRoomPrefab;
 
     [SerializeField]
     private List<LevelBase> levelBases;
     public List<Room> rooms;
 
+    private Room roomBeingBuild;
+    [HideInInspector]
+    public bool roomIsRotated; 
     public float testValue;
     // Use this for initialization
-    void Start () {
-        
+    private void OnEnable()
+    {
+        roomIsRotated = false;
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
     /// <summary>
     /// Creates the base for the level where rooms can be added in
@@ -44,6 +44,59 @@ public class LevelCreator : MonoBehaviour {
         levelBases.Add(levelBaseStart);
     }
 
+    public void SpawnRoom()
+    {
+        basicRoomPrefab = levelCreatorInfo.basicRoom;
+        roomBeingBuild = Instantiate(basicRoomPrefab);
+        roomBeingBuild.transform.localScale = new Vector3(10, levelCreatorInfo.wallHeight, 10);
+
+
+        //Lock inspector to level creator
+        ActiveEditorTracker.sharedTracker.isLocked = true;
+        //Select the room object
+        GameObject[] selectObject = new GameObject[1];
+        selectObject[0] = roomBeingBuild.gameObject;
+        Selection.objects = selectObject;
+    }
+
+
+    public void SetRoomRatio(int pNumerator, int pDenominator)
+    {
+
+        roomBeingBuild.numerator = pNumerator;
+        roomBeingBuild.denominator = pDenominator;
+
+        roomBeingBuild.UpdateSize(roomIsRotated);
+    }
+    public float setRoomScale
+    { 
+        get
+        {
+            return roomBeingBuild.editorSize;
+        }
+        set
+        {
+            roomBeingBuild.editorSize = value;
+            roomBeingBuild.UpdateSize(roomIsRotated);
+        }
+    }
+
+    public void ToggleRotateRoom()
+    {
+        roomIsRotated = roomIsRotated ? false : true;
+    }
+    public void ConfirmRoomPlacement()
+    {
+        UpdateMeshes(roomBeingBuild);
+        ActiveEditorTracker.sharedTracker.isLocked = false;        
+    }
+
+    public void DenyRoomPlacement()
+    {
+        DestroyImmediate(roomBeingBuild);
+        ActiveEditorTracker.sharedTracker.isLocked = false;
+    }
+
     public void UpdateMeshes(Room pUpdatedRoom)
     {
         //Chech for all boxcolliders if they intersect whith updatedRoom
@@ -56,7 +109,9 @@ public class LevelCreator : MonoBehaviour {
             if (roomCol.bounds.Intersects(levelBaseCol.bounds)) //Remove levelbase
             {
                 Debug.Log("Removing component");
-                DestroyImmediate(levelBases[i].gameObject);                
+                DestroyImmediate(levelBases[i].gameObject);
+                levelBases.RemoveAt(i);
+                i -= 1;
             }
         }
         CreateNewMeshes(pUpdatedRoom);

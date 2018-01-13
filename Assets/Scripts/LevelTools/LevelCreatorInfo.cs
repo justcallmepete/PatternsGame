@@ -26,17 +26,10 @@ public class LevelCreatorInfo : MonoBehaviour {
     public float wallHeight = 300;
 
     public LevelBase levelBase;
+    public Room basicRoom;
 
     private void Awake()
     {
         _instance = this;
     }
-
-    void Start () {
-		
-	}
-	
-	void Update () {
-		
-	}
 }
