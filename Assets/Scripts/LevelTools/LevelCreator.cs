@@ -141,15 +141,23 @@ public class LevelCreator : MonoBehaviour {
     void CreateNewSubMesh(Room pUpdatedRoom, Vector3 pDirection)
     {
         LevelBase subMesh = Instantiate(levelBasePrefab);
+
+        float xTarget = (pDirection.x == 1 ? pUpdatedRoom.wallBounds.maxWallsX : pUpdatedRoom.wallBounds.minWallsX);
+        float yTarget = (pDirection.z == 1 ? pUpdatedRoom.wallBounds.maxWallsZ : pUpdatedRoom.wallBounds.minWallsZ);
+        SetSubMeshScale(subMesh, xTarget, yTarget, pUpdatedRoom, pDirection);
+        SetSubMeshPosition(subMesh, pUpdatedRoom, pDirection);
+        levelBases.Add(subMesh);
+    }
+
+    void SetSubMeshScale(LevelBase pSubmesh, float xTarget, float yTarget, Room pUpdatedRoom, Vector3 pDirection)
+    {
         float newScaleX = (pDirection.x == 1 ? pUpdatedRoom.wallBounds.maxWallsX : pUpdatedRoom.wallBounds.minWallsX) - (pUpdatedRoom.transform.position.x + pUpdatedRoom.transform.localScale.x / 2 * pDirection.x);
         float newScaleZ = (pDirection.z == 1 ? pUpdatedRoom.wallBounds.maxWallsZ : pUpdatedRoom.wallBounds.minWallsZ) - (pUpdatedRoom.transform.position.z + pUpdatedRoom.transform.localScale.z / 2 * pDirection.z);
 
 
         float finalScaleX = ((pDirection.z == 0 ^ pDirection.x == 0) && pDirection.z != 0 ? pUpdatedRoom.transform.localScale.x : newScaleX);
         float finalScaleY = ((pDirection.z == 0 ^ pDirection.x == 0) && pDirection.x != 0 ? pUpdatedRoom.transform.localScale.z : newScaleZ);
-        subMesh.transform.localScale = new Vector3(Mathf.Abs(finalScaleX), levelCreatorInfo.wallHeight, Mathf.Abs(finalScaleY));
-        SetSubMeshPosition(subMesh, pUpdatedRoom, pDirection);
-        levelBases.Add(subMesh);
+        pSubmesh.transform.localScale = new Vector3(Mathf.Abs(finalScaleX), levelCreatorInfo.wallHeight, Mathf.Abs(finalScaleY));
     }
 
     void SetSubMeshPosition(LevelBase pSubmesh, Room pUpdatedRoom, Vector3 pDirection)
