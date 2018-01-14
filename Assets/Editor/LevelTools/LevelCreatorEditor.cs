@@ -19,6 +19,7 @@ public class LevelCreatorEditor : Editor {
 
     public override void OnInspectorGUI()
     {
+        Debug.Log("Current state: " + currentState.ToString());
         levelCreator = (LevelCreator)target;
         if (!levelCreator.levelBaseMain)
         {
@@ -30,6 +31,11 @@ public class LevelCreatorEditor : Editor {
                 DrawMainScreen();
                 break;
             case MenuStates.buildRoom:
+                if (levelCreator.roomBeingBuild == null)
+                {
+                    currentState = MenuStates.mainMenu;
+                    break;
+                }
                 DrawBuildRoomScreen();
                 break;
             default:
@@ -150,6 +156,8 @@ public class LevelCreatorEditor : Editor {
         if (GUILayout.Button(denyPlacement, EditorStyles.miniButtonRight, GUILayout.MinWidth(buttonWidth/2), GUILayout.MinHeight(buttonHeight/2)))
         {
             levelCreator.DenyRoomPlacement();
+            currentState = MenuStates.mainMenu;
+            ActiveEditorTracker.sharedTracker.isLocked = false;
         }
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
