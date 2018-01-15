@@ -25,6 +25,8 @@ public class LevelCreatorUtils : MonoBehaviour {
         newWallBounds.maxWallsX = newWallBounds.center.x + extends.x;
         newWallBounds.minWallsZ = newWallBounds.center.z - extends.z;
         newWallBounds.maxWallsZ = newWallBounds.center.z + extends.z;
+        
+
         return newWallBounds;
     }
 
@@ -35,7 +37,7 @@ public class LevelCreatorUtils : MonoBehaviour {
         public float minWallsZ;
         public float maxWallsX;
         public float maxWallsZ;
-
+        
         public override string ToString()
         {
             return "center: "+ center.ToString()+ " minWallsX: "+ minWallsX + " minWallsZ: "+ minWallsZ + " maxWallsX: " + maxWallsX + " maxWallsZ: " + maxWallsZ;
@@ -49,8 +51,97 @@ public class LevelCreatorUtils : MonoBehaviour {
             Debug.DrawLine(center, new Vector3(minWallsX, 0, minWallsZ), Color.red, pDuration); // Bottom left
             Debug.DrawLine(center, new Vector3(maxWallsX, 0, minWallsZ), Color.red, pDuration); // Bottom right
         }
+
+        public int TotalCornersInBound(WallsBounds pBoundsToCheck)
+        {
+            int nCornersIntersecting = 0;
+            //TopLeft
+            if (IsCornerInBound(new Vector3(-1,0,1), pBoundsToCheck))
+            {
+                nCornersIntersecting++;
+            }
+            //Top Right
+            if (IsCornerInBound(new Vector3(1, 0, 1), pBoundsToCheck))
+            {
+                nCornersIntersecting++;
+            }
+            //Bottom Left
+            if (IsCornerInBound(new Vector3(-1, 0, -1), pBoundsToCheck))
+            {
+                nCornersIntersecting++;
+            }
+            //Bottom Right
+            if (IsCornerInBound(new Vector3(1, 0, -1), pBoundsToCheck))
+            {
+                nCornersIntersecting++;
+            }
+
+            return nCornersIntersecting;
+        }
+
+        public bool IsCornerInBound(Vector3 pCorner, WallsBounds pBoundsToCheck)
+        {
+            if(pCorner.z == 1) //Top side
+            {
+                if(pCorner.x == 1) //Top right
+                {
+                    if (maxWallsX > pBoundsToCheck.minWallsX && maxWallsX < pBoundsToCheck.maxWallsX && maxWallsZ < pBoundsToCheck.maxWallsZ && maxWallsZ > pBoundsToCheck.minWallsZ)
+                    {
+                        return true;
+                    }
+                }
+                else // Top left
+                {
+                    if (minWallsX > pBoundsToCheck.minWallsX && minWallsX < pBoundsToCheck.maxWallsX && maxWallsZ < pBoundsToCheck.maxWallsZ && maxWallsZ > pBoundsToCheck.minWallsZ)
+                    {
+                        return true;
+                    }
+                }
+            }
+            else //bottom side
+            {
+                if (pCorner.x == 1) //bottom right
+                {
+                    if (maxWallsX > pBoundsToCheck.minWallsX && maxWallsX < pBoundsToCheck.maxWallsX && minWallsZ < pBoundsToCheck.maxWallsZ && minWallsZ > pBoundsToCheck.minWallsZ)
+                    {
+                        return true;
+                    }
+                }
+                else // bottom left
+                {
+                    if (minWallsX > pBoundsToCheck.minWallsX && minWallsX < pBoundsToCheck.maxWallsX && minWallsZ < pBoundsToCheck.maxWallsZ && minWallsZ > pBoundsToCheck.minWallsZ)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public static Vector3 CornerTopLeft()
+        {
+            return new Vector3(-1, 0, 1);
+        }
+        public static Vector3 CornerTopRight()
+        {
+            return new Vector3(1, 0, 1);
+        }
+        public static Vector3 CornerBottomLeft()
+        {
+            return new Vector3(-1, 0, -1);
+        }
+        public static Vector3 CornerBottomRight()
+        {
+            return new Vector3(1, 0, -1);
+        }
+
+        public void UpdateInfo(BoxCollider pBoxCol)
+        {
+            this = LevelCreatorUtils.BoxColliderToWallbounds(center, pBoxCol);
+        }
     }
 
+    
     public static WallsBounds ExtendWallBounds(WallsBounds boundsToExtend, WallsBounds boundsReference)
     {
         if (boundsReference.minWallsX < boundsToExtend.minWallsX)

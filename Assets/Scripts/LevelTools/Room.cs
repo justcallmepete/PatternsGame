@@ -15,6 +15,9 @@ public class Room : MonoBehaviour {
 
     [HideInInspector]
     public LevelCreatorUtils.WallsBounds wallBounds;
+    [HideInInspector]
+    public List<Room> intersectingRooms; 
+
     private void OnEnable()
     {
         editorSize = 0;
@@ -52,7 +55,6 @@ public class Room : MonoBehaviour {
         {
             if (movedRoom)
             {
-                Debug.Log("moved room");
                 LevelCreator lc = (LevelCreator)FindObjectOfType(typeof(LevelCreator));
                 movedRoom = false;
                 // Get room width and lenght
@@ -88,7 +90,6 @@ public class Room : MonoBehaviour {
         }
         else
         {
-
             transform.localScale = new Vector3(editorSize / denominator * numerator, 4, editorSize);
         }
     }

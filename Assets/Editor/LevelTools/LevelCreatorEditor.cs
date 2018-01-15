@@ -13,13 +13,11 @@ public class LevelCreatorEditor : Editor {
     MenuStates currentState;
     void OnEnable()
     {
-        testValue = serializedObject.FindProperty("testValue");
-        currentState = MenuStates.buildBase;
+        testValue = serializedObject.FindProperty("testValue"); 
     }
 
     public override void OnInspectorGUI()
     {
-        Debug.Log("Current state: " + currentState.ToString());
         levelCreator = (LevelCreator)target;
         if (!levelCreator.levelBaseMain)
         {
@@ -126,7 +124,7 @@ public class LevelCreatorEditor : Editor {
         //Scale region
         #region
 
-        float roomScale = EditorGUILayout.Slider("Room size", levelCreator.setRoomScale, 10,100);
+        float roomScale = EditorGUILayout.Slider("Room size", levelCreator.setRoomScale, 10,120);
         levelCreator.setRoomScale = roomScale;
         #endregion
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
