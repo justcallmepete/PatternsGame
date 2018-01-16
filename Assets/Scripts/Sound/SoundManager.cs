@@ -307,7 +307,13 @@ namespace EazyTools.SoundManager
         /// <returns>First occurrence of music Audio that has as plays the audioClip, null if no such Audio is found</returns>
         public static Audio GetMusicAudio(AudioClip audioClip)
         {
+            if(musicAudio == null)
+            {
+                return null;
+            }
+
             List<int> keys;
+
             keys = new List<int>(musicAudio.Keys);
             foreach (int key in keys)
             {
@@ -347,6 +353,10 @@ namespace EazyTools.SoundManager
         /// <returns>First occurrence of sound Audio that has as plays the audioClip, null if no such Audio is found</returns>
         public static Audio GetSoundAudio(AudioClip audioClip)
         {
+            if (musicAudio == null)
+            {
+                return null;
+            }
             List<int> keys;
             keys = new List<int>(soundsAudio.Keys);
             foreach (int key in keys)
@@ -387,6 +397,10 @@ namespace EazyTools.SoundManager
         /// <returns>First occurrence of UI sound Audio that has as plays the audioClip, null if no such Audio is found</returns>
         public static Audio GetUISoundAudio(AudioClip audioClip)
         {
+            if (UISoundsAudio == null)
+            {
+                return null;
+            }
             List<int> keys;
             keys = new List<int>(UISoundsAudio.Keys);
             foreach (int key in keys)
