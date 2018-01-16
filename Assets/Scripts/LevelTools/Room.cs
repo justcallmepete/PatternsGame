@@ -55,7 +55,7 @@ public class Room : MonoBehaviour {
         {
             if (movedRoom)
             {
-                LevelCreator lc = (LevelCreator)FindObjectOfType(typeof(LevelCreator));
+                //LevelCreator lc = (LevelCreator)FindObjectOfType(typeof(LevelCreator));
                 movedRoom = false;
                 // Get room width and lenght
                 //lc.UpdateMeshes(this);

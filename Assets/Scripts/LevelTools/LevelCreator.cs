@@ -21,12 +21,22 @@ public class LevelCreator : MonoBehaviour {
     [HideInInspector]
     public Room roomBeingBuild;
     [HideInInspector]
-    public bool roomIsRotated; 
+    public LevelBase wallBeingMade;
+    [HideInInspector]
+    public bool roomIsRotated, wallIsRotated; 
     public float testValue;
     // Use this for initialization
     private void OnEnable()
     {
         roomIsRotated = false;
+        wallIsRotated = false;
+    }
+
+    public void SelectInInspector()
+    {
+        GameObject[] selectObject = new GameObject[1];
+        selectObject[0] = this.gameObject;
+        Selection.objects = selectObject;
     }
 
     /// <summary>
@@ -62,7 +72,6 @@ public class LevelCreator : MonoBehaviour {
         Selection.objects = selectObject;
     }
 
-
     public void SetRoomRatio(int pNumerator, int pDenominator)
     {
 
@@ -71,6 +80,7 @@ public class LevelCreator : MonoBehaviour {
 
         roomBeingBuild.UpdateSize(roomIsRotated);
     }
+
     public float setRoomScale
     { 
         get
@@ -88,6 +98,7 @@ public class LevelCreator : MonoBehaviour {
     {
         roomIsRotated = roomIsRotated ? false : true;
     }
+
     public void ConfirmRoomPlacement()
     {
         roomBeingBuild.ConfirmPLacement();
@@ -97,7 +108,8 @@ public class LevelCreator : MonoBehaviour {
 
     public void DenyRoomPlacement()
     {
-        DestroyImmediate(roomBeingBuild);
+        DestroyImmediate(roomBeingBuild.gameObject);
+        SelectInInspector();
     }
 
     /// <summary>
@@ -122,6 +134,7 @@ public class LevelCreator : MonoBehaviour {
             //Debug.DrawLine(pUpdatedRoom.transform.position, levelBases[i].transform.position, Color.blue, 10f);
             if (roomCol.bounds.Intersects(levelBaseCol.bounds)) //Remove levelbase
             {
+                //TO DO: 
                 //Debug.DrawLine(pUpdatedRoom.transform.position, levelBases[i].transform.position, Color.red, 10f);
                 SpliceUpMesh(pUpdatedRoom, levelBases[i]);
                 DestroyImmediate(levelBases[i].gameObject);
@@ -279,5 +292,59 @@ public class LevelCreator : MonoBehaviour {
                                                   ((subMesh.transform.localScale.z / 2 + pUpdatedRoom.transform.localScale.z / 2) * pDirection.z));
         newLevelBases.Add(subMesh);
         subMesh.transform.parent = levelBaseMain.transform;
+    }
+
+    public void SpawnWall()
+    {
+        //Instantiate wall
+        wallBeingMade = Instantiate(levelBasePrefab);
+        wallBeingMade.transform.localScale = new Vector3(2, levelCreatorInfo.wallHeight, 2);
+        ActiveEditorTracker.sharedTracker.isLocked = true;
+        GameObject[] selectObject = new GameObject[1];
+        selectObject[0] = wallBeingMade.gameObject;
+        Selection.objects = selectObject;
+        SetWallRatio(1, 1);
+        //Check if intersecting with walls
+
+        //Cut of part that is intersecting with wall
+    }
+
+    public void ConfirmWallPlacement()
+    {
+        wallBeingMade.ConfirmPlacement();
+        levelBases.Add(wallBeingMade);
+        wallBeingMade.transform.parent = levelBaseMain.transform;
+    }
+
+    public void DenyWallPlacement()
+    {
+        DestroyImmediate(wallBeingMade.gameObject);
+        SelectInInspector();
+    }
+
+    public void SetWallRatio(int pNumerator, int pDenominator)
+    {
+
+        wallBeingMade.numerator = pNumerator;
+        wallBeingMade.denominator = pDenominator;
+
+        roomBeingBuild.UpdateSize(wallIsRotated);
+    }
+
+    public float setWallScale
+    {
+        get
+        {
+            return wallBeingMade.editorSize;
+        }
+        set
+        {
+            wallBeingMade.editorSize = value;
+            wallBeingMade.UpdateSize(wallIsRotated);
+        }
+    }
+    public void ToggleRotateWall()
+    {
+        wallIsRotated = wallIsRotated ? false : true;
     }
 }
