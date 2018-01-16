@@ -62,6 +62,12 @@ public class SlidingDoor : MonoBehaviour
                     lockedEffect[i].SetActive(false);
                 }
             }
+        } else
+        {
+            for (int i = 0; i < lockedEffect.Length; i++)
+            {
+                lockedEffect[i].SetActive(false);
+            }
         }
 
     }
