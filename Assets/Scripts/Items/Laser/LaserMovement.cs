@@ -91,7 +91,7 @@ public class LaserMovement : MonoBehaviour
         }
 
         // Update step
-        step = moveSpeed * Time.deltaTime;
+        step = rotationSpeed * Time.deltaTime;
 
         // Set new rotation
         Vector3 newDir = Vector3.RotateTowards(transform.forward, patrolPoints[currentPathIndex].transform.forward, step, 0.0F);
