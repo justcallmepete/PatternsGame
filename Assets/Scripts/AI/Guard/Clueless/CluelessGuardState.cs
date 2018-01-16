@@ -10,7 +10,7 @@ public class CluelessGuardState : GuardState
 
     public override void OnStateEnter()
     {
-        context.IndicatorColor = Color.cyan;
+        context.Indicator = GuardStateMachine.IndicatorImage.None;
         context.MovementSpeed = context.cluelessMovementSpeed;
     }
 

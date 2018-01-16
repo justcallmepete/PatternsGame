@@ -11,7 +11,7 @@ public class AlertGuardState : GuardState
 
     public override void OnStateEnter()
     {
-        context.IndicatorColor = Color.red;
+        context.Indicator = GuardStateMachine.IndicatorImage.Alert;
         context.MovementSpeed = context.alertMovementSpeed;   
     }
 
