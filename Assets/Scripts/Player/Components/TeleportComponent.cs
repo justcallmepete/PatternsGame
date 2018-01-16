@@ -15,13 +15,12 @@ public class TeleportComponent : PlayerComponentInterface
     //[Tooltip("Maximal pull distance")]
     //public float maxDistance = 10;
     [Tooltip("Duraction of channelling")]
-    public float channelTime = 2;
-    [SerializeField]
+    float channelTime = 2.8f;
+
     [Tooltip("Delay between activating teleport and changing position.")]
-    private float teleportDelay = 1;
+    private float teleportDelay = 0.6f;
     [Tooltip("Outer radius of the player")]
-    [SerializeField]
-    private float outerRadius = 1.3f;
+    private float outerRadius = 2.3f;
     private float currentTime = 0;
     private bool doTeleport = false;
 
@@ -71,7 +70,7 @@ public class TeleportComponent : PlayerComponentInterface
             return;
         }
 
-        if (MainPlayer.buttonList[teleportationKey])
+        if (MainPlayer.buttonList[teleportationKey] )
         {
             // Start channelling if player is in sight and character is free
             if (IsPlayerInSight())
@@ -155,10 +154,15 @@ public class TeleportComponent : PlayerComponentInterface
         }
 
         // Set teleport values for the other players
-        pPlayerMainPlayer.teleportTarget = gameObject.transform.position + 
-            (pPlayer.transform.position - gameObject.transform.position).normalized * outerRadius;
-        pPlayerMainPlayer.CurrentState = MainPlayer.State.Teleported;
+        //pPlayerMainPlayer.teleportTarget = gameObject.transform.position + 
+        //    (pPlayer.transform.position - gameObject.transform.position).normalized * outerRadius;
+        //pPlayerMainPlayer.CurrentState = MainPlayer.State.Teleported;
         StopChannelling();
+        MainPlayer.teleportTarget = pPlayer.transform.position +
+            (-pPlayer.transform.position + gameObject.transform.position).normalized * outerRadius;
+        MainPlayer.CurrentState = MainPlayer.State.Teleported;
+        UpdateChannelTimeRatio();
+        print(currentTime);
     }
 
     private void StopChannelling()
@@ -167,12 +171,19 @@ public class TeleportComponent : PlayerComponentInterface
         if (MainPlayer.CurrentState != MainPlayer.State.Busy)
         {
             MainPlayer.CurrentState = MainPlayer.State.Idle;
+            GameObject.Destroy(fxTeleport);
         }
         currentTime = 0;
     }
 
+    public GameObject teleportEffect;
+    GameObject fxTeleport;
+
     private void StartChannelling()
     {
+        // teleport effect
+        fxTeleport = Instantiate(teleportEffect, transform.position, transform.rotation) as GameObject;
+
         MainPlayer.animator.SetBool("teleport", true);
         MainPlayer.CurrentState = MainPlayer.State.Channelling;
     }
@@ -203,14 +214,35 @@ public class TeleportComponent : PlayerComponentInterface
 
     public IEnumerator StartTeleport()
     {
+
+       
         // Change alpha value to 0
         StartCoroutine(MainPlayer.AlphaFade());
 
-        // Wait for teleport
+        // Start teleport effect on new location
+        fxTeleport = Instantiate(teleportEffect, MainPlayer.teleportTarget, transform.rotation);
+
+        // Dissepear on current location
+        SkinnedMeshRenderer[] body = GetComponentsInChildren<SkinnedMeshRenderer>();
+        foreach (SkinnedMeshRenderer i in body)
+        {
+            i.enabled = false;
+        }
+
+        // Delay in teleport
         yield return new WaitForSeconds(teleportDelay);
+
+        // Appear in new location
+        foreach (SkinnedMeshRenderer i in body)
+        {
+            i.enabled = true;
+        }
 
         // Set new position
         gameObject.transform.position = MainPlayer.teleportTarget;
+
+
+
 
         // Change alpha value to 1
         StartCoroutine(MainPlayer.AlphaFade(1));

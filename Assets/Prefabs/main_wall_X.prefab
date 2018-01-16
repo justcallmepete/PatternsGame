@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33944533081621938}
   - component: {fileID: 65938337352778358}
   - component: {fileID: 23210730902276240}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: main_wall_X
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,12 +40,12 @@ GameObject:
   - component: {fileID: 33040983629891514}
   - component: {fileID: 65868592228043034}
   - component: {fileID: 23718352994637358}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: upper_wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &4431647709755640
 Transform:
@@ -73,7 +73,7 @@ Transform:
   - {fileID: 4431647709755640}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23210730902276240
 MeshRenderer:
   m_ObjectHideFlags: 1

@@ -241,6 +241,7 @@ public class MainPlayer : MonoBehaviour
     {
         if (currentState != State.Dead)
         {
+            GameManager.Instance.SlowMotion(0.2f, 3);
             currentState = State.Dead;
             animator.SetTrigger("die");
         }

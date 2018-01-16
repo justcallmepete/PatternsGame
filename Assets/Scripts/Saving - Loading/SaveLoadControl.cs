@@ -166,15 +166,15 @@ public class SaveLoadControl : MonoBehaviour {
 
 
         // Debug save/load
-        if (Input.GetKeyDown(KeyCode.O))
+        if (Input.GetKeyDown(KeyCode.Alpha8))
         {
             SaveData(false);
         }
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.Alpha9))
         {
             LoadData(false);
         }
-        if (Input.GetKeyDown(KeyCode.L))
+        if (Input.GetKeyDown(KeyCode.Alpha0)) // checkpoint
         {
             LoadData(true);
         }
