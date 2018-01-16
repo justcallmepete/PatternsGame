@@ -284,7 +284,7 @@ public class TeleportComponent : PlayerComponentInterface
 
         if (sound == null)
         {
-            SoundManager.PlaySound(chargeSFX, 0.4f, false, gameObject.transform);
+            SoundManager.PlaySound(chargeSFX, 0.2f, false, gameObject.transform);
 
             sound = SoundManager.GetAudio(chargeSFX);
             sound.Set3DSettings();
@@ -297,6 +297,6 @@ public class TeleportComponent : PlayerComponentInterface
 
     public void StopChargeSFX()
     {
-        SoundManager.GetAudio(chargeSFXId).Stop();
+        SoundManager.GetAudio(chargeSFX).Stop();
     }
 }

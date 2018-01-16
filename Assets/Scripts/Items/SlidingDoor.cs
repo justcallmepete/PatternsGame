@@ -17,7 +17,6 @@ public class SlidingDoor : MonoBehaviour
     public AudioClip openSFX;
     public AudioClip closeSFX;
     public AudioClip lockedSFX;
-    private int lockedSFXId;
 
     [Header("This shows the player if the door is closed with a switch")]
     public GameObject[] lockedEffect;
@@ -147,7 +146,7 @@ public class SlidingDoor : MonoBehaviour
     public void PlayLockedSFX()
     {
         Audio sound = SoundManager.GetAudio(lockedSFX);
-
+        
         if (sound == null)
         {
             SoundManager.PlaySound(lockedSFX, 0.4f, false, gameObject.transform);
