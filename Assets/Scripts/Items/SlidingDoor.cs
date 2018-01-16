@@ -8,7 +8,7 @@ public class SlidingDoor : MonoBehaviour
     float timer;
     public float openTime = 3;
 
-    private bool lockedWithSwitch = false;
+    public bool lockedWithSwitch = false;
     public bool LockedWithSwitch { get { return lockedWithSwitch; } set { lockedWithSwitch = value; } }
     private Animator animator;
 
@@ -105,6 +105,12 @@ public class SlidingDoor : MonoBehaviour
         {
             listOfDoors[i].outline.eraseRenderer = eraseRenderer;
         }
+    }
+
+    public void CameraOpenDoor()
+    {
+        lockedWithSwitch = false;
+        Open();
     }
 
     public void PlayOpenSFX()
