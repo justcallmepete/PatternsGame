@@ -8,7 +8,7 @@ public class SlidingDoor : MonoBehaviour
     float timer;
     public float openTime = 3;
 
-    private bool lockedWithSwitch = false;
+    public bool lockedWithSwitch = false;
     public bool LockedWithSwitch { get { return lockedWithSwitch; } set { lockedWithSwitch = value; } }
     private Animator animator;
 
@@ -63,6 +63,12 @@ public class SlidingDoor : MonoBehaviour
                     lockedEffect[i].SetActive(false);
                 }
             }
+        } else
+        {
+            for (int i = 0; i < lockedEffect.Length; i++)
+            {
+                lockedEffect[i].SetActive(false);
+            }
         }
 
     }
@@ -109,7 +115,14 @@ public class SlidingDoor : MonoBehaviour
         }
     }
 
-    public void PlayOpenSFX(AudioClip clip)
+
+    public void CameraOpenDoor()
+    {
+        lockedWithSwitch = false;
+        Open();
+    }
+
+    public void PlayOpenSFX()
     {
         Audio sound = SoundManager.GetAudio(closeSFX);
 
