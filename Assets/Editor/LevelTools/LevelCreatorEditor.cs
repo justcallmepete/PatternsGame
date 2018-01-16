@@ -20,6 +20,7 @@ public class LevelCreatorEditor : Editor {
         levelCreator = (LevelCreator)target;
         if (!levelCreator.levelBaseMain)
         {
+            //TO DO: Find levelbase main;
             DrawBuildBaseScreen();
             return;
         }

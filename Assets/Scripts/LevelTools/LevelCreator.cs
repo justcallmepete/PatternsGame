@@ -17,13 +17,16 @@ public class LevelCreator : MonoBehaviour {
     private List<LevelBase> levelBases;
     private List<LevelBase> newLevelBases;
     public List<Room> rooms;
+    public List<Door> doors;
 
     [HideInInspector]
     public Room roomBeingBuild;
     [HideInInspector]
     public LevelBase wallBeingMade;
+    public Door doorBeingMade;
+    public Vector3 doorDirection;
     [HideInInspector]
-    public bool roomIsRotated, wallIsRotated; 
+    public bool roomIsRotated, wallIsRotated, doorIsRotated; 
     public float testValue;
     // Use this for initialization
     private void OnEnable()
@@ -58,6 +61,8 @@ public class LevelCreator : MonoBehaviour {
         levelBases.Add(levelBaseStart);
     }
 
+    //Room methods region
+    #region 
     public void SpawnRoom()
     {
         basicRoomPrefab = levelCreatorInfo.basicRoom;
@@ -104,14 +109,112 @@ public class LevelCreator : MonoBehaviour {
         roomBeingBuild.ConfirmPLacement();
         UpdateMeshes(roomBeingBuild);
         rooms.Add(roomBeingBuild);
+        roomBeingBuild = null;
     }
 
     public void DenyRoomPlacement()
     {
         DestroyImmediate(roomBeingBuild.gameObject);
         SelectInInspector();
+        roomBeingBuild = null;
+    }
+    #endregion
+    //Wall methods region
+    #region
+    public void SpawnWall()
+    {
+        //Instantiate wall
+        wallBeingMade = Instantiate(levelBasePrefab);
+        wallBeingMade.transform.localScale = new Vector3(2, levelCreatorInfo.wallHeight, 2);
+        ActiveEditorTracker.sharedTracker.isLocked = true;
+        GameObject[] selectObject = new GameObject[1];
+        selectObject[0] = wallBeingMade.gameObject;
+        Selection.objects = selectObject;
+        SetWallRatio(1, 1);
+        //Check if intersecting with walls
+
+        //Cut of part that is intersecting with wall
     }
 
+    public void ConfirmWallPlacement()
+    {
+        wallBeingMade.ConfirmPlacement();
+        levelBases.Add(wallBeingMade);
+        wallBeingMade.transform.parent = levelBaseMain.transform;
+        wallBeingMade = null;
+    }
+
+    public void DenyWallPlacement()
+    {
+        DestroyImmediate(wallBeingMade.gameObject);
+        SelectInInspector();
+        wallBeingMade = null;
+    }
+
+    public void SetWallRatio(int pNumerator, int pDenominator)
+    {
+
+        wallBeingMade.numerator = pNumerator;
+        wallBeingMade.denominator = pDenominator;
+
+        roomBeingBuild.UpdateSize(wallIsRotated);
+    }
+
+    public float setWallScale
+    {
+        get
+        {
+            return wallBeingMade.editorSize;
+        }
+        set
+        {
+            wallBeingMade.editorSize = value;
+            wallBeingMade.UpdateSize(wallIsRotated);
+        }
+    }
+
+    public void ToggleRotateWall()
+    {
+        wallIsRotated = wallIsRotated ? false : true;
+    }
+    #endregion
+
+    //Door methods region
+    #region
+    public void SpawnDoor()
+    {
+        doorBeingMade = Instantiate(levelCreatorInfo.doorPrefab);
+        doorDirection = new Vector3(1, 0, 0);
+    }
+
+    public void ToggleRotateDoor()
+    {//Rotate clockwise
+        doorBeingMade.transform.Rotate(0, 90, 0);
+        if(doorDirection.x != 0)
+        {
+            doorDirection = new Vector3(0, 0, -doorDirection.x);
+        }
+        else
+        {
+            doorDirection = new Vector3(doorDirection.z, 0, 0);
+        }
+    }
+    public void ConfirmDoorPlacement()
+    {
+        doors.Add(doorBeingMade);
+        if (doorDirection.x != 0)
+        {
+
+        }
+        //Left door
+        //Room
+    }
+
+    public void DenyDoorPlacement()
+    {
+        DestroyImmediate(doorBeingMade.gameObject);
+    }
+    #endregion
     /// <summary>
     /// Update meshes will be called when the room is confirmed for palcing.
     /// It will delete all intersecting levelbases and start creating new levelbases around the room.
@@ -220,7 +323,7 @@ public class LevelCreator : MonoBehaviour {
             }
             else // Move mesh to side
             {
-                if(pUpdatedRoom.wallBounds.minWallsX > levelBaseWallBounds.minWallsX) //Left
+                if (pUpdatedRoom.wallBounds.minWallsX > levelBaseWallBounds.minWallsX) //Left
                 {
                     CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(-1, 0, 0));
                     if (pUpdatedRoom.wallBounds.maxWallsX < levelBaseWallBounds.maxWallsX)
@@ -228,7 +331,7 @@ public class LevelCreator : MonoBehaviour {
                         CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(1, 0, 0));
                     }
                 }
-                else if(pUpdatedRoom.wallBounds.maxWallsZ < levelBaseWallBounds.maxWallsZ) //Top
+                else if (pUpdatedRoom.wallBounds.maxWallsZ < levelBaseWallBounds.maxWallsZ) //Top
                 {
                     CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(0, 0, 1));
                     if (pUpdatedRoom.wallBounds.minWallsZ > levelBaseWallBounds.minWallsZ)
@@ -292,59 +395,5 @@ public class LevelCreator : MonoBehaviour {
                                                   ((subMesh.transform.localScale.z / 2 + pUpdatedRoom.transform.localScale.z / 2) * pDirection.z));
         newLevelBases.Add(subMesh);
         subMesh.transform.parent = levelBaseMain.transform;
-    }
-
-    public void SpawnWall()
-    {
-        //Instantiate wall
-        wallBeingMade = Instantiate(levelBasePrefab);
-        wallBeingMade.transform.localScale = new Vector3(2, levelCreatorInfo.wallHeight, 2);
-        ActiveEditorTracker.sharedTracker.isLocked = true;
-        GameObject[] selectObject = new GameObject[1];
-        selectObject[0] = wallBeingMade.gameObject;
-        Selection.objects = selectObject;
-        SetWallRatio(1, 1);
-        //Check if intersecting with walls
-
-        //Cut of part that is intersecting with wall
-    }
-
-    public void ConfirmWallPlacement()
-    {
-        wallBeingMade.ConfirmPlacement();
-        levelBases.Add(wallBeingMade);
-        wallBeingMade.transform.parent = levelBaseMain.transform;
-    }
-
-    public void DenyWallPlacement()
-    {
-        DestroyImmediate(wallBeingMade.gameObject);
-        SelectInInspector();
-    }
-
-    public void SetWallRatio(int pNumerator, int pDenominator)
-    {
-
-        wallBeingMade.numerator = pNumerator;
-        wallBeingMade.denominator = pDenominator;
-
-        roomBeingBuild.UpdateSize(wallIsRotated);
-    }
-
-    public float setWallScale
-    {
-        get
-        {
-            return wallBeingMade.editorSize;
-        }
-        set
-        {
-            wallBeingMade.editorSize = value;
-            wallBeingMade.UpdateSize(wallIsRotated);
-        }
-    }
-    public void ToggleRotateWall()
-    {
-        wallIsRotated = wallIsRotated ? false : true;
     }
 }
