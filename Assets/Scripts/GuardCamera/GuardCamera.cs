@@ -32,6 +32,8 @@ public class GuardCamera : MonoBehaviour {
 
     [SerializeField]
     List<GuardStateMachine> guardsToAlert;
+    [SerializeField]
+    List<SlidingDoor> doorsToOpen;
 
     [ExecuteInEditMode]
     void OnValidate()
@@ -181,9 +183,24 @@ public class GuardCamera : MonoBehaviour {
         }
     }
 
+    void OpenDoors()
+    {
+        for (int i = 0; i < doorsToOpen.Count; i++)
+        {
+            if (doorsToOpen[i] == null)
+            {
+                Debug.LogWarning("Guard isnt assigned to camera but array is not empty, removing index");
+                doorsToOpen.RemoveAt(i);
+                continue;
+            }
+            doorsToOpen[i].CameraOpenDoor();
+        }
+    }
+
     void Alert()
     {
         isAlerted = true;
+        OpenDoors();
         AlertGuards();
         SetVisionColor(colorAlert);
     }
