@@ -280,12 +280,19 @@ public class TeleportComponent : PlayerComponentInterface
 
     public void PlayChargeSFX()
     {
-        chargeSFXId = SoundManager.PlaySound(chargeSFX, 0.4f, false, gameObject.transform);
-        Audio open = SoundManager.GetAudio(chargeSFXId);
-        open.audioSource.rolloffMode = AudioRolloffMode.Custom;
+        Audio sound = SoundManager.GetAudio(chargeSFX);
 
-        open.Set3DDistances(2f, 15f);
-        open.audioSource.spatialBlend = 1f;
+        if (sound == null)
+        {
+            SoundManager.PlaySound(chargeSFX, 0.4f, false, gameObject.transform);
+
+            sound = SoundManager.GetAudio(chargeSFX);
+            sound.Set3DSettings();
+            return;
+        }
+
+        sound.Play();
+        sound.Set3DSettings();
     }
 
     public void StopChargeSFX()
