@@ -51,7 +51,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4306534472854472}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WallSideRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,7 +173,7 @@ GameObject:
   - component: {fileID: 23926926147237642}
   - component: {fileID: 64519088596852946}
   - component: {fileID: 114210438480154948}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: door_right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -273,7 +273,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4845124856504894}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WallSideLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -361,7 +361,7 @@ GameObject:
   - component: {fileID: 23856473836918292}
   - component: {fileID: 64597144615299340}
   - component: {fileID: 114319616486802714}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: door_left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -541,7 +541,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1730179888165314}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -76.601776, y: -1.8, z: 57.162666}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 4845124856504894}
@@ -1003,6 +1003,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b96c4ab7a72c2947b9bc9dda4114717, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outline: {fileID: 0}
 --- !u!114 &114319616486802714
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1014,6 +1015,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b96c4ab7a72c2947b9bc9dda4114717, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outline: {fileID: 0}
 --- !u!114 &114937768161197880
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1026,8 +1028,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   openTime: 3
+  lockedWithSwitch: 0
   openSFX: {fileID: 8300000, guid: 9777590d2fb39bc4eb58a2da1f9fa9ad, type: 3}
   closeSFX: {fileID: 8300000, guid: 9777590d2fb39bc4eb58a2da1f9fa9ad, type: 3}
+  lockedSFX: {fileID: 8300000, guid: 9d39007395b1680418584210f0ee8970, type: 3}
   lockedEffect:
   - {fileID: 1011142566311746}
   - {fileID: 1479971908384934}
