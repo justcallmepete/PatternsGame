@@ -108,6 +108,7 @@ GameObject:
   - component: {fileID: 4133078037355886}
   - component: {fileID: 95434433188405006}
   - component: {fileID: 114263293853886296}
+  - component: {fileID: 114017962305954232}
   m_Layer: 0
   m_Name: futuristicDoor_final
   m_TagString: Untagged
@@ -550,7 +551,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1707631142333542}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -98.6666, y: -65.323105, z: -19.77753}
+  m_LocalPosition: {x: -57.638, y: -65.323, z: -19.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4133078037355886}
@@ -1329,6 +1330,33 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114017962305954232
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1232945595235274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba1344b03541a934fa1b08610664d06e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  methods:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114263293853886296}
+        m_MethodName: ToggleOpenClosed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!114 &114147459043199366
 MonoBehaviour:
   m_ObjectHideFlags: 1

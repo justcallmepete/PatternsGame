@@ -63,6 +63,7 @@ GameObject:
   - component: {fileID: 64367553095219906}
   - component: {fileID: 114429874541306798}
   - component: {fileID: 114141393653707266}
+  - component: {fileID: 114591915086062224}
   m_Layer: 0
   m_Name: LaserTurret
   m_TagString: Untagged
@@ -103,8 +104,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100042}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -24.13428, y: 1.9, z: -26.06}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: -7.4472647, y: 12.303261, z: -21.477184}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400066}
@@ -120,7 +121,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100066}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.57, y: -0.673415, z: -1.39}
+  m_LocalPosition: {x: -8.060004, y: -0.673415, z: -1.39}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4356276228963774}
@@ -3753,7 +3754,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1121388146798170}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.06, y: 0, z: -2.44}
+  m_LocalPosition: {x: -21.16, y: 0, z: -2.44}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4672752163411006}
@@ -3809,7 +3810,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1565596793190426}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.67, y: -0.59, z: 0.98}
+  m_LocalPosition: {x: 13.29, y: -0.59, z: 1.19}
   m_LocalScale: {x: 1.0000005, y: 0.049999997, z: 1.0000005}
   m_Children: []
   m_Father: {fileID: 4105734230295622}
@@ -3848,8 +3849,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1536770773646834}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.36, y: -0.25, z: -1.54}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.29, y: -0.25, z: -1.54}
+  m_LocalScale: {x: 1, y: 1, z: 0.6570605}
   m_Children:
   - {fileID: 4673300246433688}
   m_Father: {fileID: 400042}
@@ -4091,6 +4092,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startPoint: {fileID: 400014}
   detectionRange: 5
+  isOffOnStart: 0
 --- !u!114 &114429874541306798
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4116,6 +4118,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d286e2ce034ee34da68d6a52c5b3de8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114591915086062224
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba1344b03541a934fa1b08610664d06e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  methods:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114141393653707266}
+        m_MethodName: ToggleLaser
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!114 &114731782981691874
 MonoBehaviour:
   m_ObjectHideFlags: 1
