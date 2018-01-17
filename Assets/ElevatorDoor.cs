@@ -16,5 +16,15 @@ public class ElevatorDoor : Interactable {
 
         elevator.OnInteract(obj);
     }
+
+    public override void TurnOnOutline()
+    {
+        elevator.ChangeOutlineSlidingDoor(false);
+    }
+
+    public override void TurnOffOutline()
+    {
+        elevator.ChangeOutlineSlidingDoor(true);
+    }
 }
 

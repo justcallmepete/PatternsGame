@@ -184,7 +184,7 @@ public class GuardCamera : MonoBehaviour {
                 guardsToAlert.RemoveAt(i);
                 continue;
             }
-            guardsToAlert[i].Alert(playersInVision[0].gameObject);
+            guardsToAlert[i].Distract(playersInVision[0].gameObject.transform.position);
         }
     }
 
