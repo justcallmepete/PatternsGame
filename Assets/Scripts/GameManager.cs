@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour {
         SceneManager.LoadScene("main_menu");
     }
 
-    private IEnumerator ReloadCheckpoint(float sec)
+    public IEnumerator ReloadCheckpoint(float sec)
     {
         if (gameOver)
         {

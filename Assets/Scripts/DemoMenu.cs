@@ -24,7 +24,7 @@ public class DemoMenu : MonoBehaviour {
 
     public void LoadCheckpoint()
     {
-        GameManager.Instance.ReloadCheckpoint();
+        GameManager.Instance.ReloadCheckpoint(0);
     }
 
     public void ReloadScene()
