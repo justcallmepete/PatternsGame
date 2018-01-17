@@ -575,6 +575,7 @@ GameObject:
   - component: {fileID: 114168547328747182}
   - component: {fileID: 114222337314510918}
   - component: {fileID: 114520517597607230}
+  - component: {fileID: 114356315156568890}
   m_Layer: 9
   m_Name: Player_2
   m_TagString: Player
@@ -2494,7 +2495,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1525989558876864}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15.3, y: 0, z: -37.7}
+  m_LocalPosition: {x: -16.4822, y: 1.2752896e-15, z: -57.433937}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 224594149980901384}
@@ -2821,6 +2822,18 @@ MonoBehaviour:
   channelTime: 2.8
   teleportEffect: {fileID: 1424870578961646, guid: 404bee6bab24a174eafc3f2ce9959edb,
     type: 2}
+--- !u!114 &114356315156568890
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1525989558876864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65849f33c7a890344a6c028af3b49c96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lightIsActive: 0
 --- !u!114 &114369050374040424
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2938,8 +2951,8 @@ SkinnedMeshRenderer:
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 4766647153505238}
   m_AABB:
-    m_Center: {x: 0.0013813972, y: 1.671505, z: -0.027821064}
-    m_Extent: {x: 0.1298348, y: 0.16118535, z: 0.11269525}
+    m_Center: {x: 0.0013809204, y: 1.6715031, z: -0.02782154}
+    m_Extent: {x: 0.1298348, y: 0.16118535, z: 0.11269477}
   m_DirtyAABB: 0
 --- !u!137 &137173353497548954
 SkinnedMeshRenderer:

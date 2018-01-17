@@ -23,7 +23,7 @@ public class InvestigationGuardState : SearchingGuardState
     public override void OnStateEnter()
     {
        //base.OnStateEnter();
-        lerpSpeed = context.rotationSpeed / 180.0f;
+        lerpSpeed = context.RotationSpeed / 180.0f;
 
         startRotation = context.transform.rotation.eulerAngles;
         targetRotation = Quaternion.AngleAxis(80, startRotation) * Vector3.left;
@@ -60,7 +60,7 @@ public class InvestigationGuardState : SearchingGuardState
     private void RotateTo(Vector3 rotateTarget)
     {
         Vector3 from = context.transform.forward;
-        Vector3 newRotation = Vector3.RotateTowards(from, rotateTarget, Time.deltaTime * context.rotationSpeed * Mathf.Deg2Rad, 0.0f);
+        Vector3 newRotation = Vector3.RotateTowards(from, rotateTarget, Time.deltaTime * context.RotationSpeed * Mathf.Deg2Rad, 0.0f);
         context.transform.rotation = Quaternion.LookRotation(newRotation);
         if (Vector3.Angle(context.transform.forward, rotateTarget) < 0.5f)
         {
@@ -71,7 +71,7 @@ public class InvestigationGuardState : SearchingGuardState
     private void RotateGuard(float from, float to)
     {
         Vector3 toVector = new Vector3(0.0f, to, 0.0f);
-        float deltalerp = Time.deltaTime * (1 / (System.Math.Abs(from - to) / context.rotationSpeed));
+        float deltalerp = Time.deltaTime * (1 / (System.Math.Abs(from - to) / context.RotationSpeed));
         lerpTime += deltalerp;
         if (lerpTime < 1.0f)
         {
