@@ -11,6 +11,8 @@ using EazyTools.SoundManager;
 public class ChargeSystem : MonoBehaviour
 {
     public AudioClip shootSFX;
+    private int shootSFXId;
+
     public UnityEvent methods;
     [SerializeField]
     float chargeTime;
@@ -178,16 +180,17 @@ public class ChargeSystem : MonoBehaviour
 
     public void PlayShootSFX()
     {
-        Audio sound = SoundManager.GetAudio(shootSFX);
+        Audio sound;
 
-        if (sound == null)
+        if (shootSFXId == 0)
         {
-            SoundManager.PlaySound(shootSFX, 0.4f, false, gameObject.transform);
-
-            sound = SoundManager.GetAudio(shootSFX);
+            shootSFXId = SoundManager.PlaySound(shootSFX, 0.4f, false, gameObject.transform);
+            sound = SoundManager.GetAudio(shootSFXId);
             sound.Set3DSettings();
+
             return;
         }
+        sound = SoundManager.GetAudio(shootSFX);
 
         sound.Play();
         sound.Set3DSettings();

@@ -39,11 +39,13 @@ public class GuardCameraVision : MonoBehaviour
 
     private void Update()
     {
+        if (myCamera.currentState == GuardCamera.RotateState.turnedOff) return;
         CheckPlayerInAngle();
     }
 
     private void LateUpdate()
     {
+        if (myCamera.currentState == GuardCamera.RotateState.turnedOff) return;
         DrawFieldOfView();
     }
 
