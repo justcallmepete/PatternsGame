@@ -61,6 +61,8 @@ namespace cakeslice
         public Color lineColor0 = Color.red;
         public Color lineColor1 = Color.green;
         public Color lineColor2 = Color.blue;
+        public Color lineColor3 = Color.green;
+        public Color lineColor4 = Color.blue;
 
         public bool additiveRendering = false;
 
