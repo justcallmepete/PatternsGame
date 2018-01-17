@@ -126,7 +126,7 @@ public class GuardStateMachine : MonoBehaviour {
     // Call if one of the players is shot.
     public void Shoot()
     {
-        GameManager.Instance.ReloadCheckpoint();
+       // GameManager.Instance.ReloadCheckpoint();
     }
 
     public void GoToState(GuardState newState)

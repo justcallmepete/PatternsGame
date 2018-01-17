@@ -50,8 +50,17 @@ public class GameManager : MonoBehaviour {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public void ReloadCheckpoint()
+    private IEnumerator ReloadCheckpoint(float sec)
     {
+        if (gameOver)
+        {
+            yield break;
+        }
+
+        gameOver = true;
+
+        yield return new WaitForSeconds(sec);
+    
         SaveLoadControl.Instance.LoadData(true);
     }
 
@@ -96,5 +105,7 @@ public class GameManager : MonoBehaviour {
             elapsedTime += Time.unscaledDeltaTime;
             yield return new WaitForEndOfFrame();
         }
+
+        StartCoroutine(ReloadCheckpoint(1f));
     }
 }
