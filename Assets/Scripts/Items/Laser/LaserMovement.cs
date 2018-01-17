@@ -39,7 +39,7 @@ public class LaserMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!isMoveable)
+        if (!isMoveable || patrolPoints.Length == 0)
         {
             return;
         }
@@ -66,6 +66,10 @@ public class LaserMovement : MonoBehaviour
 
     private void MoveLaser()
     {
+        if (patrolPoints.Length == 0)
+        {
+            ChangeState(State.Wait);
+        }
         // Update step
         step = moveSpeed * Time.deltaTime;
 
