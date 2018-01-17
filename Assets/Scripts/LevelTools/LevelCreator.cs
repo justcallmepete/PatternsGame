@@ -33,10 +33,19 @@ public class LevelCreator : MonoBehaviour {
     {
         roomIsRotated = false;
         wallIsRotated = false;
-        levelCreatorInfo = AssetDatabase.LoadAssetAtPath("Assets/Resources/Prefabs/LevelCreatorInfo.prefab", typeof(LevelCreatorInfo)) as LevelCreatorInfo;
-        levelBases = GetAllWalls();
+        if (!levelBaseMain)
+        {
+            levelBaseMain = GameObject.Find("levelBaseMain");
+            if (levelBaseMain)
+            {
+                levelCreatorInfo = AssetDatabase.LoadAssetAtPath("Assets/Resources/Prefabs/LevelCreatorInfo.prefab", typeof(LevelCreatorInfo)) as LevelCreatorInfo;
+                
+            }
+        }
         basicRoomPrefab = levelCreatorInfo.basicRoom;
         levelBasePrefab = levelCreatorInfo.levelBase;
+        levelBases = GetAllWalls();
+
     }
 
     public void SelectInInspector()
@@ -54,6 +63,10 @@ public class LevelCreator : MonoBehaviour {
         levelCreatorInfo = AssetDatabase.LoadAssetAtPath("Assets/Resources/Prefabs/LevelCreatorInfo.prefab", typeof(LevelCreatorInfo)) as LevelCreatorInfo;
         levelBaseMain = new GameObject();
         levelBaseMain.name = "levelBaseMain";
+        levelBasePrefab = levelCreatorInfo.levelBase;
+        basicRoomPrefab = levelCreatorInfo.basicRoom;
+        levelBasePrefab = levelCreatorInfo.levelBase;
+        levelBases = GetAllWalls();
         LevelBase levelBaseStart = Instantiate(levelBasePrefab);
         levelBaseStart.transform.localScale = new Vector3(levelCreatorInfo.baseWidth, levelCreatorInfo.wallHeight, levelCreatorInfo.baseLenght);
 
