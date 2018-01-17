@@ -18,6 +18,10 @@ public class SlidingDoor : MonoBehaviour
     public AudioClip closeSFX;
     public AudioClip lockedSFX;
 
+    private int openSFXId;
+    private int closeSFXId;
+    private int lockedSFXId;
+
     [Header("This shows the player if the door is closed with a switch")]
     public GameObject[] lockedEffect;
 
@@ -124,16 +128,17 @@ public class SlidingDoor : MonoBehaviour
 
     public void PlayOpenSFX()
     {
-        Audio sound = SoundManager.GetAudio(closeSFX);
+        Audio sound;
 
-        if (sound == null)
+        if (openSFXId == 0)
         {
-            SoundManager.PlaySound(closeSFX, 0.4f, false, gameObject.transform);
-
-            sound = SoundManager.GetAudio(closeSFX);
+            openSFXId = SoundManager.PlaySound(openSFX, 0.4f, false, gameObject.transform);
+            sound = SoundManager.GetAudio(openSFXId);
             sound.Set3DSettings();
+
             return;
         }
+        sound = SoundManager.GetAudio(openSFXId);
 
         sound.Play();
         sound.Set3DSettings();
@@ -141,16 +146,17 @@ public class SlidingDoor : MonoBehaviour
 
     public void PlayCloseSFX()
     {
-        Audio sound = SoundManager.GetAudio(closeSFX);
+        Audio sound;
 
-        if (sound == null)
+        if (closeSFXId == 0)
         {
-            SoundManager.PlaySound(closeSFX, 0.4f, false, gameObject.transform);
-
-            sound = SoundManager.GetAudio(closeSFX);
+            closeSFXId = SoundManager.PlaySound(closeSFX, 0.4f, false, gameObject.transform);
+            sound = SoundManager.GetAudio(closeSFXId);
             sound.Set3DSettings();
+
             return;
         }
+        sound = SoundManager.GetAudio(closeSFXId);
 
         sound.Play();
         sound.Set3DSettings();
@@ -158,16 +164,18 @@ public class SlidingDoor : MonoBehaviour
 
     public void PlayLockedSFX()
     {
-        Audio sound = SoundManager.GetAudio(lockedSFX);
+        Audio sound;
         
-        if (sound == null)
+        if (lockedSFXId == 0)
         {
-            SoundManager.PlaySound(lockedSFX, 0.4f, false, gameObject.transform);
-
+            lockedSFXId = SoundManager.PlaySound(lockedSFX, 0.4f, false, gameObject.transform);
             sound = SoundManager.GetAudio(lockedSFX);
             sound.Set3DSettings();
+
             return;
         }
+
+        sound = SoundManager.GetAudio(lockedSFXId);
 
         if (sound.playing)
         {
