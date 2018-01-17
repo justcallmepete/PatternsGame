@@ -36,7 +36,7 @@ public class LightCheck : MonoBehaviour {
         GuardStateMachine gsm = other.gameObject.GetComponentInParent<GuardStateMachine>();
         if (lightIsActive && gsm != null)
         {
-            gsm.InLight = true;
+            gsm.lightsStandingIn.Add(this.gameObject);
         }
     }
 
@@ -51,7 +51,7 @@ public class LightCheck : MonoBehaviour {
         if (lightIsActive && gsm != null)
         {
             Debug.Log("no light");
-            gsm.InLight = false;
+            gsm.lightsStandingIn.Remove(this.gameObject);
         }
     }
 
