@@ -14,6 +14,12 @@ public class LightCheck : MonoBehaviour {
         {
             other.gameObject.GetComponent<MainPlayer>().lightStandingIn.Add(this.gameObject);
         }
+
+        GuardStateMachine gsm = other.gameObject.GetComponentInParent<GuardStateMachine>();
+        if (lightIsActive && gsm != null)
+        {
+            gsm.InLight = true;
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -21,6 +27,13 @@ public class LightCheck : MonoBehaviour {
         if (lightIsActive && other.gameObject.GetComponent<MainPlayer>() != null)
         {
             other.gameObject.GetComponent<MainPlayer>().lightStandingIn.Remove(this.gameObject);
+        }
+
+        GuardStateMachine gsm = other.gameObject.GetComponentInParent<GuardStateMachine>();
+        if (lightIsActive && gsm != null)
+        {
+            Debug.Log("no light");
+            gsm.InLight = false;
         }
     }
 
