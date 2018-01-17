@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EazyTools.SoundManager;
 
 /*
  * Gives the player the ability to channel for teleport. Both players must have this script to enable 
@@ -9,12 +10,19 @@ using UnityEngine;
 
 public class TeleportComponent : PlayerComponentInterface
 {
+    public AudioClip teleportInSFX;
+    public AudioClip teleportOutSFX;
+    public AudioClip chargeSFX;
+
+    private int chargeSFXId;
+
     [Header("General settings")]
     public string teleportButton = "B";
     private int teleportationKey;
     //[Tooltip("Maximal pull distance")]
     //public float maxDistance = 10;
     [Tooltip("Duraction of channelling")]
+    [SerializeField]
     float channelTime = 2.8f;
 
     [Tooltip("Delay between activating teleport and changing position.")]
@@ -133,6 +141,7 @@ public class TeleportComponent : PlayerComponentInterface
 
     private IEnumerator Channelling(GameObject pPlayer)
     {
+        PlayChargeSFX();
         // Set current time to zero
         currentTime = 0;
         // Get MainPlayer script from the other player
@@ -145,6 +154,7 @@ public class TeleportComponent : PlayerComponentInterface
             if (!IsPlayerInSight() || !MainPlayer.IsChannelling() || 
                 pPlayerMainPlayer.IsBusy() || CheckAnyButton())
             {
+                StopChargeSFX();
                 // print(!IsPlayerInSight() +","+  !MainPlayer.IsChannelling() + "," + pPlayerMainPlayer.IsBusy() + "," + CheckAnyButton());
                 StopChannelling();
                 yield break;
@@ -214,8 +224,7 @@ public class TeleportComponent : PlayerComponentInterface
 
     public IEnumerator StartTeleport()
     {
-
-       
+        PlayTeleportInSFX();
         // Change alpha value to 0
         StartCoroutine(MainPlayer.AlphaFade());
 
@@ -241,13 +250,53 @@ public class TeleportComponent : PlayerComponentInterface
         // Set new position
         gameObject.transform.position = MainPlayer.teleportTarget;
 
-
-
-
         // Change alpha value to 1
         StartCoroutine(MainPlayer.AlphaFade(1));
 
         MainPlayer.CurrentState = MainPlayer.State.Idle;
         doTeleport = false;
+        PlayTeleportOutSFX();
+    }
+
+    public void PlayTeleportInSFX()
+    {
+        int id = SoundManager.PlaySound(teleportInSFX, 0.4f, false, gameObject.transform);
+        Audio open = SoundManager.GetAudio(id);
+        open.audioSource.rolloffMode = AudioRolloffMode.Custom;
+
+        open.Set3DDistances(2f, 15f);
+        open.audioSource.spatialBlend = 1f;
+    }
+
+    public void PlayTeleportOutSFX()
+    {
+        int id = SoundManager.PlaySound(teleportInSFX, 0.4f, false, gameObject.transform);
+        Audio open = SoundManager.GetAudio(id);
+        open.audioSource.rolloffMode = AudioRolloffMode.Custom;
+
+        open.Set3DDistances(2f, 15f);
+        open.audioSource.spatialBlend = 1f;
+    }
+
+    public void PlayChargeSFX()
+    {
+        Audio sound = SoundManager.GetAudio(chargeSFX);
+
+        if (sound == null)
+        {
+            SoundManager.PlaySound(chargeSFX, 0.2f, false, gameObject.transform);
+
+            sound = SoundManager.GetAudio(chargeSFX);
+            sound.Set3DSettings();
+            return;
+        }
+
+        sound.Play();
+        sound.Set3DSettings();
+    }
+
+    public void StopChargeSFX()
+    {
+        SoundManager.GetAudio(chargeSFX).Stop();
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EazyTools.SoundManager;
 /*
  * The main player class to control the state of the player and other behaviours. It searches all 
  * Player Component Interfaces and controls it by updating it in a specific order.
@@ -41,7 +42,7 @@ public class MainPlayer : MonoBehaviour
     private Color color;            // Used to store color reference.
     private Material material;
 
-    
+    public AudioClip footstepSFX;
 
     // Used for channelling
     private float channelTimeRatio = 0;
@@ -288,5 +289,22 @@ public class MainPlayer : MonoBehaviour
     {
         int index = Array.IndexOf(Enum.GetValues(playerIndex.GetType()), playerIndex);
         return index;
+    }
+
+    public void PlayFootStepSFX()
+    {
+        Audio sound = SoundManager.GetAudio(footstepSFX);
+
+        if (sound == null)
+        {
+            SoundManager.PlaySound(footstepSFX, 0.4f, false, gameObject.transform);
+
+            sound = SoundManager.GetAudio(footstepSFX);
+            sound.Set3DSettings();
+            return;
+        }
+
+        sound.Play();
+        sound.Set3DSettings();
     }
 }
