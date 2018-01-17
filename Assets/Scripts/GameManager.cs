@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour {
     private Coroutine slowMotionCoroutine;
     private float lerpSpeed;
 
+
     public static GameManager Instance
     {
         get
@@ -35,10 +36,6 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    private void Update()
-    {
-      
-    }
 
     void Awake () {
         _instance = this;
@@ -53,6 +50,11 @@ public class GameManager : MonoBehaviour {
     {
         gameOver = true;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void BackToMainMenu()
+    {
+        SceneManager.LoadScene("main_menu");
     }
 
     public void ReloadCheckpoint()

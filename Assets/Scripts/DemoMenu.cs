@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class DemoMenu : MonoBehaviour {
 
-
+    // main menu
     public void PlayGame()
     {
         SceneManager.LoadScene("Level1");
@@ -15,5 +15,28 @@ public class DemoMenu : MonoBehaviour {
     {
         Application.Quit();
     }
+
+    // pup up menu
+    public void LoadNextLevel()
+    {
+        GameManager.Instance.LoadNextScene();
+    }
+
+    public void LoadCheckpoint()
+    {
+        GameManager.Instance.ReloadCheckpoint();
+    }
+
+    public void ReloadScene()
+    {
+        GameManager.Instance.ReloadScene();
+    }
+
+    public void BackToMainMenu()
+    {
+        GameManager.Instance.BackToMainMenu();      
+    }
+
+
 
 }
