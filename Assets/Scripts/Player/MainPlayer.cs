@@ -256,7 +256,7 @@ public class MainPlayer : MonoBehaviour
 
     public IEnumerator AlphaFade(float pAlpha = 0)
     {
-        yield return null;
+        yield break;
         // Alpha start value.
         float currentAlpha = material.color.a;
 

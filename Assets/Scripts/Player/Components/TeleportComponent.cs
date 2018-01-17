@@ -172,7 +172,6 @@ public class TeleportComponent : PlayerComponentInterface
             (-pPlayer.transform.position + gameObject.transform.position).normalized * outerRadius;
         MainPlayer.CurrentState = MainPlayer.State.Teleported;
         UpdateChannelTimeRatio();
-        print(currentTime);
     }
 
     private void StopChannelling()
