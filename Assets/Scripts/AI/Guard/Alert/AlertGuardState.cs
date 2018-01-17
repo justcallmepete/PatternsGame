@@ -11,8 +11,9 @@ public class AlertGuardState : GuardState
 
     public override void OnStateEnter()
     {
-        context.IndicatorColor = Color.red;
-        context.MovementSpeed = context.alertMovementSpeed;   
+        context.Indicator = GuardStateMachine.IndicatorImage.Alert;
+        context.MovementSpeed = context.alertMovementSpeed;
+        context.VisionColor = Color.red;
     }
 
     public override void OnDistraction(Vector3 target)

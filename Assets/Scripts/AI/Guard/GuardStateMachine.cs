@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 /** This class is used as the Context class for the Guard State Machine 
  * See https://sourcemaking.com/design_patterns/state and 
@@ -14,6 +14,14 @@ public class GuardStateMachine : MonoBehaviour {
         BackAndForth,
         Loop,
         Roaming
+    }
+
+    public enum IndicatorImage
+    {
+        None,
+        Blinded,
+        Searching,
+        Alert
     }
 
 
@@ -44,7 +52,9 @@ public class GuardStateMachine : MonoBehaviour {
     public float chaseTime;
 
     [Header("General")]
-    public GameObject indicator;
+    public Image indicator;
+    public Sprite[] indicators;
+    public GameObject vision;
 
     [Header("Debug Options")]
     [SerializeField]
@@ -53,8 +63,10 @@ public class GuardStateMachine : MonoBehaviour {
     //Private values
     [SerializeField]
     private GuardState state;
+    bool inLight = true;
 
     //Properties
+    public bool InLight { get { return inLight; } set { inLight = value; } }
     public Vector3 StartLocation { get { return startLocation; } set { startLocation = value; } }
     private Vector3 startLocation; // Save the spawn location so guards can return to it.
     public Vector3 StartRotation { get { return startRotation; } set { startRotation = value; } }
@@ -67,7 +79,35 @@ public class GuardStateMachine : MonoBehaviour {
     private GameObject targetPlayer;
     public NavMeshAgent NavigationAgent { get { return agent; } set { } }
     private NavMeshAgent agent;
-    public Color IndicatorColor { get { return indicator.GetComponent<MeshRenderer>().material.color; } set { indicator.GetComponent<MeshRenderer>().material.color = value; } }
+    public Color VisionColor { get {return vision.GetComponentInChildren<MeshRenderer>().material.color; } set { vision.GetComponentInChildren<MeshRenderer>().material.color = value; } }
+    private IndicatorImage indicatorImage = IndicatorImage.None;
+    public IndicatorImage Indicator { get { return indicatorImage; } set {
+            switch (value)
+            {
+                case IndicatorImage.None:
+                    indicator.gameObject.SetActive(false);
+                    break;
+                case IndicatorImage.Blinded:
+                    indicator.gameObject.SetActive(true);
+                    indicator.sprite = indicators[0];
+                    indicator.color = Color.white;
+                     break;
+                case IndicatorImage.Searching:
+                    indicator.gameObject.SetActive(true);
+                    indicator.sprite = indicators[1];
+                    indicator.color = Color.yellow;
+                    break;
+                case IndicatorImage.Alert:
+                    indicator.gameObject.SetActive(true);
+                    indicator.sprite = indicators[2];
+                    indicator.color = Color.red;
+                    break;
+                default:
+                    indicator.gameObject.SetActive(false);
+                    break;
+            }
+        }
+    }
     public GuardPatrol PatrolRoute { get { return patrol; } set { patrol = value; } }
     public float MovementSpeed { get { return NavigationAgent.speed; } set { NavigationAgent.speed = value; } }
     private float rotationSpeed;
@@ -93,8 +133,14 @@ public class GuardStateMachine : MonoBehaviour {
     }
 
     void Update () {
+        if (!inLight)
+        {
+            GoToState(new BlindedGuardState(this));
+        }
         state.Update();
     }
+
+
 
     //Call when the Guard sees or hears a distraction. (Go to Searching state)
     public void Distract(Vector3 position)
