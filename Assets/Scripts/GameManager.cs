@@ -115,4 +115,12 @@ public class GameManager : MonoBehaviour {
 
         StartCoroutine(ReloadCheckpoint(1f));
     }
+
+    private void ResetGuards()
+    {
+        foreach(GameObject g in guards)
+        {
+            g.GetComponent<GuardStateMachine>().Reset();
+        }
+    }
 }

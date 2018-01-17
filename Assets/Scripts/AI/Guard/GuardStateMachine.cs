@@ -175,6 +175,17 @@ public class GuardStateMachine : MonoBehaviour {
        // GameManager.Instance.ReloadCheckpoint();
     }
 
+    public void Reset()
+    {
+        this.NavigationAgent.isStopped = true;
+       
+        this.transform.position = startLocation;
+        this.transform.eulerAngles = startRotation;
+        TargetPlayer = null;
+        GoToState(new PatrollingState(this));
+
+    }
+
     public void GoToState(GuardState newState)
     {
         if (state != null)
