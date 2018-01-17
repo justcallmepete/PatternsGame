@@ -18,16 +18,22 @@ public class Elevator : Interactable {
     public AudioClip closeSFX;
     public AudioClip arriveSFX;
     public AudioClip departSFX;
+    public AudioClip lockedSFX;
+    private AudioClip lockedSFXId;
 
     public bool isExitElevator = true;
     GameObject[] players;
     Vector3[] playerPositions;
     GameObject floor;
 
+    private ElevatorDoor[] listOfDoors;
 
     // Use this for initialization
     void Start () {
         anim = gameObject.GetComponent<Animator>();
+
+        listOfDoors = GetComponentsInChildren<ElevatorDoor>();
+
         if (!isExitElevator) {
             players = GameObject.FindGameObjectsWithTag("Player");
             playerPositions = new Vector3[2];
@@ -54,6 +60,10 @@ public class Elevator : Interactable {
             Open();
 
             return;
+        }
+        else
+        {
+            PlayLockedSFX();
         }
         Debug.Log("Elevator is Locked");
     }
@@ -84,6 +94,14 @@ public class Elevator : Interactable {
     public void LoadNextScene()
     {
         GameManager.Instance.LoadNextScene();
+    }
+
+    public void ChangeOutlineSlidingDoor(bool eraseRenderer)
+    {
+        for (int i = 0; i < listOfDoors.Length; i++)
+        {
+            listOfDoors[i].outline.eraseRenderer = eraseRenderer;
+        }
     }
 
     public void PlayOpenSFX()
@@ -117,5 +135,27 @@ public class Elevator : Interactable {
         int id = SoundManager.PlaySound(departSFX, 0.4f, false, gameObject.transform);
         Audio open = SoundManager.GetAudio(id);
         open.audioSource.rolloffMode = AudioRolloffMode.Custom;
+    }
+
+    public void PlayLockedSFX()
+    {
+        Audio sound = SoundManager.GetAudio(lockedSFX);
+
+        if (sound == null)
+        {
+            SoundManager.PlaySound(lockedSFX, 0.4f, false, gameObject.transform);
+
+            sound = SoundManager.GetAudio(lockedSFX);
+            sound.Set3DSettings();
+            return;
+        }
+
+        if (sound.playing)
+        {
+            return;
+        }
+
+        sound.Play();
+        sound.Set3DSettings();
     }
 }
