@@ -35,7 +35,12 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-	void Awake () {
+    private void Update()
+    {
+      
+    }
+
+    void Awake () {
         _instance = this;
         guards = GameObject.FindGameObjectsWithTag("Guard");
         players = GameObject.FindGameObjectsWithTag("Player");
