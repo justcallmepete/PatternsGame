@@ -308,6 +308,7 @@ public class LevelCreator : MonoBehaviour {
             float rightSmallestScale = rightWall.transform.localScale.x;
             for (int i = 0; i < levelBases.Count; i++)
             {
+                if (levelBases[i] == null) continue;
                 BoxCollider levelBaseBoxCollider = levelBases[i].GetComponent<BoxCollider>();
                 LevelCreatorUtils.WallsBounds levelBaseBounds = LevelCreatorUtils.BoxColliderToWallbounds(levelBases[i].transform.position, levelBaseBoxCollider);
                 if (leftBoxCollider.bounds.Intersects(levelBaseBoxCollider.bounds)) //Top box
