@@ -22,7 +22,6 @@ public abstract class Interactable : MonoBehaviour
     public virtual void OnInteract(GameObject obj) { }
     public virtual void ChangeOutline(bool eraseRenderer)
     {
-        print(outline);
         outline.eraseRenderer = eraseRenderer;
     }
 

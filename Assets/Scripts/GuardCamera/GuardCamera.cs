@@ -35,6 +35,9 @@ public class GuardCamera : MonoBehaviour {
     [SerializeField]
     List<SlidingDoor> doorsToOpen;
 
+    [SerializeField]
+    bool isOffOnStart = false;
+
     [ExecuteInEditMode]
     void OnValidate()
     {
@@ -59,6 +62,8 @@ public class GuardCamera : MonoBehaviour {
 
         setStandard();
         GetNextRotatePosition();
+
+        if (isOffOnStart) currentState = RotateState.turnedOff;
 	}
 	
 	// Update is called once per frame
@@ -179,7 +184,7 @@ public class GuardCamera : MonoBehaviour {
                 guardsToAlert.RemoveAt(i);
                 continue;
             }
-            guardsToAlert[i].Alert(playersInVision[0].gameObject);
+            guardsToAlert[i].Distract(playersInVision[0].gameObject.transform.position);
         }
     }
 

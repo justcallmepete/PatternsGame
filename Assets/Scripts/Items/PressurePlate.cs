@@ -53,7 +53,7 @@ public class PressurePlate : MonoBehaviour {
         if (currentMass >= minimalMass)
         {
             //Debug.Log("Open the door");
-            door.Open();
+            door.Open(3f);
 
             // Remove the lock if must not hold
             if (!mustHold)
