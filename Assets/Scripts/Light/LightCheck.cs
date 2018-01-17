@@ -8,11 +8,35 @@ public class LightCheck : MonoBehaviour {
     public bool LightIsActive { get { return lightIsActive; } set { lightIsActive = value; } }
     public bool lightIsActive = true;
 
+    private Light myLight;
+
+    public bool isOffOnStart = false;
+
+    private void Awake()
+    {
+        myLight = GetComponent<Light>();
+    }
+
+    private void Start()
+    {
+        if (isOffOnStart)
+        {
+            lightIsActive = false;
+            myLight.enabled = false;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if(lightIsActive && other.gameObject.GetComponent<MainPlayer>() != null)
         {
             other.gameObject.GetComponent<MainPlayer>().lightStandingIn.Add(this.gameObject);
+        }
+
+        GuardStateMachine gsm = other.gameObject.GetComponentInParent<GuardStateMachine>();
+        if (lightIsActive && gsm != null)
+        {
+            gsm.InLight = true;
         }
     }
 
@@ -21,6 +45,27 @@ public class LightCheck : MonoBehaviour {
         if (lightIsActive && other.gameObject.GetComponent<MainPlayer>() != null)
         {
             other.gameObject.GetComponent<MainPlayer>().lightStandingIn.Remove(this.gameObject);
+        }
+
+        GuardStateMachine gsm = other.gameObject.GetComponentInParent<GuardStateMachine>();
+        if (lightIsActive && gsm != null)
+        {
+            Debug.Log("no light");
+            gsm.InLight = false;
+        }
+    }
+
+    public void ToggleLight()
+    {
+        if (!lightIsActive)
+        {
+            lightIsActive = true;
+            myLight.enabled = true;
+        }
+        else
+        {
+            lightIsActive = false;
+            myLight.enabled = false;
         }
     }
 

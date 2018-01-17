@@ -338,18 +338,21 @@ public class LevelCreatorEditor : Editor {
 
     void BuildNewRoom()
     {
+        ActiveEditorTracker.sharedTracker.isLocked = true;
         levelCreator.SpawnRoom();
         currentState = MenuStates.buildRoom;
     }
 
     void BuildNewWall()
     {
+        ActiveEditorTracker.sharedTracker.isLocked = true;
         levelCreator.SpawnWall();
         currentState = MenuStates.buildWall;
     }
 
     void BuildNewDoor()
     {
+        ActiveEditorTracker.sharedTracker.isLocked = true;
         levelCreator.SpawnDoor();
         currentState = MenuStates.buildDoor;
     }

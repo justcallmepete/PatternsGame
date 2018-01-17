@@ -167,16 +167,7 @@ public class ChargeSystem : MonoBehaviour
         MainPlayer player = target.GetComponent<MainPlayer>();
         player.GetHit();
         currentState = ChargeState.done;
-        StartCoroutine(DelayBeforeReload(3f));
         GameManager.Instance.SlowMotion(0.2f, 3);
-    }
-
-    IEnumerator DelayBeforeReload(float sec)
-    {
-        yield return new WaitForSeconds(sec);
-
-        // Should be in, doesnt work atm
-        GameManager.Instance.ReloadCheckpoint();
     }
 
     IEnumerator RemoveLaser(float sec)

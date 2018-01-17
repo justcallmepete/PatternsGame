@@ -32,7 +32,7 @@ public class Elevator : Interactable {
             players = GameObject.FindGameObjectsWithTag("Player");
             playerPositions = new Vector3[2];
             floor = GameObject.FindGameObjectWithTag("Floor");
-            floor.GetComponent < MeshCollider>().enabled = false;
+            floor.GetComponent <BoxCollider>().enabled = false;
             for (int i = 0; i < players.Length; i++)
             {
                 playerPositions[i] = players[i].transform.position;
@@ -70,7 +70,7 @@ public class Elevator : Interactable {
 
     public void ElevatorArrived()
     {       
-        floor.GetComponent<MeshCollider>().enabled = true;
+        floor.GetComponent<BoxCollider>().enabled = true;
     }
 
     public void DepartElevator()

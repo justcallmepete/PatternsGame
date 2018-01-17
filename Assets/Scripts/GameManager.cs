@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour {
     private Coroutine slowMotionCoroutine;
     private float lerpSpeed;
 
+
     public static GameManager Instance
     {
         get
@@ -35,7 +36,8 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-	void Awake () {
+
+    void Awake () {
         _instance = this;
         guards = GameObject.FindGameObjectsWithTag("Guard");
         players = GameObject.FindGameObjectsWithTag("Player");
@@ -50,8 +52,22 @@ public class GameManager : MonoBehaviour {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public void ReloadCheckpoint()
+    public void BackToMainMenu()
     {
+        SceneManager.LoadScene("main_menu");
+    }
+
+    public IEnumerator ReloadCheckpoint(float sec)
+    {
+        if (gameOver)
+        {
+            yield break;
+        }
+
+        gameOver = true;
+
+        yield return new WaitForSeconds(sec);
+    
         SaveLoadControl.Instance.LoadData(true);
     }
 
@@ -96,5 +112,7 @@ public class GameManager : MonoBehaviour {
             elapsedTime += Time.unscaledDeltaTime;
             yield return new WaitForEndOfFrame();
         }
+
+        StartCoroutine(ReloadCheckpoint(1f));
     }
 }
