@@ -135,6 +135,11 @@ public class LevelCreatorUtils : MonoBehaviour {
             return new Vector3(1, 0, -1);
         }
 
+        public Vector3 GetCornerPosition(Vector3 cornerDirection)
+        {
+            return Vector3.zero;
+        }
+
         public void UpdateInfo(BoxCollider pBoxCol)
         {
             this = LevelCreatorUtils.BoxColliderToWallbounds(center, pBoxCol);

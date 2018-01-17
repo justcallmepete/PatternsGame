@@ -8,11 +8,19 @@ using UnityEditor;
 public class LevelCreatorEditor : Editor {
     LevelCreator levelCreator;
     
-    enum MenuStates { buildBase = 0, mainMenu = 1, buildRoom = 2, buildWall = 3};
+    enum MenuStates { buildBase = 0, mainMenu = 1, buildRoom = 2, buildWall = 3, buildDoor = 4};
     MenuStates currentState;
-    void OnEnable()
-    {
 
+    float buttonWidth = 50f;
+    float buttonHeight = 50f;
+
+    void OnAwake()
+    {
+        if (!levelCreator.levelBaseMain)
+        {
+            levelCreator.levelBaseMain = GameObject.Find("levelBaseMain");
+
+        }
     }
 
     public override void OnInspectorGUI()
@@ -20,8 +28,12 @@ public class LevelCreatorEditor : Editor {
         levelCreator = (LevelCreator)target;
         if (!levelCreator.levelBaseMain)
         {
-            DrawBuildBaseScreen();
-            return;
+            levelCreator.levelBaseMain = GameObject.Find("levelBaseMain");
+            if (!levelCreator.levelBaseMain)
+            {
+                DrawBuildBaseScreen();
+                return;
+            }
         }
         switch (currentState) {
             case MenuStates.mainMenu:
@@ -43,6 +55,15 @@ public class LevelCreatorEditor : Editor {
                     break;
                 }
                 DrawBuildWallScreen();
+                break;
+            case MenuStates.buildDoor:
+                if (levelCreator.doorBeingMade == null)
+                {
+                    Debug.Log("levelCreator.doorBeingMade == null");
+                    currentState = MenuStates.mainMenu;
+                    break;
+                }
+                DrawBuildDoorScreen();
                 break;
             default:
                 DrawMainScreen();
@@ -77,7 +98,7 @@ public class LevelCreatorEditor : Editor {
         EditorGUILayout.BeginHorizontal("Button");
         if (GUILayout.Button("Build Door", GUILayout.Height(100)))
         {
-
+            BuildNewDoor();
         }
         if (GUILayout.Button("Build Item", GUILayout.Height(100)))
         {
@@ -190,9 +211,6 @@ public class LevelCreatorEditor : Editor {
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         //Ratio region
         #region
-
-        float buttonWidth = 50f;
-        float buttonHeight = 50f;
         GUILayout.BeginHorizontal();
         EditorGUILayout.LabelField("Select Wall ratio");
         GUILayout.EndHorizontal();
@@ -278,6 +296,46 @@ public class LevelCreatorEditor : Editor {
         #endregion
     }
 
+    void DrawBuildDoorScreen()
+    {
+        //Rotate button
+
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        if (GUILayout.Button("Rotate door"))
+        {
+            levelCreator.ToggleRotateDoor();
+        }
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+        //Confirm / deny region
+        #region
+        GUIContent confirmPlacement = new GUIContent("\u2611", "Confirm wall placement");
+        GUIContent denyPlacement = new GUIContent("\u2612", "deny wall placement");
+
+
+        GUILayout.BeginHorizontal();
+        EditorGUILayout.PrefixLabel("Confirm or deny placement");
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
+        GUI.color = Color.green;
+        GUILayout.FlexibleSpace();
+        if (GUILayout.Button(confirmPlacement, EditorStyles.miniButtonLeft, GUILayout.MinWidth(buttonWidth / 2), GUILayout.MinHeight(buttonHeight / 2)))
+        {
+            levelCreator.ConfirmDoorPlacement();
+            currentState = MenuStates.mainMenu;
+        }
+        GUI.color = Color.red;
+        if (GUILayout.Button(denyPlacement, EditorStyles.miniButtonRight, GUILayout.MinWidth(buttonWidth / 2), GUILayout.MinHeight(buttonHeight / 2)))
+        {
+            levelCreator.DenyDoorPlacement();
+            currentState = MenuStates.mainMenu;
+            ActiveEditorTracker.sharedTracker.isLocked = false;
+        }
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+        #endregion
+    }
+
     void BuildNewRoom()
     {
         levelCreator.SpawnRoom();
@@ -286,9 +344,13 @@ public class LevelCreatorEditor : Editor {
 
     void BuildNewWall()
     {
-        Debug.Log("BuildNewWall");
         levelCreator.SpawnWall();
         currentState = MenuStates.buildWall;
     }
 
+    void BuildNewDoor()
+    {
+        levelCreator.SpawnDoor();
+        currentState = MenuStates.buildDoor;
+    }
 }

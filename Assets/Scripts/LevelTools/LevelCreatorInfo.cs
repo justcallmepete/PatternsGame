@@ -27,6 +27,7 @@ public class LevelCreatorInfo : MonoBehaviour {
 
     public LevelBase levelBase;
     public Room basicRoom;
+    public SlidingDoor doorPrefab;
 
     private void Awake()
     {

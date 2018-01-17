@@ -14,22 +14,29 @@ public class LevelCreator : MonoBehaviour {
     private Room basicRoomPrefab;
 
     [SerializeField]
-    private List<LevelBase> levelBases;
-    private List<LevelBase> newLevelBases;
+    public List<LevelBase> levelBases;
+    public List<LevelBase> newLevelBases;
     public List<Room> rooms;
+    public List<SlidingDoor> doors;
 
     [HideInInspector]
     public Room roomBeingBuild;
     [HideInInspector]
     public LevelBase wallBeingMade;
+    public SlidingDoor doorBeingMade;
+    public Vector3 doorDirection;
     [HideInInspector]
-    public bool roomIsRotated, wallIsRotated; 
+    public bool roomIsRotated, wallIsRotated, doorIsRotated; 
     public float testValue;
     // Use this for initialization
     private void OnEnable()
     {
         roomIsRotated = false;
         wallIsRotated = false;
+        levelCreatorInfo = AssetDatabase.LoadAssetAtPath("Assets/Resources/Prefabs/LevelCreatorInfo.prefab", typeof(LevelCreatorInfo)) as LevelCreatorInfo;
+        levelBases = GetAllWalls();
+        basicRoomPrefab = levelCreatorInfo.basicRoom;
+        levelBasePrefab = levelCreatorInfo.levelBase;
     }
 
     public void SelectInInspector()
@@ -47,7 +54,6 @@ public class LevelCreator : MonoBehaviour {
         levelCreatorInfo = AssetDatabase.LoadAssetAtPath("Assets/Resources/Prefabs/LevelCreatorInfo.prefab", typeof(LevelCreatorInfo)) as LevelCreatorInfo;
         levelBaseMain = new GameObject();
         levelBaseMain.name = "levelBaseMain";
-        levelBasePrefab = levelCreatorInfo.levelBase;
         LevelBase levelBaseStart = Instantiate(levelBasePrefab);
         levelBaseStart.transform.localScale = new Vector3(levelCreatorInfo.baseWidth, levelCreatorInfo.wallHeight, levelCreatorInfo.baseLenght);
 
@@ -58,9 +64,10 @@ public class LevelCreator : MonoBehaviour {
         levelBases.Add(levelBaseStart);
     }
 
+    //Room methods region
+    #region 
     public void SpawnRoom()
     {
-        basicRoomPrefab = levelCreatorInfo.basicRoom;
         roomBeingBuild = Instantiate(basicRoomPrefab);
         roomBeingBuild.transform.localScale = new Vector3(10, levelCreatorInfo.wallHeight, 10);
 
@@ -104,14 +111,240 @@ public class LevelCreator : MonoBehaviour {
         roomBeingBuild.ConfirmPLacement();
         UpdateMeshes(roomBeingBuild);
         rooms.Add(roomBeingBuild);
+        DestroyImmediate(roomBeingBuild.GetComponent<BoxCollider>());
+        roomBeingBuild = null;
     }
 
     public void DenyRoomPlacement()
     {
         DestroyImmediate(roomBeingBuild.gameObject);
         SelectInInspector();
+        roomBeingBuild = null;
+    }
+    #endregion
+    //Wall methods region
+    #region
+    public void SpawnWall()
+    {
+        //Instantiate wall
+        wallBeingMade = Instantiate(levelBasePrefab);
+        wallBeingMade.transform.localScale = new Vector3(2, levelCreatorInfo.wallHeight, 2);
+        ActiveEditorTracker.sharedTracker.isLocked = true;
+        GameObject[] selectObject = new GameObject[1];
+        selectObject[0] = wallBeingMade.gameObject;
+        Selection.objects = selectObject;
+
+        wallBeingMade.denominator = 1;
+        wallBeingMade.numerator = 1;
+        //Check if intersecting with walls
+
+        //Cut of part that is intersecting with wall
     }
 
+    public void ConfirmWallPlacement()
+    {
+        wallBeingMade.ConfirmPlacement();
+        levelBases.Add(wallBeingMade);
+        wallBeingMade.transform.parent = levelBaseMain.transform;
+        wallBeingMade = null;
+    }
+
+    public void DenyWallPlacement()
+    {
+        DestroyImmediate(wallBeingMade.gameObject);
+        SelectInInspector();
+        wallBeingMade = null;
+    }
+
+    public void SetWallRatio(int pNumerator, int pDenominator)
+    {
+
+        wallBeingMade.numerator = pNumerator;
+        wallBeingMade.denominator = pDenominator;
+
+        wallBeingMade.UpdateSize(wallIsRotated);
+    }
+
+    public float setWallScale
+    {
+        get
+        {
+            return wallBeingMade.editorSize;
+        }
+        set
+        {
+            wallBeingMade.editorSize = value;
+            wallBeingMade.UpdateSize(wallIsRotated);
+        }
+    }
+
+    public void ToggleRotateWall()
+    {
+        wallIsRotated = wallIsRotated ? false : true;
+    }
+    #endregion
+
+    //Door methods region
+    #region
+    public void SpawnDoor()
+    {
+        doorBeingMade = Instantiate(levelCreatorInfo.doorPrefab);
+        doorDirection = new Vector3(1, 0, 0);
+
+
+        GameObject[] selectObject = new GameObject[1];
+        selectObject[0] = doorBeingMade.gameObject;
+        Selection.objects = selectObject;
+    }
+
+    public void ToggleRotateDoor()
+    {//Rotate clockwise
+        if(doorDirection.x != 0)
+        {
+            float oldDir = doorDirection.x;
+            doorBeingMade.transform.Rotate(0, -90, 0);
+            doorDirection = new Vector3(0, 0, 1);
+        }
+        else
+        {
+            float oldDir = doorDirection.z;
+            doorDirection = new Vector3(1, 0, 0);
+            doorBeingMade.transform.Rotate(0, +90, 0);
+        }
+    }
+    public void ConfirmDoorPlacement()
+    {
+        Vector3 leftWallPos = doorBeingMade.transform.Find("WallSideLeft").position;
+        Vector3 rightWallPos = doorBeingMade.transform.Find("WallSideRight").position;
+        doors.Add(doorBeingMade);
+        Vector3 doorScale = new Vector3(1, 0, 4);
+        if (doorDirection.x != 0)
+        {
+            LevelBase topWall = Instantiate(levelBasePrefab);
+            LevelBase bottomWall = Instantiate(levelBasePrefab);
+            //Create top mesh to max
+            float topScale = Mathf.Abs(levelCreatorInfo.baseLenght / 2 - leftWallPos.z);
+            float bottomScale = Mathf.Abs(rightWallPos.z - levelCreatorInfo.baseLenght/2);
+            topWall.transform.localScale = new Vector3(1, levelCreatorInfo.wallHeight, topScale);
+            bottomWall.transform.localScale = new Vector3(1, levelCreatorInfo.wallHeight, bottomScale);
+            topWall.transform.position = doorBeingMade.transform.position + new Vector3(0,0, topWall.transform.localScale.z/2) + new Vector3(0, 0, (leftWallPos.z - rightWallPos.z) / 2);
+            bottomWall.transform.position = doorBeingMade.transform.position - new Vector3(0, 0, bottomWall.transform.localScale.z / 2) + new Vector3(0, 0, (leftWallPos.z - rightWallPos.z) / 2);
+
+            BoxCollider firstBoxcollider = topWall.GetComponent<BoxCollider>();
+            BoxCollider secondBoxCollider = bottomWall.GetComponent<BoxCollider>();
+            float firstSmallestScale = topWall.transform.localScale.z;
+            float secondSmallestScale = bottomWall.transform.localScale.z;
+            for (int i = 0; i < levelBases.Count; i++)
+            {
+                BoxCollider levelBaseBoxCollider = levelBases[i].GetComponent<BoxCollider>();
+                LevelCreatorUtils.WallsBounds levelBaseBounds = LevelCreatorUtils.BoxColliderToWallbounds(levelBases[i].transform.position, levelBaseBoxCollider);
+                if (firstBoxcollider.bounds.Intersects(levelBaseBoxCollider.bounds)) //Top box
+                {
+                    if (levelBaseBounds.minWallsZ < leftWallPos.z)
+                    {
+                        Debug.LogWarning("Corner of door is in a wall");
+                        Debug.Log(levelBaseBounds.ToString());
+                        continue;
+                    }
+                    float zDistanceToWall = levelBaseBounds.minWallsZ - leftWallPos.z;
+                    if (zDistanceToWall < firstSmallestScale)
+                    {
+                        firstSmallestScale = zDistanceToWall;
+                    }
+                }
+                if (secondBoxCollider.bounds.Intersects(levelBaseBoxCollider.bounds)) // Bottom box
+                {
+                    Debug.DrawLine(levelBaseBounds.center, Vector3.zero, Color.red, 10f);
+                    Debug.Log(levelBaseBounds.ToString());
+                    if (levelBaseBounds.maxWallsZ > rightWallPos.z)
+                    {
+                        Debug.LogWarning("Corner of door is in a wall");
+                        continue;
+                    }
+                    float zDistanceToWall = rightWallPos.z - levelBaseBounds.maxWallsZ;
+                    if (zDistanceToWall < secondSmallestScale)
+                    {
+                        secondSmallestScale = zDistanceToWall;
+                    }
+                }
+            }
+
+            topWall.transform.localScale = new Vector3(1, levelCreatorInfo.wallHeight, firstSmallestScale);
+            bottomWall.transform.localScale = new Vector3(1, levelCreatorInfo.wallHeight, -secondSmallestScale);
+            topWall.transform.position = doorBeingMade.transform.position + new Vector3(0, 0, topWall.transform.localScale.z / 2) + new Vector3(0, 0, (leftWallPos.z - rightWallPos.z) / 2);
+            bottomWall.transform.position = doorBeingMade.transform.position + new Vector3(0, 0, bottomWall.transform.localScale.z / 2) - new Vector3(0, 0, (leftWallPos.z - rightWallPos.z) / 2);
+
+
+            levelBases.Add(topWall);
+            levelBases.Add(bottomWall);
+        }
+        else
+        {
+            LevelBase leftWall = Instantiate(levelBasePrefab);
+            LevelBase rightWall = Instantiate(levelBasePrefab);
+            float leftScale = Mathf.Abs(levelCreatorInfo.baseWidth / 2 - leftWallPos.x);
+            float rightScale = Mathf.Abs(leftWallPos.x - levelCreatorInfo.baseWidth / 2);
+            leftWall.transform.localScale = new Vector3(leftScale, levelCreatorInfo.wallHeight,1);
+            rightWall.transform.localScale = new Vector3(rightScale, levelCreatorInfo.wallHeight,1);
+            leftWall.transform.position = doorBeingMade.transform.position - new Vector3(leftWall.transform.localScale.x / 2,0,0) - new Vector3((rightWallPos.x-leftWallPos.x) / 2, 0, 0);
+            rightWall.transform.position = doorBeingMade.transform.position + new Vector3(rightWall.transform.localScale.x / 2,0,0) + new Vector3((rightWallPos.x - leftWallPos.x) / 2, 0, 0);
+            
+            BoxCollider leftBoxCollider = leftWall.GetComponent<BoxCollider>();
+            BoxCollider rightBoxCollider = rightWall.GetComponent<BoxCollider>();
+            float leftSmallestScale = leftWall.transform.localScale.x;
+            float rightSmallestScale = rightWall.transform.localScale.x;
+            for (int i = 0; i < levelBases.Count; i++)
+            {
+                BoxCollider levelBaseBoxCollider = levelBases[i].GetComponent<BoxCollider>();
+                LevelCreatorUtils.WallsBounds levelBaseBounds = LevelCreatorUtils.BoxColliderToWallbounds(levelBases[i].transform.position, levelBaseBoxCollider);
+                if (leftBoxCollider.bounds.Intersects(levelBaseBoxCollider.bounds)) //Top box
+                {
+                    Debug.DrawLine(levelBases[i].transform.position, leftWall.transform.position, Color.red, 10f);
+                    if (levelBaseBounds.maxWallsX > leftWallPos.x)
+                    {
+                        Debug.LogWarning("Corner of door is in a wall");
+                        Debug.Log(levelBaseBounds.ToString());
+                        continue;
+                    }
+                    float xDistanceToWall = leftWallPos.x - levelBaseBounds.maxWallsX;
+                    if (xDistanceToWall < leftSmallestScale)
+                    {
+                        Debug.DrawLine(doorBeingMade.transform.position, new Vector3(levelBaseBounds.maxWallsX, levelBases[i].transform.position.y, levelBases[i].transform.position.z), Color.yellow, 10f);
+                        leftSmallestScale = xDistanceToWall;
+                    }
+                }
+                if (rightBoxCollider.bounds.Intersects(levelBaseBoxCollider.bounds)) // Bottom box
+                {
+                    if (levelBaseBounds.minWallsX < rightWallPos.x)
+                    {
+                        Debug.LogWarning("Corner of door is in a wall");
+                        continue;
+                    }
+                    float xDistanceToWall = levelBaseBounds.minWallsX - rightWallPos.x;
+                    if (xDistanceToWall < rightSmallestScale)
+                    {
+                        rightSmallestScale = xDistanceToWall;
+                    }
+                }                
+            }
+
+            leftWall.transform.localScale = new Vector3(leftSmallestScale, levelCreatorInfo.wallHeight, 1);
+            rightWall.transform.localScale = new Vector3(   rightSmallestScale, levelCreatorInfo.wallHeight, 1);
+            leftWall.transform.position = doorBeingMade.transform.position - new Vector3(leftWall.transform.localScale.x / 2, 0, 0) - new Vector3((rightWallPos.x - leftWallPos.x) / 2, 0, 0);
+            rightWall.transform.position = doorBeingMade.transform.position + new Vector3(rightWall.transform.localScale.x / 2, 0, 0) + new Vector3((rightWallPos.x - leftWallPos.x) / 2, 0, 0);
+
+            leftWall.transform.name = "leftWall";
+            rightWall.transform.name = "rightWall";
+            levelBases.Add(leftWall);
+            levelBases.Add(rightWall);
+        }
+    }
+
+    public void DenyDoorPlacement()
+    {
+        DestroyImmediate(doorBeingMade.gameObject);
+    }
+    #endregion
     /// <summary>
     /// Update meshes will be called when the room is confirmed for palcing.
     /// It will delete all intersecting levelbases and start creating new levelbases around the room.
@@ -158,55 +391,55 @@ public class LevelCreator : MonoBehaviour {
         {
             if (cornersInLevelbase > 3) // Splice in 4
             {
-                CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(0, 0, 1));
-                CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(0, 0, -1));
-                CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(1, 0, 0));
-                CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(-1, 0, 0));
+                CreateNewSubMesh(pSpliceMesh, pUpdatedRoom.wallBounds, new Vector3(0, 0, 1));
+                CreateNewSubMesh(pSpliceMesh, pUpdatedRoom.wallBounds, new Vector3(0, 0, -1));
+                CreateNewSubMesh(pSpliceMesh, pUpdatedRoom.wallBounds, new Vector3(1, 0, 0));
+                CreateNewSubMesh(pSpliceMesh, pUpdatedRoom.wallBounds, new Vector3(-1, 0, 0));
             }
             else
             {
                 //Check wich corner is intersecting
                 if (pUpdatedRoom.wallBounds.IsCornerInBound(LevelCreatorUtils.WallsBounds.CornerTopLeft(), levelBaseWallBounds))
                 {
-                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(0, 0, 1));
-                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(-1, 0, 0));
+                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom.wallBounds, new Vector3(0, 0, 1));
+                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom.wallBounds, new Vector3(-1, 0, 0));
                     if (cornersInLevelbase == 2)
                     {
                         if (pUpdatedRoom.wallBounds.IsCornerInBound(LevelCreatorUtils.WallsBounds.CornerTopRight(), levelBaseWallBounds))
                         {
-                            CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(1, 0, 0));
+                            CreateNewSubMesh(pSpliceMesh, pUpdatedRoom.wallBounds, new Vector3(1, 0, 0));
                         }
                         else //Bottom left
                         {
-                            CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(0, 0, -1));
+                            CreateNewSubMesh(pSpliceMesh, pUpdatedRoom.wallBounds, new Vector3(0, 0, -1));
                         }
                     }
                 }
                 else if (pUpdatedRoom.wallBounds.IsCornerInBound(LevelCreatorUtils.WallsBounds.CornerBottomRight(), levelBaseWallBounds))
                 {
-                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(1, 0, 0));
-                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(0, 0, -1));
+                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom.wallBounds, new Vector3(1, 0, 0));
+                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom.wallBounds, new Vector3(0, 0, -1));
                     if (cornersInLevelbase == 2)
                     {
                         if (pUpdatedRoom.wallBounds.IsCornerInBound(LevelCreatorUtils.WallsBounds.CornerTopRight(), levelBaseWallBounds))
                         {
-                            CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(0, 0, 1));
+                            CreateNewSubMesh(pSpliceMesh, pUpdatedRoom.wallBounds, new Vector3(0, 0, 1));
                         }
                         else //Bottom left
                         {
-                            CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(-1, 0, 0));
+                            CreateNewSubMesh(pSpliceMesh, pUpdatedRoom.wallBounds, new Vector3(-1, 0, 0));
                         }
                     }
                 }
                 else if (pUpdatedRoom.wallBounds.IsCornerInBound(LevelCreatorUtils.WallsBounds.CornerTopRight(), levelBaseWallBounds))
                 {
-                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(1, 0, 0));
-                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(0, 0, 1));
+                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom.wallBounds, new Vector3(1, 0, 0));
+                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom.wallBounds, new Vector3(0, 0, 1));
                 }
                 else //Bottom left solo
                 {
-                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(-1, 0, 0));
-                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(0, 0, -1));
+                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom.wallBounds, new Vector3(-1, 0, 0));
+                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom.wallBounds, new Vector3(0, 0, -1));
                 }
             }
         }
@@ -220,35 +453,35 @@ public class LevelCreator : MonoBehaviour {
             }
             else // Move mesh to side
             {
-                if(pUpdatedRoom.wallBounds.minWallsX > levelBaseWallBounds.minWallsX) //Left
+                if (pUpdatedRoom.wallBounds.minWallsX > levelBaseWallBounds.minWallsX) //Left
                 {
-                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(-1, 0, 0));
+                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom.wallBounds, new Vector3(-1, 0, 0));
                     if (pUpdatedRoom.wallBounds.maxWallsX < levelBaseWallBounds.maxWallsX)
                     {
-                        CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(1, 0, 0));
+                        CreateNewSubMesh(pSpliceMesh, pUpdatedRoom.wallBounds, new Vector3(1, 0, 0));
                     }
                 }
-                else if(pUpdatedRoom.wallBounds.maxWallsZ < levelBaseWallBounds.maxWallsZ) //Top
+                else if (pUpdatedRoom.wallBounds.maxWallsZ < levelBaseWallBounds.maxWallsZ) //Top
                 {
-                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(0, 0, 1));
+                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom.wallBounds, new Vector3(0, 0, 1));
                     if (pUpdatedRoom.wallBounds.minWallsZ > levelBaseWallBounds.minWallsZ)
                     {
-                        CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(0, 0, -1));
+                        CreateNewSubMesh(pSpliceMesh, pUpdatedRoom.wallBounds, new Vector3(0, 0, -1));
                     }
                 }
                 else if (pUpdatedRoom.wallBounds.maxWallsX < levelBaseWallBounds.maxWallsX) //Right
                 {
-                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(1, 0, 0));
+                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom.wallBounds, new Vector3(1, 0, 0));
                 }
                 else //Bottom
                 {
-                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom, new Vector3(0, 0, -1));
+                    CreateNewSubMesh(pSpliceMesh, pUpdatedRoom.wallBounds, new Vector3(0, 0, -1));
                 }
             }
         }
     }
 
-    void CreateNewSubMesh(LevelBase originalLevelBase, Room pUpdatedRoom, Vector3 pDirection)
+    void CreateNewSubMesh(LevelBase originalLevelBase,LevelCreatorUtils.WallsBounds roomWallbounds, Vector3 pDirection)
     {
         LevelBase subMesh = Instantiate(levelBasePrefab);
         subMesh.transform.position = originalLevelBase.transform.position;
@@ -259,92 +492,56 @@ public class LevelCreator : MonoBehaviour {
         float zScale = originalLevelBase.transform.localScale.z;
         if (pDirection.x != 0)
         {
-            xScale = pDirection.x == 1 ? originalBounds.maxWallsX - pUpdatedRoom.wallBounds.maxWallsX : originalBounds.minWallsX - pUpdatedRoom.wallBounds.minWallsX;
+            xScale = pDirection.x == 1 ? originalBounds.maxWallsX - roomWallbounds.maxWallsX : originalBounds.minWallsX - roomWallbounds.minWallsX;
             float topReduction = 0;
             float bottomReduction = 0;
             //Delete top scale
-            if (pUpdatedRoom.wallBounds.maxWallsZ < originalBounds.maxWallsZ)
+            if (roomWallbounds.maxWallsZ < originalBounds.maxWallsZ)
             {
-                topReduction = originalBounds.maxWallsZ - pUpdatedRoom.wallBounds.maxWallsZ;
+                topReduction = originalBounds.maxWallsZ - roomWallbounds.maxWallsZ;
             }
             //Delete bottom 
-            if (pUpdatedRoom.wallBounds.minWallsZ > originalBounds.minWallsZ)
+            if (roomWallbounds.minWallsZ > originalBounds.minWallsZ)
             {
-                bottomReduction = pUpdatedRoom.wallBounds.minWallsZ - originalBounds.minWallsZ;
+                bottomReduction = roomWallbounds.minWallsZ - originalBounds.minWallsZ;
             }
             zScale -= (topReduction + bottomReduction);
             //set to correct z pos
-            if (originalBounds.maxWallsZ > pUpdatedRoom.wallBounds.maxWallsZ) zOffset -= (originalBounds.maxWallsZ - pUpdatedRoom.wallBounds.maxWallsZ) / 2;
-            if (pUpdatedRoom.wallBounds.minWallsZ > originalBounds.minWallsZ) zOffset += (pUpdatedRoom.wallBounds.minWallsZ - originalBounds.minWallsZ) / 2;
+            if (originalBounds.maxWallsZ > roomWallbounds.maxWallsZ) zOffset -= (originalBounds.maxWallsZ - roomWallbounds.maxWallsZ) / 2;
+            if (roomWallbounds.minWallsZ > originalBounds.minWallsZ) zOffset += (roomWallbounds.minWallsZ - originalBounds.minWallsZ) / 2;
 
             //zOffset = (((originalBounds.maxWallsZ - pUpdatedRoom.wallBounds.maxWallsZ) / 2) - ((pUpdatedRoom.wallBounds.minWallsZ - originalBounds.minWallsZ) / 2)) * -1;
-            subMesh.transform.position = new Vector3(pUpdatedRoom.transform.position.x, 0, originalLevelBase.transform.position.z + zOffset);
+            subMesh.transform.position = new Vector3(roomWallbounds.center.x, 0, originalLevelBase.transform.position.z + zOffset);
         }
         else
         {
-            zScale = pDirection.z == 1 ? originalBounds.maxWallsZ - pUpdatedRoom.wallBounds.maxWallsZ : originalBounds.minWallsZ - pUpdatedRoom.wallBounds.minWallsZ;
-            subMesh.transform.position = new Vector3(originalLevelBase.transform.position.x, 0, pUpdatedRoom.transform.position.z);
+            zScale = pDirection.z == 1 ? originalBounds.maxWallsZ - roomWallbounds.maxWallsZ : originalBounds.minWallsZ - roomWallbounds.minWallsZ;
+            subMesh.transform.position = new Vector3(originalLevelBase.transform.position.x, 0, roomWallbounds.center.z);
         }
         subMesh.transform.localScale = new Vector3(Mathf.Abs(xScale), levelCreatorInfo.wallHeight, Mathf.Abs(zScale));
 
-        subMesh.transform.position += new Vector3(((subMesh.transform.localScale.x / 2 + pUpdatedRoom.transform.localScale.x / 2) * pDirection.x),
+        subMesh.transform.position += new Vector3(((subMesh.transform.localScale.x / 2 + (roomWallbounds.maxWallsX - roomWallbounds.minWallsX) / 2) * pDirection.x),
                                                    0,
-                                                  ((subMesh.transform.localScale.z / 2 + pUpdatedRoom.transform.localScale.z / 2) * pDirection.z));
+                                                  ((subMesh.transform.localScale.z / 2 + (roomWallbounds.maxWallsZ - roomWallbounds.minWallsZ) / 2) * pDirection.z));
         newLevelBases.Add(subMesh);
         subMesh.transform.parent = levelBaseMain.transform;
     }
 
-    public void SpawnWall()
+    void CreateDoorMesh(Door pDoor, Vector3 pDirection)
     {
-        //Instantiate wall
-        wallBeingMade = Instantiate(levelBasePrefab);
-        wallBeingMade.transform.localScale = new Vector3(2, levelCreatorInfo.wallHeight, 2);
-        ActiveEditorTracker.sharedTracker.isLocked = true;
-        GameObject[] selectObject = new GameObject[1];
-        selectObject[0] = wallBeingMade.gameObject;
-        Selection.objects = selectObject;
-        SetWallRatio(1, 1);
-        //Check if intersecting with walls
 
-        //Cut of part that is intersecting with wall
     }
 
-    public void ConfirmWallPlacement()
+    List<LevelBase> GetAllWalls()
     {
-        wallBeingMade.ConfirmPlacement();
-        levelBases.Add(wallBeingMade);
-        wallBeingMade.transform.parent = levelBaseMain.transform;
-    }
+        Debug.Log("Getting new walls");
+        LevelBase[] levelBases = GameObject.Find("levelBaseMain").GetComponentsInChildren<LevelBase>();
+        List<LevelBase> currentLevelBases = new List<LevelBase>();
 
-    public void DenyWallPlacement()
-    {
-        DestroyImmediate(wallBeingMade.gameObject);
-        SelectInInspector();
-    }
-
-    public void SetWallRatio(int pNumerator, int pDenominator)
-    {
-
-        wallBeingMade.numerator = pNumerator;
-        wallBeingMade.denominator = pDenominator;
-
-        roomBeingBuild.UpdateSize(wallIsRotated);
-    }
-
-    public float setWallScale
-    {
-        get
+        for (int i = 0; i < levelBases.Length; i++)
         {
-            return wallBeingMade.editorSize;
+            currentLevelBases.Add(levelBases[i]);
         }
-        set
-        {
-            wallBeingMade.editorSize = value;
-            wallBeingMade.UpdateSize(wallIsRotated);
-        }
-    }
-    public void ToggleRotateWall()
-    {
-        wallIsRotated = wallIsRotated ? false : true;
+        return currentLevelBases;
     }
 }
