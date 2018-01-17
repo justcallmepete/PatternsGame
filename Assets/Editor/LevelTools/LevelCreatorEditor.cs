@@ -13,9 +13,14 @@ public class LevelCreatorEditor : Editor {
 
     float buttonWidth = 50f;
     float buttonHeight = 50f;
-    void OnEnable()
-    {
 
+    void OnAwake()
+    {
+        if (!levelCreator.levelBaseMain)
+        {
+            levelCreator.levelBaseMain = GameObject.Find("levelBaseMain");
+
+        }
     }
 
     public override void OnInspectorGUI()
@@ -23,9 +28,12 @@ public class LevelCreatorEditor : Editor {
         levelCreator = (LevelCreator)target;
         if (!levelCreator.levelBaseMain)
         {
-            //TO DO: Find levelbase main;
-            DrawBuildBaseScreen();
-            return;
+            levelCreator.levelBaseMain = GameObject.Find("levelBaseMain");
+            if (!levelCreator.levelBaseMain)
+            {
+                DrawBuildBaseScreen();
+                return;
+            }
         }
         switch (currentState) {
             case MenuStates.mainMenu:

@@ -14,8 +14,8 @@ public class LevelCreator : MonoBehaviour {
     private Room basicRoomPrefab;
 
     [SerializeField]
-    private List<LevelBase> levelBases;
-    private List<LevelBase> newLevelBases;
+    public List<LevelBase> levelBases;
+    public List<LevelBase> newLevelBases;
     public List<Room> rooms;
     public List<SlidingDoor> doors;
 
@@ -33,6 +33,10 @@ public class LevelCreator : MonoBehaviour {
     {
         roomIsRotated = false;
         wallIsRotated = false;
+        levelCreatorInfo = AssetDatabase.LoadAssetAtPath("Assets/Resources/Prefabs/LevelCreatorInfo.prefab", typeof(LevelCreatorInfo)) as LevelCreatorInfo;
+        levelBases = GetAllWalls();
+        basicRoomPrefab = levelCreatorInfo.basicRoom;
+        levelBasePrefab = levelCreatorInfo.levelBase;
     }
 
     public void SelectInInspector()
@@ -50,7 +54,6 @@ public class LevelCreator : MonoBehaviour {
         levelCreatorInfo = AssetDatabase.LoadAssetAtPath("Assets/Resources/Prefabs/LevelCreatorInfo.prefab", typeof(LevelCreatorInfo)) as LevelCreatorInfo;
         levelBaseMain = new GameObject();
         levelBaseMain.name = "levelBaseMain";
-        levelBasePrefab = levelCreatorInfo.levelBase;
         LevelBase levelBaseStart = Instantiate(levelBasePrefab);
         levelBaseStart.transform.localScale = new Vector3(levelCreatorInfo.baseWidth, levelCreatorInfo.wallHeight, levelCreatorInfo.baseLenght);
 
@@ -65,7 +68,6 @@ public class LevelCreator : MonoBehaviour {
     #region 
     public void SpawnRoom()
     {
-        basicRoomPrefab = levelCreatorInfo.basicRoom;
         roomBeingBuild = Instantiate(basicRoomPrefab);
         roomBeingBuild.transform.localScale = new Vector3(10, levelCreatorInfo.wallHeight, 10);
 
@@ -245,10 +247,8 @@ public class LevelCreator : MonoBehaviour {
                         continue;
                     }
                     float zDistanceToWall = levelBaseBounds.minWallsZ - leftWallPos.z;
-                    Debug.Log("firstSmallestScale: " + firstSmallestScale + " zDistanceToWall: " + zDistanceToWall);
                     if (zDistanceToWall < firstSmallestScale)
                     {
-                        Debug.Log("Smaller scale found");
                         firstSmallestScale = zDistanceToWall;
                     }
                 }
@@ -264,7 +264,6 @@ public class LevelCreator : MonoBehaviour {
                     float zDistanceToWall = rightWallPos.z - levelBaseBounds.maxWallsZ;
                     if (zDistanceToWall < secondSmallestScale)
                     {
-                        Debug.Log("Smaller scale found");
                         secondSmallestScale = zDistanceToWall;
                     }
                 }
@@ -281,7 +280,6 @@ public class LevelCreator : MonoBehaviour {
         }
         else
         {
-            Debug.Log("Start placement door wals on x axis");
             LevelBase leftWall = Instantiate(levelBasePrefab);
             LevelBase rightWall = Instantiate(levelBasePrefab);
             float leftScale = Mathf.Abs(levelCreatorInfo.baseWidth / 2 - leftWallPos.x);
@@ -311,7 +309,6 @@ public class LevelCreator : MonoBehaviour {
                     float xDistanceToWall = leftWallPos.x - levelBaseBounds.maxWallsX;
                     if (xDistanceToWall < leftSmallestScale)
                     {
-                        Debug.Log("Smaller scale found. Old scale: "+ leftSmallestScale + "new Scale = "+ xDistanceToWall);
                         Debug.DrawLine(doorBeingMade.transform.position, new Vector3(levelBaseBounds.maxWallsX, levelBases[i].transform.position.y, levelBases[i].transform.position.z), Color.yellow, 10f);
                         leftSmallestScale = xDistanceToWall;
                     }
@@ -324,10 +321,8 @@ public class LevelCreator : MonoBehaviour {
                         continue;
                     }
                     float xDistanceToWall = levelBaseBounds.minWallsX - rightWallPos.x;
-                    Debug.Log("Distance to x wall = " + xDistanceToWall);
                     if (xDistanceToWall < rightSmallestScale)
                     {
-                        Debug.Log("Smaller scale found");
                         rightSmallestScale = xDistanceToWall;
                     }
                 }                
@@ -535,5 +530,18 @@ public class LevelCreator : MonoBehaviour {
     void CreateDoorMesh(Door pDoor, Vector3 pDirection)
     {
 
+    }
+
+    List<LevelBase> GetAllWalls()
+    {
+        Debug.Log("Getting new walls");
+        LevelBase[] levelBases = GameObject.Find("levelBaseMain").GetComponentsInChildren<LevelBase>();
+        List<LevelBase> currentLevelBases = new List<LevelBase>();
+
+        for (int i = 0; i < levelBases.Length; i++)
+        {
+            currentLevelBases.Add(levelBases[i]);
+        }
+        return currentLevelBases;
     }
 }
