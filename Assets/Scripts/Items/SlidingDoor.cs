@@ -85,7 +85,7 @@ public class SlidingDoor : MonoBehaviour
         switch (currentState)
         {
             case State.Closed:
-                Open();
+                Open(3f);
                 break;
             case State.Open:
                 Close();
@@ -93,8 +93,9 @@ public class SlidingDoor : MonoBehaviour
         }
     }
 
-    public void Open()
+    public void Open(float pOpentime)
     {
+        openTime = pOpentime;
         //open animation
         currentState = State.Open;
         animator.SetBool("open", true);
@@ -105,6 +106,20 @@ public class SlidingDoor : MonoBehaviour
         //close animation
         currentState = State.Closed;
         animator.SetBool("open", false);
+    }
+
+    public void ToggleOpenClosed()
+    {
+        if(currentState == State.Open)
+        {
+            //Lock door
+            Close();
+        }
+        else
+        {
+            // Open door
+            Open(Mathf.Infinity);
+        }
     }
 
     public void ChangeOutlineSlidingDoor(bool eraseRenderer)
@@ -119,7 +134,7 @@ public class SlidingDoor : MonoBehaviour
     public void CameraOpenDoor()
     {
         lockedWithSwitch = false;
-        Open();
+        Open(3f);
     }
 
     public void PlayOpenSFX()
