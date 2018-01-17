@@ -16,6 +16,7 @@ public class SlidingDoor : MonoBehaviour
     [Header("Audio Setting")]
     public AudioClip openSFX;
     public AudioClip closeSFX;
+    public AudioClip lockedSFX;
 
     [Header("This shows the player if the door is closed with a switch")]
     public GameObject[] lockedEffect;
@@ -76,6 +77,7 @@ public class SlidingDoor : MonoBehaviour
     {
         if (lockedWithSwitch)
         {
+            PlayLockedSFX();
             //Debug.Log("Door is locked by a switch");
             return;
         }
@@ -113,6 +115,7 @@ public class SlidingDoor : MonoBehaviour
         }
     }
 
+
     public void CameraOpenDoor()
     {
         lockedWithSwitch = false;
@@ -121,20 +124,57 @@ public class SlidingDoor : MonoBehaviour
 
     public void PlayOpenSFX()
     {
-        int id = SoundManager.PlaySound(openSFX, 0.4f, false, gameObject.transform);
-        Audio open = SoundManager.GetAudio(id);
-        open.audioSource.rolloffMode = AudioRolloffMode.Custom;
-        open.Set3DDistances(2f, 15f);
-        open.audioSource.spatialBlend = 1f;
+        Audio sound = SoundManager.GetAudio(closeSFX);
+
+        if (sound == null)
+        {
+            SoundManager.PlaySound(closeSFX, 0.4f, false, gameObject.transform);
+
+            sound = SoundManager.GetAudio(closeSFX);
+            sound.Set3DSettings();
+            return;
+        }
+
+        sound.Play();
+        sound.Set3DSettings();
     }
 
     public void PlayCloseSFX()
     {
-        int id = SoundManager.PlaySound(openSFX, 0.4f, false, gameObject.transform);
-        Audio open = SoundManager.GetAudio(id);
-        open.audioSource.rolloffMode = AudioRolloffMode.Custom;
+        Audio sound = SoundManager.GetAudio(closeSFX);
 
-        open.Set3DDistances(2f, 15f);
-        open.audioSource.spatialBlend = 1f;
+        if (sound == null)
+        {
+            SoundManager.PlaySound(closeSFX, 0.4f, false, gameObject.transform);
+
+            sound = SoundManager.GetAudio(closeSFX);
+            sound.Set3DSettings();
+            return;
+        }
+
+        sound.Play();
+        sound.Set3DSettings();
+    }
+
+    public void PlayLockedSFX()
+    {
+        Audio sound = SoundManager.GetAudio(lockedSFX);
+        
+        if (sound == null)
+        {
+            SoundManager.PlaySound(lockedSFX, 0.4f, false, gameObject.transform);
+
+            sound = SoundManager.GetAudio(lockedSFX);
+            sound.Set3DSettings();
+            return;
+        }
+
+        if (sound.playing)
+        {
+            return;
+        }
+
+        sound.Play();
+        sound.Set3DSettings();
     }
 }

@@ -724,8 +724,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   patrolStyle: 0
   patrol: {fileID: 0}
-  rotationSpeed: 180
-  stoppingDistance: 2.88
+  cluelessMovementSpeed: 3.5
+  searchingMovementSpeed: 3.5
+  alertMovementSpeed: 3.5
+  cluelessRotationSpeed: 180
+  searchingRotationSpeed: 100
+  alertRotationSpeed: 270
+  stoppingDistance: 5
+  chaseTime: 3
   indicator: {fileID: 1215901542418796}
   logStateTransitions: 0
 --- !u!114 &114176686104585126
@@ -766,11 +772,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewRadius: 0
-  viewRadiusInLight: 13.42
   viewAngle: 90
   meshResolution: 1
   viewMeshFiler: {fileID: 33152555057316402}
-  viewMeshFilerInLight: {fileID: 33947356604818080}
   edgeCheckIteration: 4
   edgeThresholdDistance: 0.5
   checkPlayerInSightDelay: 0.5

@@ -32,6 +32,7 @@ public class SearchingGuardState : GuardState
     {
         context.GetComponent<NavMeshAgent>().SetDestination(targetPosition);
         context.IndicatorColor = Color.yellow;
+        context.MovementSpeed = context.searchingMovementSpeed;
     }
 
     public override void OnStateExit()

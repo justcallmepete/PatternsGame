@@ -10,13 +10,13 @@ public class GuardStateMachine : MonoBehaviour {
 
     public enum PatrolStyle
     {
-       Stationary,
-       BackAndForth,
-       Loop,
-       Roaming
+        Stationary,
+        BackAndForth,
+        Loop,
+        Roaming
     }
 
-   
+
 
     /****************************
      *     INSPECTOR VALUES     *
@@ -25,11 +25,23 @@ public class GuardStateMachine : MonoBehaviour {
     public PatrolStyle patrolStyle;
     [SerializeField]
     private GuardPatrol patrol;
-    public float rotationSpeed;
+
+    [Header("Speed Options")]
+    public float cluelessMovementSpeed;
+    public float searchingMovementSpeed;
+    public float alertMovementSpeed;
+
+    public float cluelessRotationSpeed;
+    public float searchingRotationSpeed;
+    public float alertRotationSpeed;
+
+    //public float rotationSpeed;
 
     [Header("Chasing Options")]
     [Range(1.0f, 10.0f)]
     public float stoppingDistance;
+    [Tooltip("How long does the guard still know where the player is after he has lost sight")]
+    public float chaseTime;
 
     [Header("General")]
     public GameObject indicator;
@@ -49,12 +61,29 @@ public class GuardStateMachine : MonoBehaviour {
     private Vector3 startRotation; // Save the start rotation so the guard faces the right way spawn.
     public int LastWaypointIndex { get { return lastWaypointIndex; } set { lastWaypointIndex = value; } }
     private int lastWaypointIndex = 0;
+    public bool PlayerVisible { get { return playerVisible; } set { } }
+    private bool playerVisible = false;
     public GameObject TargetPlayer { get { return targetPlayer; } set { targetPlayer = value; } }
     private GameObject targetPlayer;
-    public NavMeshAgent NavigationAgent { get { return agent; }  set { } }
+    public NavMeshAgent NavigationAgent { get { return agent; } set { } }
     private NavMeshAgent agent;
-    public Color IndicatorColor { get { return indicator.GetComponent<MeshRenderer>().material.color; } set { indicator.GetComponent<MeshRenderer>().material.color = value;  } }
+    public Color IndicatorColor { get { return indicator.GetComponent<MeshRenderer>().material.color; } set { indicator.GetComponent<MeshRenderer>().material.color = value; } }
     public GuardPatrol PatrolRoute { get { return patrol; } set { patrol = value; } }
+    public float MovementSpeed { get { return NavigationAgent.speed; } set { NavigationAgent.speed = value; } }
+    private float rotationSpeed;
+    public float RotationSpeed
+    {
+        get
+        {
+            if (state is AlertGuardState) { return alertRotationSpeed; }
+            else if (state is SearchingGuardState) { return searchingRotationSpeed; }
+            else return cluelessRotationSpeed;
+        }
+        set { }
+    }
+
+
+  
 
     void Awake () {
         StartLocation = transform.position;
@@ -77,14 +106,21 @@ public class GuardStateMachine : MonoBehaviour {
     public void Alert(GameObject player)
     {
         TargetPlayer = player;
+        playerVisible = true;
         state.OnSeePlayer(player);
     }
 
     //Call if player is no longer visible (Go to searching state)
     public void PlayerLost(Vector3 lastKnownPosition)
     {
+        playerVisible = false;
+    }
+
+    public void ForgetPlayer()
+    {
+        Vector3 lastPlayerPosition = TargetPlayer.transform.position;
         TargetPlayer = null;
-        GoToState(new SearchingGuardState(this, lastKnownPosition));
+        GoToState(new SearchingGuardState(this, lastPlayerPosition));
     }
     
     // Call if one of the players is shot.
