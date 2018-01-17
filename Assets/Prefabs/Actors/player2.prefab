@@ -2533,6 +2533,7 @@ MonoBehaviour:
   lightStandingIn: []
   playerIndex: 1
   alphaSpeed: 1
+  footstepSFX: {fileID: 8300000, guid: a29c496874af68844981baa5c7fc125e, type: 3}
   teleportTarget: {x: 0, y: 0, z: 0}
   buttonDownList: 00000000000000000000
   buttonList: 00000000000000000000
@@ -2583,7 +2584,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 770f2e67c65b5864f891d5201519f0d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  teleportInSFX: {fileID: 0}
+  teleportOutSFX: {fileID: 0}
+  chargeSFX: {fileID: 0}
   teleportButton: B
+  channelTime: 2.8
   teleportEffect: {fileID: 1424870578961646, guid: 404bee6bab24a174eafc3f2ce9959edb,
     type: 2}
 --- !u!136 &136591020227010972
