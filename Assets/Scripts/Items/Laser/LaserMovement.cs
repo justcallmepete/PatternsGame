@@ -68,12 +68,10 @@ public class LaserMovement : MonoBehaviour
     {
         // Update step
         step = moveSpeed * Time.deltaTime;
-        Debug.Log(transform.name);
 
         // Set new position
         transform.position = Vector3.MoveTowards(transform.position, patrolPoints[currentPathIndex].transform.position, step);
-        Debug.DrawLine(transform.position,patrolPoints[currentPathIndex].transform.position);
-        print(Vector3.Distance(transform.position, patrolPoints[currentPathIndex].transform.position));
+
         // Change state if reached target
         if (Vector3.Distance(transform.position, patrolPoints[currentPathIndex].transform.position) < 0.1f)
         {
