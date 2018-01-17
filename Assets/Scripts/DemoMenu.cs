@@ -8,7 +8,7 @@ public class DemoMenu : MonoBehaviour {
     // main menu
     public void PlayGame()
     {
-        SceneManager.LoadScene("Level1");
+        SceneManager.LoadScene("tutorialLevel1");
     }
 
     public void CloseGame()
@@ -24,7 +24,7 @@ public class DemoMenu : MonoBehaviour {
 
     public void LoadCheckpoint()
     {
-        GameManager.Instance.ReloadCheckpoint(0);
+        GameManager.Instance.ReloadCheckpoint(0f);
     }
 
     public void ReloadScene()
