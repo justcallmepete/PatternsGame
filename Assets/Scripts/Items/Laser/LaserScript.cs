@@ -11,6 +11,9 @@ public class LaserScript : MonoBehaviour
     private ParticleSystem particleSystem;
     private LaserMovement laserMovement;
 
+    [SerializeField]
+    bool isOffOnStart = false;
+
     void Start()
     {
         laserLine = GetComponentInChildren<LineRenderer>();
@@ -20,6 +23,8 @@ public class LaserScript : MonoBehaviour
         laserLine.SetWidth(.2f, .2f);
 
         laserMovement = GetComponent<LaserMovement>();
+
+        if (isOffOnStart) ToggleLaser();
     }
 
     void Update()
@@ -64,12 +69,14 @@ public class LaserScript : MonoBehaviour
             raycastOn = true;
             laserLine.enabled = true;
             emission.enabled = true;
+            ToggleMovement(true);
         }
         else
         {
             raycastOn = false;
             laserLine.enabled = false;
             emission.enabled = false;
+            ToggleMovement(false);
         }
     }
 
