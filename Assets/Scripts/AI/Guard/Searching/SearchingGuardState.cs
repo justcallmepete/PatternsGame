@@ -32,7 +32,7 @@ public class SearchingGuardState : GuardState
     {
         context.GetComponent<NavMeshAgent>().SetDestination(targetPosition);
         context.Indicator = GuardStateMachine.IndicatorImage.Searching;
-
+        context.VisionColor = Color.yellow;
         context.MovementSpeed = context.searchingMovementSpeed;
     }
 

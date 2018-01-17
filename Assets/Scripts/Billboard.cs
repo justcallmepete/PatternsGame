@@ -1,20 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 public class Billboard : MonoBehaviour {
 
     [SerializeField]
     GameObject placement;
-    [SerializeField]
+
     Camera camera;
     [SerializeField]
     RectTransform canvasRect;
     [SerializeField]
     GameObject indicator;
 
-    
+    private void Start()
+    {
+        GameObject ob = GameObject.FindGameObjectWithTag("MainCamera");
+        camera = ob.GetComponent<Camera>();
+    }
+
     void Update()
     {
         ShowIndicator();
@@ -35,7 +37,6 @@ public class Billboard : MonoBehaviour {
         Vector2 screenPoint = camera.WorldToScreenPoint(offsetPos);
         // Convert screen position to Canvas / RectTransform space <- leave camera null if Screen Space Overlay
         RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPoint, null, out canvasPos);
-        indicator.SetActive(true);
         indicator.transform.localPosition = canvasPos;
     }
 }

@@ -54,6 +54,7 @@ public class GuardStateMachine : MonoBehaviour {
     [Header("General")]
     public Image indicator;
     public Sprite[] indicators;
+    public GameObject vision;
 
     [Header("Debug Options")]
     [SerializeField]
@@ -78,6 +79,7 @@ public class GuardStateMachine : MonoBehaviour {
     private GameObject targetPlayer;
     public NavMeshAgent NavigationAgent { get { return agent; } set { } }
     private NavMeshAgent agent;
+    public Color VisionColor { get {return vision.GetComponentInChildren<MeshRenderer>().material.color; } set { vision.GetComponentInChildren<MeshRenderer>().material.color = value; } }
     private IndicatorImage indicatorImage = IndicatorImage.None;
     public IndicatorImage Indicator { get { return indicatorImage; } set {
             switch (value)
@@ -88,14 +90,17 @@ public class GuardStateMachine : MonoBehaviour {
                 case IndicatorImage.Blinded:
                     indicator.gameObject.SetActive(true);
                     indicator.sprite = indicators[0];
+                    indicator.color = Color.white;
                      break;
                 case IndicatorImage.Searching:
                     indicator.gameObject.SetActive(true);
                     indicator.sprite = indicators[1];
+                    indicator.color = Color.yellow;
                     break;
                 case IndicatorImage.Alert:
                     indicator.gameObject.SetActive(true);
                     indicator.sprite = indicators[2];
+                    indicator.color = Color.red;
                     break;
                 default:
                     indicator.gameObject.SetActive(false);

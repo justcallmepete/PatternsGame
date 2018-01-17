@@ -21,11 +21,15 @@ public class BlindedGuardState : GuardState
     public override void OnStateEnter()
     {
         context.Indicator = GuardStateMachine.IndicatorImage.Blinded;
+        context.vision.SetActive(false);
+        context.NavigationAgent.isStopped = true;
 
     }
 
     public override void OnStateExit()
     {
+        context.vision.SetActive(true);
+        context.NavigationAgent.isStopped = false;
     }
 
     public override void Update()

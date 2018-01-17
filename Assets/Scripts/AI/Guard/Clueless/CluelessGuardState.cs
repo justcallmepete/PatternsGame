@@ -12,6 +12,7 @@ public class CluelessGuardState : GuardState
     {
         context.Indicator = GuardStateMachine.IndicatorImage.None;
         context.MovementSpeed = context.cluelessMovementSpeed;
+        context.VisionColor = Color.cyan;
     }
 
     public override void Update()
