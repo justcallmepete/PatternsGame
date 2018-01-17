@@ -540,7 +540,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1545890002877138}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.07, y: -0.066431, z: -41.57}
+  m_LocalPosition: {x: -10.81, y: -0.066431, z: -35.6}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 4405247809925974}
@@ -948,6 +948,7 @@ MonoBehaviour:
   openTime: 3
   openSFX: {fileID: 8300000, guid: 9777590d2fb39bc4eb58a2da1f9fa9ad, type: 3}
   closeSFX: {fileID: 8300000, guid: 9777590d2fb39bc4eb58a2da1f9fa9ad, type: 3}
+  lockedSFX: {fileID: 8300000, guid: 9d39007395b1680418584210f0ee8970, type: 3}
   lockedEffect:
   - {fileID: 1415980041245470}
   - {fileID: 1496679321276354}
@@ -962,6 +963,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b96c4ab7a72c2947b9bc9dda4114717, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outline: {fileID: 0}
 --- !u!114 &114512272661226916
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -973,6 +975,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b96c4ab7a72c2947b9bc9dda4114717, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outline: {fileID: 0}
 --- !u!198 &198110864782672332
 ParticleSystem:
   m_ObjectHideFlags: 1

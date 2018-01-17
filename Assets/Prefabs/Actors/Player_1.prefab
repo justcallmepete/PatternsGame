@@ -1805,7 +1805,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1782929250056026}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -22.24, y: 8.506368e-16, z: -38.309277}
+  m_LocalPosition: {x: -16.64716, y: 1.348455e-15, z: -60.729015}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 4571842017286298}
@@ -2625,6 +2625,7 @@ MonoBehaviour:
   lightStandingIn: []
   playerIndex: 0
   alphaSpeed: 1
+  footstepSFX: {fileID: 8300000, guid: a29c496874af68844981baa5c7fc125e, type: 3}
   teleportTarget: {x: 0, y: 0, z: 0}
   buttonDownList: 00000000000000000000
   buttonList: 00000000000000000000
@@ -2719,10 +2720,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 770f2e67c65b5864f891d5201519f0d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  teleportInSFX: {fileID: 8300000, guid: 8026d6c3384c2114088373aac990b79b, type: 3}
+  teleportOutSFX: {fileID: 8300000, guid: 6109da61f2a8dbc4692187a8694d1c8a, type: 3}
+  chargeSFX: {fileID: 8300000, guid: 1f8cb60b6c3ba774f9f07dd28b785019, type: 3}
   teleportButton: B
   channelTime: 2.8
-  teleportDelay: 1
-  outerRadius: 2.3
   teleportEffect: {fileID: 1424870578961646, guid: 404bee6bab24a174eafc3f2ce9959edb,
     type: 2}
 --- !u!114 &114526465125706674

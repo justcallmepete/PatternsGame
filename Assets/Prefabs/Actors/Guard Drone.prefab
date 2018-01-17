@@ -259,6 +259,7 @@ GameObject:
   - component: {fileID: 4654099427785654}
   - component: {fileID: 33061055651489592}
   - component: {fileID: 23754458830147002}
+  - component: {fileID: 114347548123434490}
   m_Layer: 0
   m_Name: Viewmesh visualisation
   m_TagString: Untagged
@@ -302,8 +303,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1224667214683130}
-  m_LocalRotation: {x: -0, y: 0.6983256, z: -0, w: -0.7157803}
-  m_LocalPosition: {x: 16.36, y: 0, z: -44.07}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: -16.677511, y: 0.0012298822, z: -31.318457}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 4423946606856088}
@@ -311,7 +312,7 @@ Transform:
   - {fileID: 4695153437690020}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 271.414, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!4 &4275145164488246
 Transform:
   m_ObjectHideFlags: 1
@@ -815,10 +816,26 @@ MonoBehaviour:
   endSimulateSpeed: 5
   startRateOverTime: 2
   endRateOverTime: 25
+  decayfactor: 2
   laserMoveSpeed: 0.5
   ps_chargeParticles: {fileID: 198447098074708906}
   ps_chargeCenter: {fileID: 198819911896289596}
   ps_chargeCenter_2: {fileID: 198006746809761428}
+--- !u!114 &114347548123434490
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1770892366394018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: 0
+  eraseRenderer: 0
+  originalLayer: 0
+  originalMaterials: []
 --- !u!114 &114699484884198442
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -830,13 +847,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e159da4561c1304c92cded0f142752f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewRadius: 6.95
+  viewRadius: 8.87
   viewAngle: 90
   meshResolution: 1
   viewMeshFiler: {fileID: 33061055651489592}
   edgeCheckIteration: 4
   edgeThresholdDistance: 0.5
-  checkPlayerInSightDelay: 0.5
+  checkPlayerInSightDelay: 0.1
 --- !u!114 &114766882345311994
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -862,12 +879,13 @@ MonoBehaviour:
   patrolStyle: 2
   patrol: {fileID: 0}
   cluelessMovementSpeed: 3.5
-  searchingMovementSpeed: 3.5
-  alertMovementSpeed: 3.5
+  searchingMovementSpeed: 4
+  alertMovementSpeed: 7
   cluelessRotationSpeed: 180
   searchingRotationSpeed: 180
-  alertRotationSpeed: 180
-  stoppingDistance: 4.5
+  alertRotationSpeed: 270
+  stoppingDistance: 7.02
+  chaseTime: 3
   indicator: {fileID: 1724743845177202}
   logStateTransitions: 0
 --- !u!120 &120403160515138806
