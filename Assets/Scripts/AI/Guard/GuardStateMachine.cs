@@ -175,6 +175,19 @@ public class GuardStateMachine : MonoBehaviour {
        // GameManager.Instance.ReloadCheckpoint();
     }
 
+    public void Reset()
+    {
+        this.transform.position = startLocation;
+        this.transform.eulerAngles = startRotation;
+        TargetPlayer = null;
+        this.lastWaypointIndex = 0;
+        this.playerVisible = false;
+
+        Indicator = IndicatorImage.None;
+
+        GoToState(new PatrollingState(this));
+    }
+
     public void GoToState(GuardState newState)
     {
         if (state != null)

@@ -59,16 +59,13 @@ public class GameManager : MonoBehaviour {
 
     public IEnumerator ReloadCheckpoint(float sec)
     {
-        if (gameOver)
-        {
-            yield break;
-        }
-
-        gameOver = true;
-
         yield return new WaitForSeconds(sec);
     
         SaveLoadControl.Instance.LoadData(true);
+        ResetGuards();
+        StopAllCoroutines();
+        Time.timeScale = 1;
+
     }
 
     public void LoadNextScene()
