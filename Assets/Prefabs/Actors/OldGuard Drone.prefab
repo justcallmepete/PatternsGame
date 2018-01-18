@@ -724,14 +724,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   patrolStyle: 0
   patrol: {fileID: 0}
-  cluelessMovementSpeed: 0
-  searchingMovementSpeed: 0
-  alertMovementSpeed: 0
-  cluelessRotationSpeed: 0
-  searchingRotationSpeed: 0
-  alertRotationSpeed: 0
+  cluelessMovementSpeed: 3.5
+  searchingMovementSpeed: 3.5
+  alertMovementSpeed: 3.5
+  cluelessRotationSpeed: 180
+  searchingRotationSpeed: 100
+  alertRotationSpeed: 270
   stoppingDistance: 5
-  chaseTime: 0
+  chaseTime: 3
   indicator: {fileID: 0}
   indicators: []
   vision: {fileID: 0}

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -59,16 +59,12 @@ public class GameManager : MonoBehaviour {
 
     public IEnumerator ReloadCheckpoint(float sec)
     {
-        if (gameOver)
-        {
-            yield break;
-        }
-
-        gameOver = true;
-
         yield return new WaitForSeconds(sec);
     
         SaveLoadControl.Instance.LoadData(true);
+        ResetGuards();
+        StopAllCoroutines();
+        Time.timeScale = 1;
     }
 
     public void LoadNextScene()
@@ -114,5 +110,13 @@ public class GameManager : MonoBehaviour {
         }
 
         StartCoroutine(ReloadCheckpoint(1f));
+    }
+
+    private void ResetGuards()
+    {
+        foreach(GameObject g in guards)
+        {
+            g.GetComponent<GuardStateMachine>().Reset();
+        }
     }
 }
