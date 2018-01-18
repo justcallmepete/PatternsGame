@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 /*
  * Checks to see if one of the players is in the light. Adds lights to an array stored in the player to determine if the player is in light.
@@ -10,6 +11,7 @@ public class LightCheck : MonoBehaviour {
 
     private Light myLight;
 
+    List<GuardStateMachine> guardsInMe;
     public bool isOffOnStart = false;
 
     private void Awake()
@@ -24,6 +26,7 @@ public class LightCheck : MonoBehaviour {
             lightIsActive = false;
             myLight.enabled = false;
         }
+        guardsInMe = new List<GuardStateMachine>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -37,6 +40,7 @@ public class LightCheck : MonoBehaviour {
         if (lightIsActive && gsm != null)
         {
             gsm.lightsStandingIn.Add(this.gameObject);
+            guardsInMe.Add(gsm);
         }
     }
 
@@ -52,6 +56,7 @@ public class LightCheck : MonoBehaviour {
         {
             Debug.Log("no light");
             gsm.lightsStandingIn.Remove(this.gameObject);
+            guardsInMe.Remove(gsm);
         }
     }
 
@@ -66,6 +71,11 @@ public class LightCheck : MonoBehaviour {
         {
             lightIsActive = false;
             myLight.enabled = false;
+            for (int i = 0; i < guardsInMe.Count; i++)
+            {
+                guardsInMe[i].lightsStandingIn.Remove(this.gameObject);
+            }
+            guardsInMe = new List<GuardStateMachine>();
         }
     }
 
