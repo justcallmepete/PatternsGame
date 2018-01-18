@@ -74,13 +74,6 @@ public class GameManager : MonoBehaviour {
         {
             players[i].GetComponent<MainPlayer>().inventory.Keycard = false;
         }
-        print(SceneManager.sceneCount);
-
-        if (SceneManager.GetActiveScene().buildIndex + 1 >= SceneManager.sceneCount)
-        {
-            SceneManager.LoadScene(0);
-            return;
-        }
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
