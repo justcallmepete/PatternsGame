@@ -178,13 +178,14 @@ public class GuardStateMachine : MonoBehaviour {
 
     public void Reset()
     {
-        this.NavigationAgent.isStopped = true;
-       
         this.transform.position = startLocation;
         this.transform.eulerAngles = startRotation;
         TargetPlayer = null;
-        GoToState(new PatrollingState(this));
+        this.lastWaypointIndex = 0;
+        this.playerVisible = false;
+        Indicator = IndicatorImage.None;
 
+        GoToState(new PatrollingState(this));
     }
 
     public void GoToState(GuardState newState)
