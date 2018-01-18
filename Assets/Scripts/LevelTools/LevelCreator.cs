@@ -5,7 +5,6 @@ using UnityEditor;
 #endif
 using UnityEngine;
 
-[ExecuteInEditMode]
 public class LevelCreator : MonoBehaviour {
 
     private LevelCreatorInfo levelCreatorInfo;
@@ -32,6 +31,7 @@ public class LevelCreator : MonoBehaviour {
     public float testValue;
     // Use this for initialization
     #if UNITY_EDITOR
+        #if UNITY_EDITOR
     private void OnEnable()
     {
         roomIsRotated = false;
@@ -49,6 +49,7 @@ public class LevelCreator : MonoBehaviour {
         levelBases = GetAllWalls();
 
     }
+#endif
 
     public void SelectInInspector()
     {
