@@ -65,7 +65,6 @@ public class GameManager : MonoBehaviour {
         ResetGuards();
         StopAllCoroutines();
         Time.timeScale = 1;
-
     }
 
     public void LoadNextScene()
@@ -111,5 +110,13 @@ public class GameManager : MonoBehaviour {
         }
 
         StartCoroutine(ReloadCheckpoint(1f));
+    }
+
+    private void ResetGuards()
+    {
+        foreach(GameObject g in guards)
+        {
+            g.GetComponent<GuardStateMachine>().Reset();
+        }
     }
 }
