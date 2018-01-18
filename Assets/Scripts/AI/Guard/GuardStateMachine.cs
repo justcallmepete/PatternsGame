@@ -182,7 +182,7 @@ public class GuardStateMachine : MonoBehaviour {
         TargetPlayer = null;
         this.lastWaypointIndex = 0;
         this.playerVisible = false;
-
+        this.NavigationAgent.isStopped = false;
         Indicator = IndicatorImage.None;
 
         GoToState(new PatrollingState(this));
