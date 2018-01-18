@@ -18,7 +18,6 @@ public class LaserMovement : MonoBehaviour
     private int currentPathIndex = 0;
     private Waypoint[] patrolPoints;
 
-    [HideInInspector]
     public bool isMoveable = true;
 
     private float step;
