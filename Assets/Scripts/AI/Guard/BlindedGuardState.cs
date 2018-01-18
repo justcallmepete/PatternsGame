@@ -34,6 +34,9 @@ public class BlindedGuardState : GuardState
 
     public override void Update()
     {
-        
+        if(context.lightsStandingIn.Count > 0)
+        {
+            context.GoToState(new PatrollingState(context));
+        }
     }
 }
