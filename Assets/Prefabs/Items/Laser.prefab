@@ -63,6 +63,7 @@ GameObject:
   - component: {fileID: 64367553095219906}
   - component: {fileID: 114429874541306798}
   - component: {fileID: 114141393653707266}
+  - component: {fileID: 114498644028459626}
   m_Layer: 0
   m_Name: LaserTurret
   m_TagString: Untagged
@@ -4091,6 +4092,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startPoint: {fileID: 400014}
   detectionRange: 5
+  isOffOnStart: 0
 --- !u!114 &114429874541306798
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4105,6 +4107,33 @@ MonoBehaviour:
   moveSpeed: 2
   rotationSpeed: 1
   isMoveable: 1
+--- !u!114 &114498644028459626
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba1344b03541a934fa1b08610664d06e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  methods:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114141393653707266}
+        m_MethodName: ToggleLaser
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!114 &114582301498976152
 MonoBehaviour:
   m_ObjectHideFlags: 1
