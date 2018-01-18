@@ -165,7 +165,7 @@ public class LevelCreatorEditor : Editor {
         //Scale region
         #region
 
-        float roomScale = EditorGUILayout.Slider("Room size", levelCreator.setRoomScale, 10,120);
+        float roomScale = EditorGUILayout.Slider("Room size", levelCreator.setRoomScale, 1,120);
         levelCreator.setRoomScale = roomScale;
         #endregion
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
@@ -258,7 +258,7 @@ public class LevelCreatorEditor : Editor {
         //Scale region
         #region
 
-        float wallScale = EditorGUILayout.Slider("Wall size", levelCreator.setWallScale, 10, 120);
+        float wallScale = EditorGUILayout.Slider("Wall size", levelCreator.setWallScale, 1, 120);
         levelCreator.setWallScale = wallScale;
         #endregion
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);

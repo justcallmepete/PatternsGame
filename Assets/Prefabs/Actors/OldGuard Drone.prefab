@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 114065501793967590}
   - component: {fileID: 114176686104585126}
   m_Layer: 0
-  m_Name: NewGuardDrone
+  m_Name: OldGuard Drone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -732,7 +732,9 @@ MonoBehaviour:
   alertRotationSpeed: 270
   stoppingDistance: 5
   chaseTime: 3
-  indicator: {fileID: 1215901542418796}
+  indicator: {fileID: 0}
+  indicators: []
+  vision: {fileID: 0}
   logStateTransitions: 0
 --- !u!114 &114176686104585126
 MonoBehaviour:
