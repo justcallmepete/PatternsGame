@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 114766882345311994}
   m_Layer: 0
   m_Name: Guard Drone
-  m_TagString: Untagged
+  m_TagString: Guard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1041,6 +1041,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 5f5b5d44cfe01f94f965b424f5493f6b, type: 3}
   vision: {fileID: 1075100193057894}
   logStateTransitions: 0
+  lightsStandingIn: []
 --- !u!120 &120403160515138806
 LineRenderer:
   m_ObjectHideFlags: 1
