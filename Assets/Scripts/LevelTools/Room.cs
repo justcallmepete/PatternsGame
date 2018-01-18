@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 [ExecuteInEditMode]
@@ -32,36 +31,6 @@ public class Room : MonoBehaviour {
 
     void Update()
     {
-        if (Selection.Contains(this.gameObject))
-        {
-            bool mouseWasDown = false;
-            if (Input.GetMouseButton(0))
-            {
-                Debug.Log("mouse down");
-                mouseWasDown = true;
-            }
-            else if (mouseWasDown)
-            {
-                Debug.Log("mouse was down");
-            }
-                //Check if moving
-                //If moving
-                //If not holding mouse button
-                //if not moving
-                //If was moving
-                //Update meshes
-        }
-        if (!Selection.Contains(this.gameObject))
-        {
-            if (movedRoom)
-            {
-                //LevelCreator lc = (LevelCreator)FindObjectOfType(typeof(LevelCreator));
-                movedRoom = false;
-                // Get room width and lenght
-                //lc.UpdateMeshes(this);
-            }
-            return;
-        }
         UpdatePreviousInfo();
         //If the first GameObject's Bounds enters the second GameObject's Bounds, output the message
 

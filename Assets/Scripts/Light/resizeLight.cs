@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 
@@ -22,7 +24,7 @@ public class resizeLight : MonoBehaviour {
         currentRatioNumerator = numerator;
         currentRatioDenominator = denominator;
         light = GetComponent<Light>();
-        light.cookie = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Materials/Cookies/cookie" + numerator+"-" + denominator + ".png", typeof(Texture2D));
+        light.cookie = Resources.Load("Cookies/cookie" + numerator + "-" + denominator + ".png") as Texture2D;
     }
     public void Rotate()
     {
@@ -41,6 +43,7 @@ public class resizeLight : MonoBehaviour {
 	}
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(resizeLight))]
 public class LightEditor: Editor
 {
@@ -90,3 +93,4 @@ public class LightEditor: Editor
         GUILayout.EndHorizontal();
     }
 }
+#endif

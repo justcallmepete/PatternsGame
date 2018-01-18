@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿#if UNITY_EDITOR
+using System.Collections;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 [ExecuteInEditMode]
@@ -38,8 +41,7 @@ public class LevelCreator : MonoBehaviour {
             levelBaseMain = GameObject.Find("levelBaseMain");
             if (levelBaseMain)
             {
-                levelCreatorInfo = AssetDatabase.LoadAssetAtPath("Assets/Resources/Prefabs/LevelCreatorInfo.prefab", typeof(LevelCreatorInfo)) as LevelCreatorInfo;
-                
+                levelCreatorInfo = Resources.Load("Prefabs/LevelCreatorInfo.prefab") as LevelCreatorInfo;                
             }
         }
         basicRoomPrefab = levelCreatorInfo.basicRoom;
@@ -559,3 +561,5 @@ public class LevelCreator : MonoBehaviour {
         return currentLevelBases;
     }
 }
+
+#endif
