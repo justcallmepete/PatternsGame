@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
@@ -63,10 +64,9 @@ public class GuardStateMachine : MonoBehaviour {
     //Private values
     [SerializeField]
     private GuardState state;
-    bool inLight = true;
 
     //Properties
-    public bool InLight { get { return inLight; } set { inLight = value; } }
+    public List<GameObject> lightsStandingIn;
     public Vector3 StartLocation { get { return startLocation; } set { startLocation = value; } }
     private Vector3 startLocation; // Save the spawn location so guards can return to it.
     public Vector3 StartRotation { get { return startRotation; } set { startRotation = value; } }
@@ -130,11 +130,12 @@ public class GuardStateMachine : MonoBehaviour {
         StartRotation = transform.forward;
         agent = GetComponent<NavMeshAgent>();
         GoToState(new PatrollingState(this));
+        lightsStandingIn = new List<GameObject>();
     }
 
     void Update () {
-        if (!inLight)
-        {
+        if(lightsStandingIn.Count <= 0)
+        { 
             GoToState(new BlindedGuardState(this));
         }
         state.Update();
@@ -173,6 +174,17 @@ public class GuardStateMachine : MonoBehaviour {
     public void Shoot()
     {
        // GameManager.Instance.ReloadCheckpoint();
+    }
+
+    public void Reset()
+    {
+        this.NavigationAgent.isStopped = true;
+       
+        this.transform.position = startLocation;
+        this.transform.eulerAngles = startRotation;
+        TargetPlayer = null;
+        GoToState(new PatrollingState(this));
+
     }
 
     public void GoToState(GuardState newState)
