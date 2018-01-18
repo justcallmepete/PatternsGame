@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -32,6 +31,7 @@ public class LevelCreator : MonoBehaviour {
     public bool roomIsRotated, wallIsRotated, doorIsRotated; 
     public float testValue;
     // Use this for initialization
+    #if UNITY_EDITOR
     private void OnEnable()
     {
         roomIsRotated = false;
@@ -41,7 +41,7 @@ public class LevelCreator : MonoBehaviour {
             levelBaseMain = GameObject.Find("levelBaseMain");
             if (levelBaseMain)
             {
-                levelCreatorInfo = Resources.Load("Prefabs/LevelCreatorInfo.prefab") as LevelCreatorInfo;                
+                levelCreatorInfo = Resources.Load("Prefabs/LevelCreatorInfo.prefab") as LevelCreatorInfo;                 
             }
         }
         basicRoomPrefab = levelCreatorInfo.basicRoom;
@@ -83,6 +83,7 @@ public class LevelCreator : MonoBehaviour {
     #region 
     public void SpawnRoom()
     {
+        levelCreatorInfo = AssetDatabase.LoadAssetAtPath("Assets/Resources/Prefabs/LevelCreatorInfo.prefab", typeof(LevelCreatorInfo)) as LevelCreatorInfo;
         roomBeingBuild = Instantiate(basicRoomPrefab);
         roomBeingBuild.transform.localScale = new Vector3(10, levelCreatorInfo.wallHeight, 10);
 
@@ -142,6 +143,8 @@ public class LevelCreator : MonoBehaviour {
     public void SpawnWall()
     {
         //Instantiate wall
+        levelCreatorInfo = AssetDatabase.LoadAssetAtPath("Assets/Resources/Prefabs/LevelCreatorInfo.prefab", typeof(LevelCreatorInfo)) as LevelCreatorInfo;
+        levelBasePrefab = levelCreatorInfo.levelBase;
         wallBeingMade = Instantiate(levelBasePrefab);
         wallBeingMade.transform.localScale = new Vector3(2, levelCreatorInfo.wallHeight, 2);
         ActiveEditorTracker.sharedTracker.isLocked = true;
@@ -560,6 +563,5 @@ public class LevelCreator : MonoBehaviour {
         }
         return currentLevelBases;
     }
-}
-
 #endif
+}
