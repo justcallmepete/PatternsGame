@@ -118,5 +118,6 @@ public class GameManager : MonoBehaviour {
         {
             g.GetComponent<GuardStateMachine>().Reset();
         }
+
     }
 }
