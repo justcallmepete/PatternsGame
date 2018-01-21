@@ -8,30 +8,24 @@ using UnityEngine;
 public class LevelCreator : MonoBehaviour {
 
     private LevelCreatorInfo levelCreatorInfo;
-
-    [HideInInspector]
+    
     public GameObject levelBaseMain;
     private LevelBase levelBasePrefab;
     private Room basicRoomPrefab;
-
-    [SerializeField]
+    
     public List<LevelBase> levelBases;
     public List<LevelBase> newLevelBases;
     public List<Room> rooms;
     public List<SlidingDoor> doors;
-
-    [HideInInspector]
+    
     public Room roomBeingBuild;
-    [HideInInspector]
     public LevelBase wallBeingMade;
     public SlidingDoor doorBeingMade;
+
+    public bool roomIsRotated, wallIsRotated, doorIsRotated;
     public Vector3 doorDirection;
-    [HideInInspector]
-    public bool roomIsRotated, wallIsRotated, doorIsRotated; 
-    public float testValue;
     // Use this for initialization
     #if UNITY_EDITOR
-        #if UNITY_EDITOR
     private void OnEnable()
     {
         roomIsRotated = false;
@@ -49,7 +43,6 @@ public class LevelCreator : MonoBehaviour {
         levelBases = GetAllWalls();
 
     }
-#endif
 
     public void SelectInInspector()
     {
@@ -220,13 +213,11 @@ public class LevelCreator : MonoBehaviour {
     {//Rotate clockwise
         if(doorDirection.x != 0)
         {
-            float oldDir = doorDirection.x;
             doorBeingMade.transform.Rotate(0, -90, 0);
             doorDirection = new Vector3(0, 0, 1);
         }
         else
         {
-            float oldDir = doorDirection.z;
             doorDirection = new Vector3(1, 0, 0);
             doorBeingMade.transform.Rotate(0, +90, 0);
         }
@@ -236,7 +227,7 @@ public class LevelCreator : MonoBehaviour {
         Vector3 leftWallPos = doorBeingMade.transform.Find("WallSideLeft").position;
         Vector3 rightWallPos = doorBeingMade.transform.Find("WallSideRight").position;
         doors.Add(doorBeingMade);
-        Vector3 doorScale = new Vector3(1, 0, 4);
+
         if (doorDirection.x != 0)
         {
             LevelBase topWall = Instantiate(levelBasePrefab);
