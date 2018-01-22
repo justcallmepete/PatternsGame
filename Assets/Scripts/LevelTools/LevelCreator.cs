@@ -139,16 +139,23 @@ public partial class LevelCreator : MonoBehaviour {
     }
     #endregion
 
-    void AddNewWalls()
+    /// <summary>
+    /// Adds new objects to the undostack
+    /// </summary>
+    /// <param name="objectToAdd"></param>
+    void AddNewObject(GameObject objectToAdd)
     {
-        //TO DO: Have a method that handles all new walls
-
-        //TO DO: Implement undo function with walls
+        tempUndoList.Add(objectToAdd, UndoRedoState.Instantiated);
     }
 
-    void RemoveObject()
+    /// <summary>
+    /// Adds removed objects to the undostack. It will first disable them for x amount of stacks and will later be removed.
+    /// </summary>
+    /// <param name="objectToRemove"></param>
+    void RemoveObject(GameObject objectToRemove)
     {
-        //TO DO: Add to undo queue as removed object
+        objectToRemove.SetActive(false);
+        tempUndoList.Add(objectToRemove, UndoRedoState.Destroyed);
     }
 
     List<LevelBase> GetAllWalls()

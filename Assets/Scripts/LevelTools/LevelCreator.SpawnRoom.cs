@@ -56,12 +56,15 @@ public partial class LevelCreator : MonoBehaviour {
 
     public void ConfirmRoomPlacement()
     {
-        List<Dictionary<GameObject, string>> undoList = new List<Dictionary<GameObject, string>>();
+        tempUndoList = new Dictionary<GameObject, UndoRedoState>();
+
         roomBeingBuild.ConfirmPLacement();
         UpdateMeshes(roomBeingBuild);
         rooms.Add(roomBeingBuild);
         DestroyImmediate(roomBeingBuild.GetComponent<BoxCollider>());
-        roomBeingBuild = null;        
+        AddNewObject(roomBeingBuild.gameObject);
+        roomBeingBuild = null;
+        AddToUndo(tempUndoList);
     }
 
     public void DenyRoomPlacement()
@@ -211,6 +214,7 @@ public partial class LevelCreator : MonoBehaviour {
     void CreateNewSubMesh(LevelBase originalLevelBase, LevelCreatorUtils.WallsBounds roomWallbounds, Vector3 pDirection)
     {
         LevelBase subMesh = Instantiate(levelBasePrefab);
+        AddNewObject(subMesh.gameObject);
         subMesh.transform.position = originalLevelBase.transform.position;
 
         float zOffset = 0;
