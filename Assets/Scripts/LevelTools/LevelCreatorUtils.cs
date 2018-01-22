@@ -171,4 +171,55 @@ public class LevelCreatorUtils : MonoBehaviour {
         }
         return boundsToExtend;
     }
+
+}
+
+public class MaxStack<T> { 
+    private int maxItems;
+    private T[] items;
+
+    private int top = 0;
+    private int bottom = 0;
+    private int count = 0;
+    public MaxStack(int pMaxItems)
+    {
+        maxItems = pMaxItems;
+        items = new T[pMaxItems];
+    }
+
+    public void Clear()
+    {
+        count = 0;
+    }
+
+    public T Peek()
+    {
+        return items[top];
+    }
+
+    public T Pop()
+    {
+        count--;
+        if (count <= 0) return default(T);
+        return items[--top];
+    }
+
+    public T Push(T pItem)
+    {
+        T itemToReturn = default(T);
+        count++;
+        count = count > items.Length ? items.Length : count;
+
+        if (items.Length >= maxItems)
+        {
+            itemToReturn = items[bottom++];
+            bottom = bottom > items.Length ? 0 : bottom;
+        }
+        items[top++] = pItem;
+        top = top > items.Length ? 0 : top;
+        //Check if reached max
+        return itemToReturn;
+
+    }
+
 }

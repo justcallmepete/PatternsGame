@@ -25,8 +25,9 @@ public partial class LevelCreator : MonoBehaviour {
 
     public bool roomIsRotated, wallIsRotated, doorIsRotated;
     public Vector3 doorDirection;
+
     // Use this for initialization
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
     private void OnEnable()
     {
         roomIsRotated = false;
@@ -143,6 +144,11 @@ public partial class LevelCreator : MonoBehaviour {
         //TO DO: Have a method that handles all new walls
 
         //TO DO: Implement undo function with walls
+    }
+
+    void RemoveObject()
+    {
+        //TO DO: Add to undo queue as removed object
     }
 
     List<LevelBase> GetAllWalls()

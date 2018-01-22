@@ -56,11 +56,12 @@ public partial class LevelCreator : MonoBehaviour {
 
     public void ConfirmRoomPlacement()
     {
+        List<Dictionary<GameObject, string>> undoList = new List<Dictionary<GameObject, string>>();
         roomBeingBuild.ConfirmPLacement();
         UpdateMeshes(roomBeingBuild);
         rooms.Add(roomBeingBuild);
         DestroyImmediate(roomBeingBuild.GetComponent<BoxCollider>());
-        roomBeingBuild = null;
+        roomBeingBuild = null;        
     }
 
     public void DenyRoomPlacement()
