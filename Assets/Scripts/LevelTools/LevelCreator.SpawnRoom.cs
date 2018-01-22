@@ -100,7 +100,7 @@ public partial class LevelCreator : MonoBehaviour {
                 //TO DO: 
                 //Debug.DrawLine(pUpdatedRoom.transform.position, levelBases[i].transform.position, Color.red, 10f);
                 SpliceUpMesh(pUpdatedRoom, levelBases[i]);
-                DestroyImmediate(levelBases[i].gameObject);
+                RemoveObject(levelBases[i].gameObject);
                 levelBases.RemoveAt(i);
                 i -= 1;
             }

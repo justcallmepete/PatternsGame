@@ -37,14 +37,18 @@ public partial class LevelCreator : MonoBehaviour {
     }
     public void ConfirmDoorPlacement()
     {
+        tempUndoList = new Dictionary<GameObject, UndoRedoState>();
         Vector3 leftWallPos = doorBeingMade.transform.Find("WallSideLeft").position;
         Vector3 rightWallPos = doorBeingMade.transform.Find("WallSideRight").position;
         doors.Add(doorBeingMade);
-
+        AddNewObject(doorBeingMade.gameObject);
         if (doorDirection.x != 0)
         {
             LevelBase topWall = Instantiate(levelBasePrefab);
             LevelBase bottomWall = Instantiate(levelBasePrefab);
+
+            AddNewObject(topWall.gameObject);
+            AddNewObject(bottomWall.gameObject);
             //Create top mesh to max
             float topScale = Mathf.Abs(levelCreatorInfo.baseLenght / 2 - leftWallPos.z);
             float bottomScale = Mathf.Abs(rightWallPos.z - levelCreatorInfo.baseLenght / 2);
@@ -65,8 +69,6 @@ public partial class LevelCreator : MonoBehaviour {
                 {
                     if (levelBaseBounds.minWallsZ < leftWallPos.z)
                     {
-                        Debug.LogWarning("Corner of door is in a wall");
-                        Debug.Log(levelBaseBounds.ToString());
                         continue;
                     }
                     float zDistanceToWall = levelBaseBounds.minWallsZ - leftWallPos.z;
@@ -77,8 +79,6 @@ public partial class LevelCreator : MonoBehaviour {
                 }
                 if (secondBoxCollider.bounds.Intersects(levelBaseBoxCollider.bounds)) // Bottom box
                 {
-                    Debug.DrawLine(levelBaseBounds.center, Vector3.zero, Color.red, 10f);
-                    Debug.Log(levelBaseBounds.ToString());
                     if (levelBaseBounds.maxWallsZ > rightWallPos.z)
                     {
                         Debug.LogWarning("Corner of door is in a wall");
@@ -96,6 +96,8 @@ public partial class LevelCreator : MonoBehaviour {
             bottomWall.transform.localScale = new Vector3(1, levelCreatorInfo.wallHeight, -secondSmallestScale);
             topWall.transform.position = doorBeingMade.transform.position + new Vector3(0, 0, topWall.transform.localScale.z / 2) + new Vector3(0, 0, (leftWallPos.z - rightWallPos.z) / 2);
             bottomWall.transform.position = doorBeingMade.transform.position + new Vector3(0, 0, bottomWall.transform.localScale.z / 2) - new Vector3(0, 0, (leftWallPos.z - rightWallPos.z) / 2);
+            topWall.transform.parent = levelBaseMain.transform;
+            bottomWall.transform.parent = levelBaseMain.transform;
 
 
             levelBases.Add(topWall);
@@ -105,6 +107,10 @@ public partial class LevelCreator : MonoBehaviour {
         {
             LevelBase leftWall = Instantiate(levelBasePrefab);
             LevelBase rightWall = Instantiate(levelBasePrefab);
+
+            AddNewObject(leftWall.gameObject);
+            AddNewObject(rightWall.gameObject);
+
             float leftScale = Mathf.Abs(levelCreatorInfo.baseWidth / 2 - leftWallPos.x);
             float rightScale = Mathf.Abs(leftWallPos.x - levelCreatorInfo.baseWidth / 2);
             leftWall.transform.localScale = new Vector3(leftScale, levelCreatorInfo.wallHeight, 1);
@@ -123,17 +129,14 @@ public partial class LevelCreator : MonoBehaviour {
                 LevelCreatorUtils.WallsBounds levelBaseBounds = LevelCreatorUtils.BoxColliderToWallbounds(levelBases[i].transform.position, levelBaseBoxCollider);
                 if (leftBoxCollider.bounds.Intersects(levelBaseBoxCollider.bounds)) //Top box
                 {
-                    Debug.DrawLine(levelBases[i].transform.position, leftWall.transform.position, Color.red, 10f);
                     if (levelBaseBounds.maxWallsX > leftWallPos.x)
                     {
                         Debug.LogWarning("Corner of door is in a wall");
-                        Debug.Log(levelBaseBounds.ToString());
                         continue;
                     }
                     float xDistanceToWall = leftWallPos.x - levelBaseBounds.maxWallsX;
                     if (xDistanceToWall < leftSmallestScale)
                     {
-                        Debug.DrawLine(doorBeingMade.transform.position, new Vector3(levelBaseBounds.maxWallsX, levelBases[i].transform.position.y, levelBases[i].transform.position.z), Color.yellow, 10f);
                         leftSmallestScale = xDistanceToWall;
                     }
                 }
@@ -156,12 +159,16 @@ public partial class LevelCreator : MonoBehaviour {
             rightWall.transform.localScale = new Vector3(rightSmallestScale, levelCreatorInfo.wallHeight, 1);
             leftWall.transform.position = doorBeingMade.transform.position - new Vector3(leftWall.transform.localScale.x / 2, 0, 0) - new Vector3((rightWallPos.x - leftWallPos.x) / 2, 0, 0);
             rightWall.transform.position = doorBeingMade.transform.position + new Vector3(rightWall.transform.localScale.x / 2, 0, 0) + new Vector3((rightWallPos.x - leftWallPos.x) / 2, 0, 0);
+            leftWall.transform.parent = levelBaseMain.transform;
+            rightWall.transform.parent = levelBaseMain.transform;
 
             leftWall.transform.name = "leftWall";
             rightWall.transform.name = "rightWall";
             levelBases.Add(leftWall);
             levelBases.Add(rightWall);
         }
+
+        AddToUndo(tempUndoList);
     }
 
     public void DenyDoorPlacement()

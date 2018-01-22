@@ -192,6 +192,11 @@ public class MaxStack<T> {
         count = 0;
     }
 
+    public int Count()
+    {
+        return count;
+    }
+
     public T Peek()
     {
         return items[top];
@@ -200,7 +205,11 @@ public class MaxStack<T> {
     public T Pop()
     {
         count--;
-        if (count <= 0) return default(T);
+        if (count < 0)
+        {
+            count = 0;
+            return default(T);
+        }
         return items[--top];
     }
 

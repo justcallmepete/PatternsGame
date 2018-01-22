@@ -160,7 +160,6 @@ public partial class LevelCreator : MonoBehaviour {
 
     List<LevelBase> GetAllWalls()
     {
-        Debug.Log("Getting new walls");
         LevelBase[] levelBases = GameObject.Find("levelBaseMain").GetComponentsInChildren<LevelBase>();
         List<LevelBase> currentLevelBases = new List<LevelBase>();
 

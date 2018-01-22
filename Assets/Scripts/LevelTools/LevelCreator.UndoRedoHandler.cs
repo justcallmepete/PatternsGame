@@ -5,14 +5,18 @@ using UnityEngine;
 
 public partial class LevelCreator : MonoBehaviour {
     Dictionary<GameObject, UndoRedoState> tempUndoList;
-    MaxStack<Dictionary<GameObject, UndoRedoState>> undoStack;
-    MaxStack<Dictionary<GameObject, UndoRedoState>> redoStack;
+    MaxStack<Dictionary<GameObject, UndoRedoState>> undoStack = new MaxStack<Dictionary<GameObject, UndoRedoState>>(10);
+    MaxStack<Dictionary<GameObject, UndoRedoState>> redoStack = new MaxStack<Dictionary<GameObject, UndoRedoState>>(10);
 
     public enum UndoRedoState {Instantiated, Destroyed };
 
     public void Undo()
     {
         Dictionary<GameObject, UndoRedoState> groupToUndo = undoStack.Pop();
+        if(groupToUndo == null)
+        {
+            return;
+        }
         foreach (KeyValuePair<GameObject, UndoRedoState> pair in groupToUndo)
         {
             if (UndoRedoState.Instantiated.Equals(pair.Value))
