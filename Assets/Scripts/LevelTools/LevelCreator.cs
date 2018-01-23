@@ -30,8 +30,6 @@ public partial class LevelCreator : MonoBehaviour {
 #if UNITY_EDITOR
     private void OnEnable()
     {
-        roomIsRotated = false;
-        wallIsRotated = false;
         if (!levelBaseMain)
         {
             levelBaseMain = GameObject.Find("levelBaseMain");
@@ -62,9 +60,6 @@ public partial class LevelCreator : MonoBehaviour {
         levelBaseMain = new GameObject();
         levelBaseMain.name = "levelBaseMain";
         levelBasePrefab = levelCreatorInfo.levelBase;
-        basicRoomPrefab = levelCreatorInfo.basicRoom;
-        levelBasePrefab = levelCreatorInfo.levelBase;
-        levelBases = GetAllWalls();
         LevelBase levelBaseStart = Instantiate(levelBasePrefab);
         levelBaseStart.transform.localScale = new Vector3(levelCreatorInfo.baseWidth, levelCreatorInfo.wallHeight, levelCreatorInfo.baseLenght);
 
@@ -173,7 +168,6 @@ public partial class LevelCreator : MonoBehaviour {
     void GetLevelCreatorInfo()
     {
         levelCreatorInfo = AssetDatabase.LoadAssetAtPath("Assets/Resources/Prefabs/LevelCreatorInfo.prefab", typeof(LevelCreatorInfo)) as LevelCreatorInfo;
-        Debug.Log(levelCreatorInfo);
         levelBasePrefab = levelCreatorInfo.levelBase;
         basicRoomPrefab = levelCreatorInfo.basicRoom;
         doorPrefab = levelCreatorInfo.doorPrefab;

@@ -18,7 +18,6 @@ public partial class LevelCreator : MonoBehaviour {
         roomBeingBuild = Instantiate(levelCreatorInfo.basicRoom);
         roomBeingBuild.transform.localScale = new Vector3(10, levelCreatorInfo.wallHeight, 10);
         levelBases = GetAllWalls();
-        Debug.Log(roomBeingBuild);
         //Lock inspector to level creator
         ActiveEditorTracker.sharedTracker.isLocked = true;
         //Select the room object

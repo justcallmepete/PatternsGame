@@ -17,12 +17,12 @@ public partial class LevelCreator : MonoBehaviour {
         {
             return;
         }
+        redoStack.Push(groupToUndo);
         foreach (KeyValuePair<GameObject, UndoRedoState> pair in groupToUndo)
         {
             if (UndoRedoState.Instantiated.Equals(pair.Value))
             {
                 pair.Key.gameObject.SetActive(false);
-                //TO DO: Remove object or set to redo
             }
             else if (UndoRedoState.Destroyed.Equals(pair.Value))
             {
@@ -33,16 +33,39 @@ public partial class LevelCreator : MonoBehaviour {
 
     public void Redo()
     {
-
+        Dictionary<GameObject, UndoRedoState> groupToRedo = redoStack.Pop();
+        if (groupToRedo == null)
+        {
+            return;
+        }
+        undoStack.Push(groupToRedo);
+        foreach (KeyValuePair<GameObject, UndoRedoState> pair in groupToRedo)
+        {
+            if (UndoRedoState.Instantiated.Equals(pair.Value))
+            {
+                pair.Key.gameObject.SetActive(true);
+            }
+            else if (UndoRedoState.Destroyed.Equals(pair.Value))
+            {
+                pair.Key.gameObject.SetActive(false);
+            }
+        }
     }
 
     public void AddToUndo(Dictionary<GameObject, UndoRedoState> undoGroup)
     {
+        redoStack.Clear();
         Dictionary<GameObject, UndoRedoState> groupToRemove = undoStack.Push(undoGroup);
-        if (groupToRemove != null)
+        if (groupToRemove == null)
         {
-            RemoveFromUndoStack(groupToRemove);
+            return;
         }
+        RemoveFromUndoStack(groupToRemove);
+    }
+
+    void AddToRedo(Dictionary<GameObject, UndoRedoState> undoGroup)
+    {
+        redoStack.Push(undoGroup);
     }
 
     void RemoveFromUndoStack(Dictionary<GameObject, UndoRedoState> groupToRemove)
@@ -56,4 +79,6 @@ public partial class LevelCreator : MonoBehaviour {
             }
         }
     }
+
+
 }

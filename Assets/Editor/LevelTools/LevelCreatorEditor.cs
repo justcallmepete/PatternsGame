@@ -106,7 +106,7 @@ public class LevelCreatorEditor : Editor {
         }
         EditorGUILayout.EndHorizontal();
 
-        GUIContent undoContent = new GUIContent("\u2770", "Undo");
+        GUIContent undoContent = new GUIContent("\u238C", "Undo");
         GUIContent redoContent = new GUIContent("\u2771", "deny room placement");
         GUILayout.BeginHorizontal();
         EditorGUILayout.PrefixLabel("Undo or redo");
