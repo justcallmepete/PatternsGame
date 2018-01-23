@@ -11,7 +11,7 @@ using EazyTools.SoundManager;
 [RequireComponent(typeof(InputComponent))]
 [RequireComponent(typeof(MovementComponent))]
 //[RequireComponent(typeof(Inventory))]
-[RequireComponent(typeof(WhistleComponent))]
+// [RequireComponent(typeof(WhistleComponent))]
 [RequireComponent(typeof(TeleportComponent))]
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(DetectionComponent))]
