@@ -572,7 +572,6 @@ GameObject:
   - component: {fileID: 114197526965680478}
   - component: {fileID: 114028629384897514}
   - component: {fileID: 114204342176822286}
-  - component: {fileID: 114168547328747182}
   - component: {fileID: 114222337314510918}
   - component: {fileID: 114520517597607230}
   m_Layer: 9
@@ -2494,7 +2493,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1525989558876864}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -66.593285, y: -1.8, z: 59.811073}
+  m_LocalPosition: {x: 0.23, y: -1.8, z: 24.82}
   m_LocalScale: {x: 1.8, y: 1.8, z: 1.8}
   m_Children:
   - {fileID: 224594149980901384}
@@ -2733,20 +2732,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114168547328747182
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1525989558876864}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bc5df6c6b348314eaf6a0c2ceaf39dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  whistleButton: Y
-  radius: 4
-  lifeTime: 0.5
 --- !u!114 &114197526965680478
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2938,8 +2923,8 @@ SkinnedMeshRenderer:
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 4766647153505238}
   m_AABB:
-    m_Center: {x: 0.0015354156, y: 1.8572292, z: -0.030914307}
-    m_Extent: {x: 0.14426096, y: 0.17909485, z: 0.12521535}
+    m_Center: {x: 0.0013808012, y: 1.671504, z: -0.027821176}
+    m_Extent: {x: 0.1298347, y: 0.16118433, z: 0.1126951}
   m_DirtyAABB: 0
 --- !u!137 &137173353497548954
 SkinnedMeshRenderer:
