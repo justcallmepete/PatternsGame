@@ -41,6 +41,7 @@ GameObject:
   - component: {fileID: 124842106982097914}
   - component: {fileID: 114265151368987644}
   - component: {fileID: 114207790843072442}
+  - component: {fileID: 114821899278402206}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -208,6 +209,8 @@ MonoBehaviour:
   lineColor0: {r: 0.7607843, g: 0.03137255, b: 0.5882353, a: 1}
   lineColor1: {r: 0, g: 1, b: 0, a: 1}
   lineColor2: {r: 0, g: 0, b: 1, a: 1}
+  lineColor3: {r: 0, g: 1, b: 0, a: 1}
+  lineColor4: {r: 0, g: 0, b: 1, a: 1}
   additiveRendering: 0
   backfaceCulling: 1
   cornerOutlines: 0
@@ -252,6 +255,18 @@ MonoBehaviour:
   player2: {fileID: 0}
   focusObject: {fileID: 0}
   speed: 3
+--- !u!114 &114821899278402206
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1534483588434972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profile: {fileID: 11400000, guid: 6ee0a003b18398345a82912b85ab6937, type: 2}
 --- !u!124 &124842106982097914
 Behaviour:
   m_ObjectHideFlags: 1
