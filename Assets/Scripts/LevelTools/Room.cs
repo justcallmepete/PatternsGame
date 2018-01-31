@@ -37,12 +37,12 @@ public class Room : MonoBehaviour {
             bool mouseWasDown = false;
             if (Input.GetMouseButton(0))
             {
-                Debug.Log("mouse down");
+                //Debug.Log("mouse down");
                 mouseWasDown = true;
             }
             else if (mouseWasDown)
             {
-                Debug.Log("mouse was down");
+                //Debug.Log("mouse was down");
             }
                 //Check if moving
                 //If moving

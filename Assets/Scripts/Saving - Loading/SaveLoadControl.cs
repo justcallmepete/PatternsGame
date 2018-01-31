@@ -98,7 +98,7 @@ public class SaveLoadControl : MonoBehaviour {
             BinaryFormatter formatter = new BinaryFormatter();
             if (isCheckpoint)
             {
-                Debug.Log("save checkpoint");
+                //Debug.Log("save checkpoint");
                 FileStream saveFile = File.Create("savegames/checkpoint.mainframe");
                 formatter.Serialize(saveFile, serializableData);
                 saveFile.Close();
@@ -106,7 +106,7 @@ public class SaveLoadControl : MonoBehaviour {
 
             if (!isCheckpoint)
             {
-                Debug.Log("save game");
+                //Debug.Log("save game");
                 File.Delete("savegames/checkpoint.mainframe"); // Delete the checkpoint
                 FileStream saveFile = File.Create("savegames/save.mainframe");
                 formatter.Serialize(saveFile, serializableData);
@@ -123,7 +123,7 @@ public class SaveLoadControl : MonoBehaviour {
             if (isCheckpoint)
             {
 
-                Debug.Log("load checkpoint");
+                //Debug.Log("load checkpoint");
                 // Deserialize the binary to readable data
                 if (File.Exists("savegames/checkpoint.mainframe"))
                 {
@@ -144,7 +144,7 @@ public class SaveLoadControl : MonoBehaviour {
 
             if (!isCheckpoint)
             {
-                Debug.Log("load game");
+                //Debug.Log("load game");
                 // Deserialize the binary to readable data
                 BinaryFormatter formatter = new BinaryFormatter();
                 FileStream saveFile = File.Open("savegames/save.mainframe", FileMode.Open);

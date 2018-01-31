@@ -80,7 +80,7 @@ public class InvestigationGuardState : SearchingGuardState
         else
         {
             context.transform.eulerAngles = toVector;
-            Debug.Log(toVector);
+            //Debug.Log(toVector);
             OnTargetReached();
         }
     }

@@ -138,13 +138,13 @@ public class Door : Interactable
     {
         if (lockedWithSwitch)
         {
-            Debug.Log("Door is locked by a switch");
+            //Debug.Log("Door is locked by a switch");
             return;
         }
 
         if (lockedWithKey)
         {
-            Debug.Log("Door is locked");
+            //Debug.Log("Door is locked");
             // TODO Check if the player has a key
         }
 

@@ -29,7 +29,7 @@ public class CluelessGuardState : GuardState
     {
         //TODO: handle State transition
         context.GoToState(new ChaseGuardState(context));
-        Debug.Log("I see the Player!");
+        //Debug.Log("I see the Player!");
     }
 
     public override void OnStateExit()

@@ -52,7 +52,8 @@ public class GuardVision : MonoBehaviour {
 
     private void LateUpdate()
     {
-        DrawFieldOfView();
+       // Invoke("DrawFieldOfView", (float)0.01);
+       DrawFieldOfView();
     }
 
     IEnumerator CheckTargetWithDelay(float pDelay)
@@ -80,7 +81,7 @@ public class GuardVision : MonoBehaviour {
                 if (!Physics.Raycast(transform.position, dirToTarget, distToTarget, obstacleLayerMask))
                 {
                     //Draw line if in sight
-                    Debug.DrawLine(transform.position, transform.position + dirToTarget * distToTarget, Color.red, 2f);
+                    //Debug.DrawLine(transform.position, transform.position + dirToTarget * distToTarget, Color.red, 2f);
                     playersInSight.Add(targets[i].transform);
 
                 }
@@ -130,7 +131,7 @@ public class GuardVision : MonoBehaviour {
 
     private void SpotPlayer(GameObject player)
     {
-        Debug.Log("spotting player");
+        //Debug.Log("spotting player");
         GetComponentInParent<GuardStateMachine>().Alert(player);
     }
 

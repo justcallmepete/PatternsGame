@@ -51,7 +51,7 @@ public class LightArea : MonoBehaviour
 
     public void SwitchOnOff()
     {
-        Debug.Log("SwitchOnOff");
+        //Debug.Log("SwitchOnOff");
         if (isOn)
         {
             isOn = false;

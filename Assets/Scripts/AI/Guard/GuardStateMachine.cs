@@ -201,7 +201,7 @@ public class GuardStateMachine : MonoBehaviour {
         //Debug Option
         if (logStateTransitions)
         {
-            Debug.Log("Transitioned to: " + state.ToString());
+            // Debug.Log("Transitioned to: " + state.ToString());
         }
     }
 }
