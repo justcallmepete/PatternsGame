@@ -256,7 +256,7 @@ public class LevelCreator : MonoBehaviour {
                     if (levelBaseBounds.minWallsZ < leftWallPos.z)
                     {
                         Debug.LogWarning("Corner of door is in a wall");
-                        Debug.Log(levelBaseBounds.ToString());
+                        //Debug.Log(levelBaseBounds.ToString());
                         continue;
                     }
                     float zDistanceToWall = levelBaseBounds.minWallsZ - leftWallPos.z;
@@ -268,7 +268,7 @@ public class LevelCreator : MonoBehaviour {
                 if (secondBoxCollider.bounds.Intersects(levelBaseBoxCollider.bounds)) // Bottom box
                 {
                     Debug.DrawLine(levelBaseBounds.center, Vector3.zero, Color.red, 10f);
-                    Debug.Log(levelBaseBounds.ToString());
+                    //Debug.Log(levelBaseBounds.ToString());
                     if (levelBaseBounds.maxWallsZ > rightWallPos.z)
                     {
                         Debug.LogWarning("Corner of door is in a wall");

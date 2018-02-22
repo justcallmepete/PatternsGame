@@ -36,7 +36,7 @@ public class ChaseGuardState : AlertGuardState
 
     public override void OnStateExit()
     {
-        Debug.Log("EXIT CHASE");
+       // Debug.Log("EXIT CHASE");
         chargeSystem.StopCharge();
         base.OnStateExit();
     }

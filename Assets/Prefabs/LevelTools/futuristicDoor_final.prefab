@@ -246,7 +246,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1698778044990644
 GameObject:
@@ -348,7 +348,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1846533779430536
 GameObject:
@@ -541,9 +541,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1730179888165314}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.307844, y: -1.7999997, z: -12.486008}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 28.29, y: -1.8, z: 62.02}
+  m_LocalScale: {x: 0.50000024, y: 0.5, z: 0.50000024}
   m_Children:
   - {fileID: 4845124856504894}
   - {fileID: 4306534472854472}
@@ -557,7 +557,7 @@ Transform:
   - {fileID: 4038879557506074}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!4 &4642520165250396
 Transform:
   m_ObjectHideFlags: 1
@@ -1029,7 +1029,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   openTime: 3
-  lockedWithSwitch: 0
+  lockedWithSwitch: 1
   openSFX: {fileID: 8300000, guid: 9777590d2fb39bc4eb58a2da1f9fa9ad, type: 3}
   closeSFX: {fileID: 8300000, guid: 9777590d2fb39bc4eb58a2da1f9fa9ad, type: 3}
   lockedSFX: {fileID: 8300000, guid: 9d39007395b1680418584210f0ee8970, type: 3}

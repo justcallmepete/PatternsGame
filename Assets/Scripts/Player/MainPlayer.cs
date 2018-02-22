@@ -132,7 +132,7 @@ public class MainPlayer : MonoBehaviour
     {
         if (SaveLoadControl.Instance.isLoadingCheckpoint)
         {
-            Debug.Log("Loading player checkpoint");
+            // Debug.Log("Loading player checkpoint");
             if (getPlayerIndex() == "P1")
             {
                 transform.position = new Vector3(SaveLoadControl.Instance.loadedCheckpoint.savedPlayer1Data.playerPosX,

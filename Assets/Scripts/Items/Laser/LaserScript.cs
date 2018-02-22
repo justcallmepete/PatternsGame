@@ -41,7 +41,7 @@ public class LaserScript : MonoBehaviour
 
         if (Physics.Raycast(startPoint.position, fwd, out hit))
         {
-            print(hit.transform.name);
+            //print(hit.transform.name);
             if (hit.transform.tag == "Player")
             {
                 MainPlayer mainPlayer = hit.transform.GetComponent<MainPlayer>();
