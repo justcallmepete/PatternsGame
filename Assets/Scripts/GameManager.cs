@@ -74,6 +74,7 @@ public class GameManager : MonoBehaviour {
         {
             players[i].GetComponent<MainPlayer>().inventory.Keycard = false;
         }
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 

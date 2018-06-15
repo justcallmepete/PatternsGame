@@ -8,7 +8,7 @@ public class DemoMenu : MonoBehaviour {
     // main menu
     public void PlayGame()
     {
-        SceneManager.LoadScene("tutorialLevel1");
+        SceneManager.LoadScene("DemoLevel_1");
     }
 
     public void CloseGame()

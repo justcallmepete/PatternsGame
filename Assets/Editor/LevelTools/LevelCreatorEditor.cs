@@ -105,6 +105,25 @@ public class LevelCreatorEditor : Editor {
 
         }
         EditorGUILayout.EndHorizontal();
+
+        GUIContent undoContent = new GUIContent("\u238C", "Undo");
+        GUIContent redoContent = new GUIContent("\u2771", "deny room placement");
+        GUILayout.BeginHorizontal();
+        EditorGUILayout.PrefixLabel("Undo or redo");
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
+        GUI.color = Color.gray;
+        GUILayout.FlexibleSpace();
+        if (GUILayout.Button(undoContent, EditorStyles.miniButtonLeft, GUILayout.MinWidth(buttonWidth / 2), GUILayout.MinHeight(buttonHeight / 2)))
+        {
+            levelCreator.Undo();
+        }
+        if (GUILayout.Button(undoContent, EditorStyles.miniButtonRight, GUILayout.MinWidth(buttonWidth / 2), GUILayout.MinHeight(buttonHeight / 2)))
+        {
+            levelCreator.Redo();
+        }
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
     }
 
     void DrawBuildRoomScreen()

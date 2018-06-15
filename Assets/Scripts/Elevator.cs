@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 using EazyTools.SoundManager;
 
@@ -44,12 +46,13 @@ public class Elevator : Interactable {
                 playerPositions[i] = players[i].transform.position;
                 players[i].transform.position = new Vector3(playerPositions[i].x, playerPositions[i].y - 10, playerPositions[i].z);
             }
-            anim.runtimeAnimatorController = AssetDatabase.LoadAssetAtPath("Assets/Animations/Elevator_arrive.controller", typeof(RuntimeAnimatorController)) as RuntimeAnimatorController;
+            anim.runtimeAnimatorController = Resources.Load("Animations/Elevator_arrive", typeof(RuntimeAnimatorController)) as RuntimeAnimatorController;
         }
         else
         {
-            anim.runtimeAnimatorController = AssetDatabase.LoadAssetAtPath("Assets/Animations/Elevator_depart.controller", typeof(RuntimeAnimatorController)) as RuntimeAnimatorController;
+            anim.runtimeAnimatorController = Resources.Load("Animations/Elevator_depart", typeof(RuntimeAnimatorController)) as RuntimeAnimatorController;
         }
+        Debug.Log("anim.runtimeAnimatorController: " + anim.runtimeAnimatorController.ToString());
 	}
 
     public override void OnInteract(GameObject obj)
