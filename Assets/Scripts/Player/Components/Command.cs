@@ -60,7 +60,6 @@ class DoNothing : Command
 
     public DoNothing(MovementComponent mc)
     {
-        this.mc = mc;
     }
 
     public void Execute()

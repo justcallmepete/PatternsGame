@@ -27,6 +27,8 @@ public class DetectionComponent : PlayerComponentInterface
         // Set id
         id = 2;
 
+        // InputManager instance accessible from everywhere
+        // map key for teleport
         detectionKey = InputManager.Instance.GetKey(detectionButton, MainPlayer.GetPlayerIndex());
     }
 

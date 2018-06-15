@@ -3,24 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
-
-   // public static List<Command> OldCommands = new List<Command>();
     private Command buttonW, buttonS, buttonShift, nothing;
 
     public GameObject PlayerGameObject;
     private MovementComponent PMC;
     private TeleportComponent PTC;
 
-
-    // Use this for initialization
     private void Start ()
     {
+        // Get components for moving and teleporting
         PMC = PlayerGameObject.GetComponent<MovementComponent>();
         PTC = PlayerGameObject.GetComponent<TeleportComponent>();
-	//	buttonW = new MoveForward(PMC);
+        // bind Command to Class
+		buttonW = new MoveForward(PMC);
         buttonS = new MoveBackwards(PMC);
         buttonShift = new Teleport(PTC);
-        buttonW = new Teleport(PTC);
         nothing = new DoNothing(PMC);
 	}
 
@@ -30,11 +27,11 @@ public class PlayerController : MonoBehaviour {
         HandleInput();
     }
 
+    // Handle input of button, Execute command attached to the button
    void HandleInput()
     {
         if (Input.GetKey(KeyCode.W))
         {
-            Debug.Log("buttonW executed");
             buttonW.Execute();
         }
 
@@ -48,6 +45,7 @@ public class PlayerController : MonoBehaviour {
             buttonShift.Execute();
         }
 
+        // added a nothing for default movement state (reset)
         nothing.Execute();
     }
 }
