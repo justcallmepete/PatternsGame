@@ -3,6 +3,7 @@
 public class InputManager : MonoBehaviour
 {
 
+    // private instance of component
     private static InputManager _instance;
     private ControllerDictionaries controllerDictionaries;
     private string[] controllerNames;
@@ -17,13 +18,16 @@ public class InputManager : MonoBehaviour
     }
     public ControllerType[] controllerUsed;
     private bool [] checkedController;
-
+    
+    //accessor component is public
     public static InputManager Instance
     {
         get
         {
             if (_instance == null)
             {
+                // note: not thread safe
+                // if no instance is made, make a new instance
                 GameObject gameObject = new GameObject("InputManager");
                 gameObject.AddComponent<InputManager>();
                 _instance = gameObject.GetComponent<InputManager>();
