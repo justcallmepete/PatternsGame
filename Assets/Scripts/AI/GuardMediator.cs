@@ -6,11 +6,19 @@ public class GuardMediator : MonoBehaviour
 {
     public List<GuardStateMachine> guards;
 
+    /*
+     * This method will be called by the camera or other sensor when a player is spotted.
+     */
     public void PlayerStandinInLight(Vector3 position, int guardsToPoint, int guardsOnAlert, float toPointDist, float onAlertDist)
     {
         AssignTaskToGuards(position, guardsToPoint, guardsOnAlert, toPointDist, onAlertDist);
     }
 
+    /*
+     * This method is used to assign specific tasks to the guards depending on the distance to a certain point and the amount of guards needed for a specific task
+     * First it will assign the task that sends the guards to the location and then it will put the remaining guards on alert on their own spot.
+     *
+     */
     private void AssignTaskToGuards(Vector3 fromPoint, int guardsToPoint, int guardsOnAlert, float toPointDist,
         float onAlertDist)
     {
