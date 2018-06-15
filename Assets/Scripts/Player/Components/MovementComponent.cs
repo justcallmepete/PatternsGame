@@ -54,10 +54,10 @@ public class MovementComponent : PlayerComponentInterface
         {
             return;
         }
-        SetMovementValues();
+       // SetMovementValues();
     }
 
-    private void SetMovementValues()
+    public void SetMovementValues()
     {
         if (MainPlayer.IsChannelling())
         {

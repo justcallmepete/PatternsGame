@@ -120,7 +120,7 @@ public class TeleportComponent : PlayerComponentInterface
         return false;
     }
 
-    private GameObject GetClosestPlayer()
+    public GameObject GetClosestPlayer()
     {
         int index = 0;
         float minDistance = Vector3.Distance(otherPlayers[0].transform.position, gameObject.transform.position);
@@ -139,7 +139,7 @@ public class TeleportComponent : PlayerComponentInterface
         return otherPlayers[index];
     }
 
-    private IEnumerator Channelling(GameObject pPlayer)
+    public IEnumerator Channelling(GameObject pPlayer)
     {
         PlayChargeSFX();
         // Set current time to zero

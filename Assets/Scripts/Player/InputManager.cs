@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class InputManager : MonoBehaviour
 {
 
-    public static InputManager _instance;
+    private static InputManager _instance;
     private ControllerDictionaries controllerDictionaries;
     private string[] controllerNames;
     public string[] actualControllerNames;

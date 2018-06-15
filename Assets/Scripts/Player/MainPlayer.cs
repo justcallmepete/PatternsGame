@@ -8,7 +8,7 @@ using EazyTools.SoundManager;
  * Player Component Interfaces and controls it by updating it in a specific order.
  */
 
-[RequireComponent(typeof(InputComponent))]
+//[RequireComponent(typeof(InputComponent))]
 [RequireComponent(typeof(MovementComponent))]
 //[RequireComponent(typeof(Inventory))]
 // [RequireComponent(typeof(WhistleComponent))]
@@ -206,7 +206,7 @@ public class MainPlayer : MonoBehaviour
         // Update all components
         foreach (PlayerComponentInterface component in components)
         {
-            component.UpdateComponent();
+           // component.UpdateComponent();
         }
 
         SaveData();
